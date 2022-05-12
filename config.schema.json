@@ -1,5 +1,5 @@
 {
-  "pluginAlias": "ExampleHomebridgePlugin",
+  "pluginAlias": "FreeAtHomeLocalApi",
   "pluginType": "platform",
   "singular": true,
   "schema": {

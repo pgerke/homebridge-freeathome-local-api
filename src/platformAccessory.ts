@@ -24,8 +24,8 @@ export class ExamplePlatformAccessory {
   ) {
     // set accessory information
     this.accessory
-      .getService(this.platform.Service.AccessoryInformation)!
-      .setCharacteristic(
+      .getService(this.platform.Service.AccessoryInformation)
+      ?.setCharacteristic(
         this.platform.Characteristic.Manufacturer,
         "Default-Manufacturer"
       )
@@ -45,7 +45,8 @@ export class ExamplePlatformAccessory {
     // in this example we are using the name we stored in the `accessory.context` in the `discoverDevices` method.
     this.service.setCharacteristic(
       this.platform.Characteristic.Name,
-      accessory.context.device.exampleDisplayName
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      accessory.context.device.exampleDisplayName as CharacteristicValue
     );
 
     // each service must implement at-minimum the "required characteristics" for the given service type
@@ -129,11 +130,12 @@ export class ExamplePlatformAccessory {
    * Handle "SET" requests from HomeKit
    * These are sent when the user changes the state of an accessory, for example, turning on a Light bulb.
    */
-  async setOn(value: CharacteristicValue) {
+  setOn(value: CharacteristicValue): Promise<void> {
     // implement your own code to turn your device on/off
     this.exampleStates.On = value as boolean;
 
     this.platform.log.debug("Set Characteristic On ->", value);
+    return Promise.resolve();
   }
 
   /**
@@ -149,7 +151,7 @@ export class ExamplePlatformAccessory {
    * @example
    * this.service.updateCharacteristic(this.platform.Characteristic.On, true)
    */
-  async getOn(): Promise<CharacteristicValue> {
+  getOn(): Promise<CharacteristicValue> {
     // implement your own code to check if the device is on
     const isOn = this.exampleStates.On;
 
@@ -158,17 +160,18 @@ export class ExamplePlatformAccessory {
     // if you need to return an error to show the device as "Not Responding" in the Home app:
     // throw new this.platform.api.hap.HapStatusError(this.platform.api.hap.HAPStatus.SERVICE_COMMUNICATION_FAILURE);
 
-    return isOn;
+    return Promise.resolve(isOn);
   }
 
   /**
    * Handle "SET" requests from HomeKit
    * These are sent when the user changes the state of an accessory, for example, changing the Brightness
    */
-  async setBrightness(value: CharacteristicValue) {
+  setBrightness(value: CharacteristicValue): Promise<void> {
     // implement your own code to set the brightness
     this.exampleStates.Brightness = value as number;
 
     this.platform.log.debug("Set Characteristic Brightness -> ", value);
+    return Promise.resolve();
   }
 }

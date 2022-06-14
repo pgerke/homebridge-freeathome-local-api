@@ -1,116 +1,240 @@
-import { API, DynamicPlatformPlugin, Logger, PlatformAccessory, PlatformConfig, Service, Characteristic } from 'homebridge';
+import {
+  API,
+  DynamicPlatformPlugin,
+  Logger,
+  PlatformAccessory,
+  PlatformConfig,
+  Service,
+  Characteristic,
+} from "homebridge";
+import { PLATFORM_NAME, PLUGIN_NAME } from "./settings";
+import {
+  SystemAccessPoint,
+  Logger as FreeAtHomeLogger,
+  Configuration,
+  WebSocketMessage,
+} from "freeathome-local-api-client";
+import { BinarySensorAccessory } from "./binarySensorAccessory";
+import { FreeAtHomeContext, isFreeAtHomeAccessory } from "./freeAtHomeContext";
+import { FunctionID } from "./enumerations";
+import { FreeAtHomeAccessory } from "./freeAtHomeAccessory";
 
-import { PLATFORM_NAME, PLUGIN_NAME } from './settings';
-import { ExamplePlatformAccessory } from './platformAccessory';
+// In the local API the system access point UUID is always an empty UUID. Could be extended later to also support the cloud API.
+export const emptyGuid = "00000000-0000-0000-0000-000000000000";
 
-/**
- * HomebridgePlatform
- * This class is the main constructor for your plugin, this is where you should
- * parse the user config and discover/register accessories with Homebridge.
- */
-export class ExampleHomebridgePlatform implements DynamicPlatformPlugin {
+/** The free&#64;home Homebridge platform. */
+export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
+  /** The service reference */
   public readonly Service: typeof Service = this.api.hap.Service;
-  public readonly Characteristic: typeof Characteristic = this.api.hap.Characteristic;
+  /** The characteristic reference */
+  public readonly Characteristic: typeof Characteristic =
+    this.api.hap.Characteristic;
+  /** The list of restored cached accessories */
+  public readonly accessories: Array<PlatformAccessory<FreeAtHomeContext>> = [];
+  /** The system access point */
+  public readonly sysap: SystemAccessPoint;
+  private fahAccessories = new Map<string, FreeAtHomeAccessory>();
+  private fahLogger: FreeAtHomeLogger;
 
-  // this is used to track restored cached accessories
-  public readonly accessories: PlatformAccessory[] = [];
-
+  /**
+   * Constructs a new free&#64;home Homebridge platform instance.
+   * @param log {Logger} The logger instance.
+   * @param config {PlatformConfig} The platform configuration.
+   * @param api {API} The API instance.
+   */
   constructor(
     public readonly log: Logger,
     public readonly config: PlatformConfig,
-    public readonly api: API,
+    public readonly api: API
   ) {
-    this.log.debug('Finished initializing platform:', this.config.name);
+    // Create a logger for the free&#64;home Local API Client
+    this.fahLogger = {
+      debug: (message?: unknown, ...optionalParams: unknown[]) =>
+        log.debug((message as string) ?? "", ...optionalParams),
+      error: (message?: unknown, ...optionalParams: unknown[]) =>
+        log.error((message as string) ?? "", ...optionalParams),
+      log: (message?: unknown, ...optionalParams: unknown[]) =>
+        log.info((message as string) ?? "", ...optionalParams),
+      warn: (message?: unknown, ...optionalParams: unknown[]) =>
+        log.warn((message as string) ?? "", ...optionalParams),
+    };
 
-    // When this event is fired it means Homebridge has restored all cached accessories from disk.
-    // Dynamic Platform plugins should only register new accessories after this event was fired,
-    // in order to ensure they weren't added to homebridge already. This event can also be used
-    // to start discovery of new accessories.
-    this.api.on('didFinishLaunching', () => {
-      log.debug('Executed didFinishLaunching callback');
-      // run the method to discover / register your devices as accessories
-      this.discoverDevices();
+    // Create a system access point instance
+    this.sysap = new SystemAccessPoint(
+      this.config.host as string,
+      this.config.user as string,
+      this.config.password as string,
+      this.config.tlsEnabled as boolean,
+      this.config.verboseErrors as boolean,
+      this.fahLogger
+    );
+
+    // Subscribe to web socket messages
+    this.sysap
+      .getWebSocketMessages()
+      .subscribe((message: WebSocketMessage) =>
+        this.processWebSocketMesage(message)
+      );
+
+    this.log.debug("Finished initializing platform:", this.config.name);
+
+    // When Homebridge has restored all cached accessories from disk we can start discovery of new accessories.
+    this.api.on("didFinishLaunching", () => {
+      log.debug("Executed didFinishLaunching callback");
+      // run discovery
+      this.discoverDevices()
+        .then(() =>
+          this.log.info(
+            `Discovery completed: ${this.fahAccessories.size} accessories detected`
+          )
+        )
+        .catch((error) => this.log.error("Device discovery failed", error));
+
+      // Connect to system access point web socket
+      this.sysap.connectWebSocket(this.config.tlsEnabled as boolean);
     });
   }
 
   /**
+   * Configures the specified accessory.
+   * @param accessory The accessory to be configured.
+   * @description
    * This function is invoked when homebridge restores cached accessories from disk at startup.
    * It should be used to setup event handlers for characteristics and update respective values.
    */
-  configureAccessory(accessory: PlatformAccessory) {
-    this.log.info('Loading accessory from cache:', accessory.displayName);
+  public configureAccessory(accessory: PlatformAccessory) {
+    this.log.info("Loading accessory from cache:", accessory.displayName);
 
     // add the restored accessory to the accessories cache so we can track if it has already been registered
-    this.accessories.push(accessory);
+    if (isFreeAtHomeAccessory(accessory, this.fahLogger))
+      this.accessories.push(accessory);
   }
 
-  /**
-   * This is an example method showing how to register discovered accessories.
-   * Accessories must only be registered once, previously created accessories
-   * must not be registered again to prevent "duplicate UUID" errors.
-   */
-  discoverDevices() {
+  /** Discovers the supported free&#64;home devices from the System Access Point. */
+  private async discoverDevices(): Promise<void> {
+    // Get the SysAP configuration
+    const config: Configuration = await this.sysap.getConfiguration();
 
-    // EXAMPLE ONLY
-    // A real plugin you would discover accessories from the local network, cloud services
-    // or a user-defined array in the platform config.
-    const exampleDevices = [
-      {
-        exampleUniqueId: 'ABCD',
-        exampleDisplayName: 'Bedroom',
-      },
-      {
-        exampleUniqueId: 'EFGH',
-        exampleDisplayName: 'Kitchen',
-      },
-    ];
+    // Enmumerate the devices
+    Object.keys(config[emptyGuid].devices).forEach((serial: string) => {
+      // Filter unsupported (pseudo) devices like scenes or third party devices
+      if (!serial.startsWith("ABB")) return;
 
-    // loop over the discovered devices and register each one if it has not already been registered
-    for (const device of exampleDevices) {
+      const device = config[emptyGuid].devices[serial];
+      if (!device.channels) return;
 
-      // generate a unique id for the accessory this should be generated from
-      // something globally unique, but constant, for example, the device serial
-      // number or MAC address
-      const uuid = this.api.hap.uuid.generate(device.exampleUniqueId);
+      // Enumerate the channels
+      Object.keys(device.channels).forEach((channelId: string) => {
+        const channel = device.channels?.[channelId];
+        if (!channel) return;
 
-      // see if an accessory with the same uuid has already been registered and restored from
-      // the cached devices we stored in the `configureAccessory` method above
-      const existingAccessory = this.accessories.find(accessory => accessory.UUID === uuid);
+        // Filter unsupported channels
+        if (
+          !(
+            channel.functionID &&
+            Object.values<string>(FunctionID).includes(channel.functionID)
+          )
+        ) {
+          this.log.debug(
+            `Ignored ${serial} (${channelId}): FunctionID '${
+              channel.functionID ?? "<UNDEFINED>"
+            }' is not supported.`
+          );
+          return;
+        }
 
-      if (existingAccessory) {
-        // the accessory already exists
-        this.log.info('Restoring existing accessory from cache:', existingAccessory.displayName);
+        // Filter unconfigured devices
+        if (!(channel.floor && channel.room)) {
+          this.log.debug(
+            `Ignored ${serial} (${channelId}): Floor and room are not configured.`
+          );
+          return;
+        }
 
-        // if you need to update the accessory.context then you should run `api.updatePlatformAccessories`. eg.:
-        // existingAccessory.context.device = device;
-        // this.api.updatePlatformAccessories([existingAccessory]);
+        // Create or restore the accessory
+        const uuid = this.api.hap.uuid.generate(`${serial}_${channelId}`);
+        let accessory = this.accessories.find(
+          (accessory) => accessory.UUID === uuid
+        );
+        if (accessory) {
+          // the accessory already exists
+          this.log.info(
+            "Restoring existing accessory from cache:",
+            accessory.displayName
+          );
 
-        // create the accessory handler for the restored accessory
-        // this is imported from `platformAccessory.ts`
-        new ExamplePlatformAccessory(this, existingAccessory);
+          // Update context
+          accessory.context.deviceSerial = serial;
+          accessory.context.device = device;
+          accessory.context.channel = channel;
+          accessory.context.channelId = channelId;
+          this.api.updatePlatformAccessories([accessory]);
+          // it is possible to remove platform accessories at any time using `api.unregisterPlatformAccessories`, eg.:
+          // remove platform accessories when no longer present
+          // this.api.unregisterPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [existingAccessory]);
+          // this.log.info('Removing existing accessory from cache:', existingAccessory.displayName);
+        } else {
+          // the accessory does not yet exist, so we need to create it
+          this.log.info("Adding new accessory:", channel.displayName);
+          // create a new accessory
+          accessory = new this.api.platformAccessory<FreeAtHomeContext>(
+            channel.displayName ?? uuid,
+            uuid
+          );
+          accessory.context.deviceSerial = serial;
+          accessory.context.device = device;
+          accessory.context.channel = channel;
+          accessory.context.channelId = channelId;
+          // link the accessory to your platform
+          this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [
+            accessory,
+          ]);
+        }
 
-        // it is possible to remove platform accessories at any time using `api.unregisterPlatformAccessories`, eg.:
-        // remove platform accessories when no longer present
-        // this.api.unregisterPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [existingAccessory]);
-        // this.log.info('Removing existing accessory from cache:', existingAccessory.displayName);
-      } else {
-        // the accessory does not yet exist, so we need to create it
-        this.log.info('Adding new accessory:', device.exampleDisplayName);
+        // Ignore non free&#64;home accessories
+        if (!isFreeAtHomeAccessory(accessory, this.fahLogger)) return;
 
-        // create a new accessory
-        const accessory = new this.api.platformAccessory(device.exampleDisplayName, uuid);
+        // create accessory
+        switch (channel.functionID) {
+          case FunctionID.FID_SWITCH_ACTUATOR:
+            this.fahAccessories.set(
+              `${serial}_${channelId}`,
+              new BinarySensorAccessory(this, accessory)
+            );
+            return;
+          default:
+            this.log.error(
+              `${serial} (${channelId}): Cannot configure accessory for FunctionID '${
+                channel.functionID ?? "<UNDEFINED>"
+              }'!`
+            );
+        }
+      });
+    });
+  }
 
-        // store a copy of the device object in the `accessory.context`
-        // the `context` property can be used to store any data about the accessory you may need
-        accessory.context.device = device;
+  private processWebSocketMesage(message: WebSocketMessage): void {
+    // Get data point identifiers
+    const datapoints = Object.keys(message[emptyGuid].datapoints);
 
-        // create the accessory handler for the newly create accessory
-        // this is imported from `platformAccessory.ts`
-        new ExamplePlatformAccessory(this, accessory);
-
-        // link the accessory to your platform
-        this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory]);
+    datapoints.forEach((datapoint) => {
+      // Ignore data points that have an unexpected format
+      const match = datapoint.match(
+        /^(ABB[a-zA-Z0-9]{9})\/(ch\d{4})\/(odp\d{4})$/i
+      );
+      if (!match) {
+        this.log.debug(`Ignored datapoint ${datapoint}: Unexpected format`);
+        return;
       }
-    }
+
+      // Ignore data points we don't have an accessory for
+      const identifier = `${match[1]}_${match[2]}`;
+      if (!this.fahAccessories.has(identifier)) return;
+
+      // Update the accessory data point
+      this.fahAccessories
+        .get(identifier)
+        ?.updateDatapoint(match[3], message[emptyGuid].datapoints[datapoint]);
+    });
   }
 }

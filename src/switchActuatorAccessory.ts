@@ -6,11 +6,8 @@ import {
 } from "homebridge";
 import { FreeAtHomeAccessory } from "./freeAtHomeAccessory";
 import { FreeAtHomeContext } from "./freeAtHomeContext";
-import {
-  defaultDebounce,
-  emptyGuid,
-  FreeAtHomeHomebridgePlatform,
-} from "./platform";
+import { FreeAtHomeHomebridgePlatform } from "./platform";
+import { DefaultDebounce, EmptyGuid } from "./util";
 import { debounce } from "debounce";
 
 /**
@@ -25,7 +22,7 @@ export class SwitchActuatorAccessory extends FreeAtHomeAccessory {
   private stateOn: boolean;
   private readonly setOn: CharacteristicSetHandler = debounce(
     (value: CharacteristicValue) => this.setOnDebounced(value),
-    defaultDebounce
+    DefaultDebounce
   );
 
   /**
@@ -53,7 +50,7 @@ export class SwitchActuatorAccessory extends FreeAtHomeAccessory {
     this.service
       .getCharacteristic(this.platform.Characteristic.On)
       .onSet(this.setOn.bind(this))
-      .onGet(this.getOn.bind(this));
+      .onGet(() => this.stateOn);
   }
 
   private async setOnDebounced(value: CharacteristicValue): Promise<void> {
@@ -66,7 +63,7 @@ export class SwitchActuatorAccessory extends FreeAtHomeAccessory {
 
     // set data point at SysAP
     await this.platform.sysap.setDatapoint(
-      emptyGuid,
+      EmptyGuid,
       this.accessory.context.deviceSerial,
       this.accessory.context.channelId,
       "idp0000",
@@ -74,28 +71,17 @@ export class SwitchActuatorAccessory extends FreeAtHomeAccessory {
     );
   }
 
-  private getOn(): Promise<CharacteristicValue> {
-    return Promise.resolve(this.stateOn);
-  }
-
   public override updateDatapoint(datapoint: string, value: string): void {
     // ignore unknown data points
     if (datapoint !== "odp0000") return;
 
-    // parse value
-    const characteristicValue = !!parseInt(value);
-
-    // log event
-    this.platform.log.info(
-      `${this.accessory.displayName} (Switch Actuator ${
-        this.serialNumber
-      }) updated characteristic On -> ${characteristicValue.toString()}`
-    );
-
-    // asynchoronously update the characteristic
-    this.service.updateCharacteristic(
+    // do the update
+    this.stateOn = !!parseInt(value);
+    this.doUpdateDatapoint(
+      "Switch Actuator",
+      this.service,
       this.platform.Characteristic.On,
-      characteristicValue
+      this.stateOn
     );
   }
 }

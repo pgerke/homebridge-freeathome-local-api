@@ -6,11 +6,8 @@ import {
 } from "homebridge";
 import { FreeAtHomeAccessory } from "./freeAtHomeAccessory";
 import { FreeAtHomeContext } from "./freeAtHomeContext";
-import {
-  defaultDebounce,
-  emptyGuid,
-  FreeAtHomeHomebridgePlatform,
-} from "./platform";
+import { FreeAtHomeHomebridgePlatform } from "./platform";
+import { DefaultDebounce, EmptyGuid } from "./util";
 import { debounce } from "debounce";
 
 /** A dimming actuator accessory.*/
@@ -21,11 +18,11 @@ export class DimmerAccessory extends FreeAtHomeAccessory {
 
   private readonly setOn: CharacteristicSetHandler = debounce(
     (value: CharacteristicValue) => this.setOnDebounced(value),
-    defaultDebounce
+    DefaultDebounce
   );
   private readonly setBrightness: CharacteristicSetHandler = debounce(
     (value: CharacteristicValue) => this.setBrightnessDebounced(value),
-    defaultDebounce
+    DefaultDebounce
   );
 
   /**
@@ -44,7 +41,9 @@ export class DimmerAccessory extends FreeAtHomeAccessory {
       this.accessory.context.channel.outputs?.odp0000.value ?? "0"
     );
     this.stateBrightness = parseInt(
-      this.accessory.context.channel.outputs?.odp0001.value ?? "0"
+      (this.stateOn
+        ? this.accessory.context.channel.outputs?.odp0001.value
+        : this.accessory.context.channel.inputs?.idp0002.value) ?? "0"
     );
 
     // get the Lightbulb service if it exists, otherwise create a new service instance
@@ -56,13 +55,13 @@ export class DimmerAccessory extends FreeAtHomeAccessory {
     this.service
       .getCharacteristic(this.platform.Characteristic.On)
       .onSet(this.setOn.bind(this))
-      .onGet(this.getOn.bind(this));
+      .onGet(() => this.stateOn);
 
     // register handlers for the Brightness Characteristic
     this.service
       .getCharacteristic(this.platform.Characteristic.Brightness)
       .onSet(this.setBrightness.bind(this))
-      .onGet(this.getBrightness.bind(this));
+      .onGet(() => this.stateBrightness);
   }
 
   private async setOnDebounced(value: CharacteristicValue): Promise<void> {
@@ -75,12 +74,16 @@ export class DimmerAccessory extends FreeAtHomeAccessory {
 
     // set data point at SysAP
     await this.platform.sysap.setDatapoint(
-      emptyGuid,
+      EmptyGuid,
       this.accessory.context.deviceSerial,
       this.accessory.context.channelId,
       "idp0000",
       value ? "1" : "0"
     );
+
+    // restore previous brightness
+    if (value && this.stateBrightness)
+      await this.setBrightnessDebounced(this.stateBrightness);
   }
 
   private async setBrightnessDebounced(
@@ -95,7 +98,7 @@ export class DimmerAccessory extends FreeAtHomeAccessory {
 
     // set data point at SysAP
     await this.platform.sysap.setDatapoint(
-      emptyGuid,
+      EmptyGuid,
       this.accessory.context.deviceSerial,
       this.accessory.context.channelId,
       "idp0002",
@@ -103,41 +106,30 @@ export class DimmerAccessory extends FreeAtHomeAccessory {
     );
   }
 
-  private getOn(): Promise<CharacteristicValue> {
-    return Promise.resolve(this.stateOn);
-  }
-
-  private getBrightness(): Promise<CharacteristicValue> {
-    return Promise.resolve(this.stateBrightness);
-  }
-
   public override updateDatapoint(datapoint: string, value: string): void {
     // ignore unknown data points
-    let characteristic: "On" | "Brightness";
-    let characteristicValue: CharacteristicValue;
     switch (datapoint) {
       case "odp0000":
-        characteristic = "On";
-        characteristicValue = !!parseInt(value);
-        this.stateOn = characteristicValue;
-        break;
+        this.stateOn = !!parseInt(value);
+        // do the update
+        this.doUpdateDatapoint(
+          "Dimmer Accessory",
+          this.service,
+          this.platform.Characteristic.On,
+          this.stateOn
+        );
+        return;
       case "odp0001":
-        characteristic = "Brightness";
-        characteristicValue = parseInt(value);
-        this.stateBrightness = characteristicValue;
-        break;
+        this.stateBrightness = parseInt(value);
+        this.doUpdateDatapoint(
+          "Dimmer Accessory",
+          this.service,
+          this.platform.Characteristic.Brightness,
+          this.stateBrightness
+        );
+        return;
       default:
         return;
     }
-
-    // log event
-    this.platform.log.info(
-      `${this.accessory.displayName} (Dimmer Accessory ${
-        this.serialNumber
-      }) updated characteristic ${characteristic} -> ${characteristicValue.toString()}`
-    );
-
-    // asynchoronously update the characteristic
-    this.service.updateCharacteristic(characteristic, characteristicValue);
   }
 }

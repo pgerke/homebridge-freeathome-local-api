@@ -1,4 +1,10 @@
-import { PlatformAccessory } from "homebridge";
+import {
+  Characteristic,
+  CharacteristicValue,
+  PlatformAccessory,
+  Service,
+  WithUUID,
+} from "homebridge";
 import { FreeAtHomeContext } from "./freeAtHomeContext";
 import { FreeAtHomeHomebridgePlatform } from "./platform";
 
@@ -39,4 +45,23 @@ export abstract class FreeAtHomeAccessory {
    * @param value A string representing the new value.
    */
   public abstract updateDatapoint(datapoint: string, value: string): void;
+
+  protected doUpdateDatapoint(
+    acccessoryDisplayType: string,
+    service: Service,
+    characteristic: WithUUID<new () => Characteristic>,
+    characteristicValue: CharacteristicValue
+  ): void {
+    // log event
+    this.platform.log.info(
+      `${this.accessory.displayName} (${acccessoryDisplayType} ${
+        this.serialNumber
+      }) updated characteristic ${
+        characteristic.name
+      } -> ${characteristicValue.toString()}`
+    );
+
+    // asynchoronously update the characteristic
+    service.updateCharacteristic(characteristic, characteristicValue);
+  }
 }

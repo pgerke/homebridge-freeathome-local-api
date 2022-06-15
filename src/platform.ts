@@ -20,11 +20,8 @@ import { FunctionID } from "./functionId";
 import { FreeAtHomeAccessory } from "./freeAtHomeAccessory";
 import { DimmerAccessory } from "./dimmerAccessory";
 import { Subscription } from "rxjs";
-
-// In the local API the system access point UUID is always an empty UUID. Could be extended later to also support the cloud API.
-export const emptyGuid = "00000000-0000-0000-0000-000000000000";
-/** The default debounce timer  */
-export const defaultDebounce = 250;
+import { RoomTemperatureControllerAccessory } from "./roomTemperatureControllerAccessory";
+import { EmptyGuid } from "./util";
 
 /** The free&#64;home Homebridge platform. */
 export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
@@ -125,12 +122,14 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
     const config: Configuration = await this.sysap.getConfiguration();
 
     // Enmumerate the devices
-    Object.keys(config[emptyGuid].devices).forEach((serial: string) => {
+    Object.keys(config[EmptyGuid].devices).forEach((serial: string) => {
       // Filter unsupported (pseudo) devices like scenes or third party devices
       if (!serial.startsWith("ABB")) return;
 
-      const device = config[emptyGuid].devices[serial];
+      const device = config[EmptyGuid].devices[serial];
       if (!device.channels) return;
+
+      const locationConfiguredOnDeviceLevel = device.floor && device.room;
 
       // Enumerate the channels
       Object.keys(device.channels).forEach((channelId: string) => {
@@ -153,7 +152,10 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
         }
 
         // Filter unconfigured devices
-        if (!(channel.floor && channel.room)) {
+        if (
+          !locationConfiguredOnDeviceLevel &&
+          !(channel.floor && channel.room)
+        ) {
           this.log.debug(
             `Ignored ${serial} (${channelId}): Floor and room are not configured.`
           );
@@ -211,12 +213,12 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
               new SwitchActuatorAccessory(this, accessory)
             );
             return;
-          // case FunctionID.FID_ROOM_TEMPERATURE_CONTROLLER_MASTER_WITHOUT_FAN:
-          //   this.fahAccessories.set(
-          //     `${serial}_${channelId}`,
-          //     new RoomTemperatureSensorAccessory(this, accessory)
-          //   );
-          //   return;
+          case FunctionID.FID_ROOM_TEMPERATURE_CONTROLLER_MASTER_WITHOUT_FAN:
+            this.fahAccessories.set(
+              `${serial}_${channelId}`,
+              new RoomTemperatureControllerAccessory(this, accessory)
+            );
+            return;
           case FunctionID.FID_DIMMING_ACTUATOR:
           case FunctionID.FID_RGB_ACTUATOR:
           case FunctionID.FID_RGB_W_ACTUATOR:
@@ -238,7 +240,7 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
 
   private processWebSocketMesage(message: WebSocketMessage): void {
     // Get data point identifiers
-    const datapoints = Object.keys(message[emptyGuid].datapoints);
+    const datapoints = Object.keys(message[EmptyGuid].datapoints);
 
     datapoints.forEach((datapoint) => {
       // Ignore data points that have an unexpected format
@@ -257,7 +259,7 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
       // Update the accessory data point
       this.fahAccessories
         .get(identifier)
-        ?.updateDatapoint(match[3], message[emptyGuid].datapoints[datapoint]);
+        ?.updateDatapoint(match[3], message[EmptyGuid].datapoints[datapoint]);
     });
   }
 }

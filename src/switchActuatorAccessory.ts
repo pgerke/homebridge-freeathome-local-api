@@ -27,7 +27,7 @@ export class SwitchActuatorAccessory extends FreeAtHomeAccessory {
 
     // set initial state
     this.stateOn = !!parseInt(
-      this.accessory.context.channel.outputs!.odp0000.value!
+      this.accessory.context.channel.outputs?.odp0000.value ?? "0"
     );
 
     // get the Switch service if it exists, otherwise create a new service instance

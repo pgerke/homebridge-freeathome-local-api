@@ -17,7 +17,7 @@ A Homebridge plugin that allows the user to control BUSCH-JAEGER free@home devic
 
 # Supported accessories
 
-- Binary Sensors
+- Binary Switches
 - Outlets
 - Lights
 

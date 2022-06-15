@@ -4,17 +4,18 @@ import { FreeAtHomeContext } from "./freeAtHomeContext";
 import { emptyGuid, FreeAtHomeHomebridgePlatform } from "./platform";
 
 /**
- * A binary sensor accessory.
+ * A switch actuator accessory.
  * @description
- * A binary sensor can be used to control more or less any that free&#64;home device
+ * A switch actuator can be used to control more or less any that free&#64;home device
  * that has a binary on/off power state exposed on data point 0000 like, for example,
- * binary switches or dimmers.
+ * binary switches, outlets or non-dimmable lights.
  */
-export class BinarySensorAccessory extends FreeAtHomeAccessory {
+export class SwitchActuatorAccessory extends FreeAtHomeAccessory {
   private readonly service: Service;
+  private stateOn: boolean;
 
   /**
-   * Constructs a new binary sensor accessory instance.
+   * Constructs a new switch actuator accessory instance.
    * @param platform The free&#64;home Homebridge platform controlling the accessory
    * @param accessory The platform accessory.
    */
@@ -23,6 +24,11 @@ export class BinarySensorAccessory extends FreeAtHomeAccessory {
     readonly accessory: PlatformAccessory<FreeAtHomeContext>
   ) {
     super(platform, accessory);
+
+    // set initial state
+    this.stateOn = !!parseInt(
+      this.accessory.context.channel.outputs!.odp0000.value!
+    );
 
     // get the Switch service if it exists, otherwise create a new service instance
     this.service =
@@ -39,7 +45,7 @@ export class BinarySensorAccessory extends FreeAtHomeAccessory {
   private async setOn(value: CharacteristicValue): Promise<void> {
     // log event
     this.platform.log.info(
-      `${this.accessory.displayName} (Binary Sensor ${
+      `${this.accessory.displayName} (Switch Actuator ${
         this.serialNumber
       }) set characteristic On -> ${value.toString()}`
     );
@@ -54,26 +60,8 @@ export class BinarySensorAccessory extends FreeAtHomeAccessory {
     );
   }
 
-  private async getOn(): Promise<CharacteristicValue> {
-    // get data point from SysAP
-    const response = await this.platform.sysap.getDatapoint(
-      emptyGuid,
-      this.accessory.context.deviceSerial,
-      this.accessory.context.channelId,
-      "odp0000"
-    );
-
-    // parse value
-    const value = !!parseInt(response[emptyGuid].values[0]);
-
-    // log event
-    this.platform.log.info(
-      `${this.accessory.displayName} (Binary Sensor ${
-        this.serialNumber
-      }) get characteristic On -> ${value.toString()}`
-    );
-
-    return value;
+  private getOn(): Promise<CharacteristicValue> {
+    return Promise.resolve(this.stateOn);
   }
 
   public override updateDatapoint(datapoint: string, value: string): void {
@@ -85,7 +73,7 @@ export class BinarySensorAccessory extends FreeAtHomeAccessory {
 
     // log event
     this.platform.log.info(
-      `${this.accessory.displayName} (Binary Sensor ${
+      `${this.accessory.displayName} (Switch Actuator ${
         this.serialNumber
       }) updated characteristic On -> ${characteristicValue.toString()}`
     );

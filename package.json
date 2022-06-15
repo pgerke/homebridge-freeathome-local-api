@@ -1,7 +1,7 @@
 {
   "displayName": "free@home Local API",
   "name": "homebridge-freeathome-local-api",
-  "version": "0.1.0-pre",
+  "version": "0.2.0-pre",
   "preview": true,
   "description": "Control your free@home setup using the local API provided by your System Access Point",
   "license": "MIT",
@@ -33,11 +33,17 @@
   },
   "keywords": [
     "homebridge-plugin",
-    "freeathome"
+    "free@home",
+    "freeathome",
+    "buschjaeger",
+    "busch-jaeger",
+    "abb",
+    "smarthome"
   ],
   "dependencies": {
     "freeathome-local-api-client": "1.2.0-pre.5",
-    "node-fetch": "^2.6.7"
+    "node-fetch": "^2.6.7",
+    "rxjs": "^7.5.5"
   },
   "devDependencies": {
     "@istanbuljs/nyc-config-typescript": "^1.0.2",

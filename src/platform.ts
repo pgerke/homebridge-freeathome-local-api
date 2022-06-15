@@ -14,10 +14,11 @@ import {
   Configuration,
   WebSocketMessage,
 } from "freeathome-local-api-client";
-import { BinarySensorAccessory } from "./binarySensorAccessory";
+import { SwitchActuatorAccessory } from "./switchActuatorAccessory";
 import { FreeAtHomeContext, isFreeAtHomeAccessory } from "./freeAtHomeContext";
 import { FunctionID } from "./enumerations";
 import { FreeAtHomeAccessory } from "./freeAtHomeAccessory";
+import { Subscription } from "rxjs";
 
 // In the local API the system access point UUID is always an empty UUID. Could be extended later to also support the cloud API.
 export const emptyGuid = "00000000-0000-0000-0000-000000000000";
@@ -35,6 +36,7 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
   public readonly sysap: SystemAccessPoint;
   private fahAccessories = new Map<string, FreeAtHomeAccessory>();
   private fahLogger: FreeAtHomeLogger;
+  private readonly webSocketSubscription: Subscription;
 
   /**
    * Constructs a new free&#64;home Homebridge platform instance.
@@ -70,7 +72,7 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
     );
 
     // Subscribe to web socket messages
-    this.sysap
+    this.webSocketSubscription = this.sysap
       .getWebSocketMessages()
       .subscribe((message: WebSocketMessage) =>
         this.processWebSocketMesage(message)
@@ -92,6 +94,10 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
 
       // Connect to system access point web socket
       this.sysap.connectWebSocket(this.config.tlsEnabled as boolean);
+    });
+    this.api.on("shutdown", () => {
+      log.debug("Executed shutdown callback");
+      this.webSocketSubscription.unsubscribe();
     });
   }
 

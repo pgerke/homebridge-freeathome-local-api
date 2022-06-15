@@ -16,12 +16,15 @@ import {
 } from "freeathome-local-api-client";
 import { SwitchActuatorAccessory } from "./switchActuatorAccessory";
 import { FreeAtHomeContext, isFreeAtHomeAccessory } from "./freeAtHomeContext";
-import { FunctionID } from "./enumerations";
+import { FunctionID } from "./functionId";
 import { FreeAtHomeAccessory } from "./freeAtHomeAccessory";
+import { DimmerAccessory } from "./dimmerAccessory";
 import { Subscription } from "rxjs";
 
 // In the local API the system access point UUID is always an empty UUID. Could be extended later to also support the cloud API.
 export const emptyGuid = "00000000-0000-0000-0000-000000000000";
+/** The default debounce timer  */
+export const defaultDebounce = 250;
 
 /** The free&#64;home Homebridge platform. */
 export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
@@ -206,6 +209,20 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
             this.fahAccessories.set(
               `${serial}_${channelId}`,
               new SwitchActuatorAccessory(this, accessory)
+            );
+            return;
+          // case FunctionID.FID_ROOM_TEMPERATURE_CONTROLLER_MASTER_WITHOUT_FAN:
+          //   this.fahAccessories.set(
+          //     `${serial}_${channelId}`,
+          //     new RoomTemperatureSensorAccessory(this, accessory)
+          //   );
+          //   return;
+          case FunctionID.FID_DIMMING_ACTUATOR:
+          case FunctionID.FID_RGB_ACTUATOR:
+          case FunctionID.FID_RGB_W_ACTUATOR:
+            this.fahAccessories.set(
+              `${serial}_${channelId}`,
+              new DimmerAccessory(this, accessory)
             );
             return;
           default:

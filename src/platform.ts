@@ -205,7 +205,7 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
           case FunctionID.FID_SWITCH_ACTUATOR:
             this.fahAccessories.set(
               `${serial}_${channelId}`,
-              new BinarySensorAccessory(this, accessory)
+              new SwitchActuatorAccessory(this, accessory)
             );
             return;
           default:

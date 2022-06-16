@@ -7,45 +7,47 @@
   "schema": {
     "type": "object",
     "properties": {
-      "title": "Name",
-      "type": "string",
-      "required": true,
-      "default": "My free@home Setup"
-    },
-    "host": {
-      "title": "System Access Point Hostname",
-      "description": "The system access point host name",
-      "placeholder": "SysAP Host Name",
-      "type": "string",
-      "required": true
-    },
-    "user": {
-      "title": "User ID",
-      "description": "The user name that shall be used to authenticate with the system access point.",
-      "placeholder": "SysAP User",
-      "type": "string",
-      "required": true
-    },
-    "password": {
-      "title": "Password",
-      "description": "The password that shall be used to authenticate with the system access point",
-      "placeholder": "SysAP Password",
-      "type": "string",
-      "required": true
-    },
-    "tlsEnabled ": {
-      "title": "TLS Enabled",
-      "description": "Determines whether the communication with the system access point shall be protected by TLS. Disabling TLS poses a security risk!",
-      "type": "boolean",
-      "required": false,
-      "default": true
-    },
-    "verboseErrors ": {
-      "title": "Verbose Errors",
-      "description": "Determines whether verbose error messages shall be used, for example for message validation. This is a debug option that should only be enabled if needed.",
-      "type": "boolean",
-      "required": false,
-      "default": false
+      "name": {
+        "title": "Name",
+        "type": "string",
+        "required": true,
+        "default": "My free@home Setup"
+      },
+      "host": {
+        "title": "System Access Point Hostname",
+        "description": "The system access point host name",
+        "placeholder": "SysAP Host Name",
+        "type": "string",
+        "required": true
+      },
+      "user": {
+        "title": "User ID",
+        "description": "The user name that shall be used to authenticate with the system access point.",
+        "placeholder": "SysAP User",
+        "type": "string",
+        "required": true
+      },
+      "password": {
+        "title": "Password",
+        "description": "The password that shall be used to authenticate with the system access point",
+        "placeholder": "SysAP Password",
+        "type": "string",
+        "required": true
+      },
+      "tlsEnabled ": {
+        "title": "TLS Enabled",
+        "description": "Determines whether the communication with the system access point shall be protected by TLS. Disabling TLS poses a security risk!",
+        "type": "boolean",
+        "required": false,
+        "default": true
+      },
+      "verboseErrors ": {
+        "title": "Verbose Errors",
+        "description": "Determines whether verbose error messages shall be used, for example for message validation. This is a debug option that should only be enabled if needed.",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      }
     }
   }
 }

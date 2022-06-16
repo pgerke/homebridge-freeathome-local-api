@@ -10,19 +10,14 @@ A Homebridge plugin that allows the user to control BUSCH-JAEGER free@home devic
 
 ## Features
 
-- Control your BUSCH-JAEGER free@home lights, outlets, heating regulartors and more with your Apple devices
+- Control your BUSCH-JAEGER free@home lights, outlets, heating regulators and more with your Apple devices
 - Ask Siri to control your devices and set automations with Apple Home
 - Based on the local API provided by the System Access Point running firmware version >2.6.0
 - 100% covered by automated unit tests
 
 # Supported accessories
 
-- Binary Sensors
-- Outlets
-- Lights
-
-That's not that much yet, but keep your eyes peeled, new accessories are coming up soon:
-
+- Switch actuators: Binary switches, outlets, simple (on/off) lights
 - Dimmable Lights
 - Thermostats
 

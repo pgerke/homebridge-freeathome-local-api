@@ -9,6 +9,7 @@ import {
 } from "homebridge";
 import { PLATFORM_NAME, PLUGIN_NAME } from "./settings";
 import {
+  Channel,
   SystemAccessPoint,
   Logger as FreeAtHomeLogger,
   Configuration,
@@ -126,47 +127,30 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
       // Filter unsupported (pseudo) devices like scenes or third party devices
       if (!serial.startsWith("ABB")) return;
 
+      // Filter devices without channels
       const device = config[EmptyGuid].devices[serial];
       if (!device.channels) return;
 
-      const locationConfiguredOnDeviceLevel = device.floor && device.room;
+      // Room and Floor may be defined either on device or on channel level.
+      // Here we check if the location is defined on device level.
+      const locationConfiguredOnDeviceLevel = !!device.floor && !!device.room;
 
       // Enumerate the channels
       Object.keys(device.channels).forEach((channelId: string) => {
         const channel = device.channels?.[channelId];
-        if (!channel) return;
-
-        // Filter unsupported channels
         if (
-          !(
-            channel.functionID &&
-            Object.values<string>(FunctionID).includes(channel.functionID)
+          !this.isViableChannel(
+            serial,
+            channelId,
+            channel,
+            locationConfiguredOnDeviceLevel
           )
-        ) {
-          this.log.debug(
-            `Ignored ${serial} (${channelId}): FunctionID '${
-              channel.functionID ?? "<UNDEFINED>"
-            }' is not supported.`
-          );
+        )
           return;
-        }
-
-        // Filter unconfigured devices
-        if (
-          !locationConfiguredOnDeviceLevel &&
-          !(channel.floor && channel.room)
-        ) {
-          this.log.debug(
-            `Ignored ${serial} (${channelId}): Floor and room are not configured.`
-          );
-          return;
-        }
 
         // Create or restore the accessory
         const uuid = this.api.hap.uuid.generate(`${serial}_${channelId}`);
-        let accessory = this.accessories.find(
-          (accessory) => accessory.UUID === uuid
-        );
+        let accessory = this.accessories.find((a) => a.UUID === uuid);
         if (accessory) {
           // the accessory already exists
           this.log.info(
@@ -206,36 +190,76 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
         if (!isFreeAtHomeAccessory(accessory, this.fahLogger)) return;
 
         // create accessory
-        switch (channel.functionID) {
-          case FunctionID.FID_SWITCH_ACTUATOR:
-            this.fahAccessories.set(
-              `${serial}_${channelId}`,
-              new SwitchActuatorAccessory(this, accessory)
-            );
-            return;
-          case FunctionID.FID_ROOM_TEMPERATURE_CONTROLLER_MASTER_WITHOUT_FAN:
-            this.fahAccessories.set(
-              `${serial}_${channelId}`,
-              new RoomTemperatureControllerAccessory(this, accessory)
-            );
-            return;
-          case FunctionID.FID_DIMMING_ACTUATOR:
-          case FunctionID.FID_RGB_ACTUATOR:
-          case FunctionID.FID_RGB_W_ACTUATOR:
-            this.fahAccessories.set(
-              `${serial}_${channelId}`,
-              new DimmerAccessory(this, accessory)
-            );
-            return;
-          default:
-            this.log.error(
-              `${serial} (${channelId}): Cannot configure accessory for FunctionID '${
-                channel.functionID ?? "<UNDEFINED>"
-              }'!`
-            );
-        }
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        this.createAccessory(serial, channel.functionID!, channelId, accessory);
       });
     });
+  }
+  isViableChannel(
+    serial: string,
+    channelId: string,
+    channel: Channel | undefined,
+    locationConfiguredOnDeviceLevel: boolean
+  ): channel is Channel {
+    if (!channel) return false;
+
+    // Filter unsupported channels
+    if (
+      !(
+        channel.functionID &&
+        Object.values<string>(FunctionID).includes(channel.functionID)
+      )
+    ) {
+      this.log.debug(
+        `Ignored ${serial} (${channelId}): FunctionID '${
+          channel.functionID ?? "<UNDEFINED>"
+        }' is not supported.`
+      );
+      return false;
+    }
+
+    // Filter unconfigured devices
+    if (!locationConfiguredOnDeviceLevel && !(channel.floor && channel.room)) {
+      this.log.debug(
+        `Ignored ${serial} (${channelId}): Floor and room are not configured.`
+      );
+      return false;
+    }
+
+    return true;
+  }
+  private createAccessory(
+    serial: string,
+    functionID: string,
+    channelId: string,
+    accessory: PlatformAccessory<FreeAtHomeContext>
+  ) {
+    switch (functionID) {
+      case FunctionID.FID_SWITCH_ACTUATOR:
+        this.fahAccessories.set(
+          `${serial}_${channelId}`,
+          new SwitchActuatorAccessory(this, accessory)
+        );
+        return;
+      case FunctionID.FID_ROOM_TEMPERATURE_CONTROLLER_MASTER_WITHOUT_FAN:
+        this.fahAccessories.set(
+          `${serial}_${channelId}`,
+          new RoomTemperatureControllerAccessory(this, accessory)
+        );
+        return;
+      case FunctionID.FID_DIMMING_ACTUATOR:
+      case FunctionID.FID_RGB_ACTUATOR:
+      case FunctionID.FID_RGB_W_ACTUATOR:
+        this.fahAccessories.set(
+          `${serial}_${channelId}`,
+          new DimmerAccessory(this, accessory)
+        );
+        return;
+      default:
+        this.log.error(
+          `${serial} (${channelId}): Cannot configure accessory for FunctionID '${functionID}'!`
+        );
+    }
   }
 
   private processWebSocketMesage(message: WebSocketMessage): void {
@@ -245,7 +269,7 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
     datapoints.forEach((datapoint) => {
       // Ignore data points that have an unexpected format
       const match = datapoint.match(
-        /^(ABB[a-zA-Z0-9]{9})\/(ch\d{4})\/(odp\d{4})$/i
+        /^(ABB[a-z0-9]{9})\/(ch\d{4})\/(odp\d{4})$/i
       );
       if (!match) {
         this.log.debug(`Ignored datapoint ${datapoint}: Unexpected format`);

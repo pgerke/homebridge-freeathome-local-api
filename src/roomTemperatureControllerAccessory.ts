@@ -16,8 +16,8 @@ export class RoomTemperatureControllerAccessory extends FreeAtHomeAccessory {
   private controllerOnOff: boolean;
   private heatingOn: boolean;
   private coolingOn: boolean;
-  private sysApTargetTemperature: number;
   private stateCurrentTemperature: number;
+  private stateTargetTemperature: number;
   private readonly setTargetHeatingCoolingState: CharacteristicSetHandler =
     debounce(
       (value: CharacteristicValue) =>
@@ -49,10 +49,6 @@ export class RoomTemperatureControllerAccessory extends FreeAtHomeAccessory {
       ? this.platform.Characteristic.TargetHeatingCoolingState.AUTO
       : this.platform.Characteristic.TargetHeatingCoolingState.OFF;
   }
-  private get stateTargetTemperature(): number {
-    return this.sysApTargetTemperature;
-    // return Math.max(10.0, this.sysApTargetTemperature);
-  }
 
   /**
    * Constructs a new Room Temperature Controller accessory instance.
@@ -78,7 +74,7 @@ export class RoomTemperatureControllerAccessory extends FreeAtHomeAccessory {
     this.stateCurrentTemperature = parseFloat(
       this.accessory.context.channel.outputs?.odp0010.value ?? "0.0"
     );
-    this.sysApTargetTemperature = parseFloat(
+    this.stateTargetTemperature = parseFloat(
       this.accessory.context.channel.outputs?.odp0006.value ?? "0.0"
     );
 
@@ -211,7 +207,7 @@ export class RoomTemperatureControllerAccessory extends FreeAtHomeAccessory {
         );
         return;
       case "odp0006":
-        this.sysApTargetTemperature = parseFloat(value);
+        this.stateTargetTemperature = parseFloat(value);
         this.doUpdateDatapoint(
           "Room Temperature Controller",
           this.service,

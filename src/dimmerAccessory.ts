@@ -1,29 +1,14 @@
-import {
-  CharacteristicSetHandler,
-  CharacteristicValue,
-  PlatformAccessory,
-  Service,
-} from "homebridge";
+import { CharacteristicValue, PlatformAccessory, Service } from "homebridge";
 import { FreeAtHomeAccessory } from "./freeAtHomeAccessory";
 import { FreeAtHomeContext } from "./freeAtHomeContext";
 import { FreeAtHomeHomebridgePlatform } from "./platform";
-import { DefaultDebounce, EmptyGuid } from "./util";
-import { debounce } from "debounce";
+import { EmptyGuid } from "./util";
 
 /** A dimming actuator accessory.*/
 export class DimmerAccessory extends FreeAtHomeAccessory {
   private readonly service: Service;
   private stateOn: boolean;
   private stateBrightness: number;
-
-  private readonly setOn: CharacteristicSetHandler = debounce(
-    (value: CharacteristicValue) => this.setOnDebounced(value),
-    DefaultDebounce
-  );
-  private readonly setBrightness: CharacteristicSetHandler = debounce(
-    (value: CharacteristicValue) => this.setBrightnessDebounced(value),
-    DefaultDebounce
-  );
 
   /**
    * Constructs a new dimming actuator accessory instance.
@@ -64,7 +49,11 @@ export class DimmerAccessory extends FreeAtHomeAccessory {
       .onGet(() => this.stateBrightness);
   }
 
-  private async setOnDebounced(value: CharacteristicValue): Promise<void> {
+  private async setOn(value: CharacteristicValue): Promise<void> {
+    // avoid unncessary updates or update cache
+    if (value === this.stateOn) return;
+    else this.stateOn = value as boolean;
+
     // log event
     this.platform.log.info(
       `${this.accessory.displayName} (Dimmer Accessory ${
@@ -83,12 +72,14 @@ export class DimmerAccessory extends FreeAtHomeAccessory {
 
     // restore previous brightness
     if (value && this.stateBrightness)
-      await this.setBrightnessDebounced(this.stateBrightness);
+      await this.setBrightness(this.stateBrightness);
   }
 
-  private async setBrightnessDebounced(
-    value: CharacteristicValue
-  ): Promise<void> {
+  private async setBrightness(value: CharacteristicValue): Promise<void> {
+    // avoid unncessary updates or update cache
+    if (value === this.stateBrightness) return;
+    else this.stateBrightness = value as number;
+
     // log event
     this.platform.log.info(
       `${this.accessory.displayName} (Dimmer Accessory ${
@@ -120,6 +111,9 @@ export class DimmerAccessory extends FreeAtHomeAccessory {
         );
         return;
       case "odp0001":
+        // Do NOT set brightness to 0, otherwise when turning the dimmer back on, brightness will be 100%.
+        if (value === "0") return;
+
         this.stateBrightness = parseInt(value);
         this.doUpdateDatapoint(
           "Dimmer Accessory",

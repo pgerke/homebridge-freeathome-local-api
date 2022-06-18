@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.3.0-pre - 19.06.2022
+
+### Added
+
+- [PG-186](https://pgerke.atlassian.net/browse/PG-186):
+  Automatic reconnection to System Access Point web socket after connection loss.
+
+### Fixed
+
+- [PG-193](https://pgerke.atlassian.net/browse/PG-193):
+  Rolled back to ts-node@10.8.0 to fix an issue with code coverage calculation.
+
 ## 0.2.3-pre - 17.06.2022
 
 ### Fixed

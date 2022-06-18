@@ -24,6 +24,8 @@ import { Subscription } from "rxjs";
 import { RoomTemperatureControllerAccessory } from "./roomTemperatureControllerAccessory";
 import { EmptyGuid } from "./util";
 
+const DelayFactor = 200;
+
 /** The free&#64;home Homebridge platform. */
 export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
   /** The service reference */
@@ -38,6 +40,8 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
   private fahAccessories = new Map<string, FreeAtHomeAccessory>();
   private fahLogger: FreeAtHomeLogger;
   private readonly webSocketSubscription: Subscription;
+  private wsConnectionAttempt = 0;
+  private readonly maxWsRetryCount: number;
 
   /**
    * Constructs a new free&#64;home Homebridge platform instance.
@@ -50,6 +54,9 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
     public readonly config: PlatformConfig,
     public readonly api: API
   ) {
+    // set maximum reconnection attempt count
+    this.maxWsRetryCount = (this.config.maxWsRetryCount as number) ?? 10;
+
     // Create a logger for the free&#64;home Local API Client
     this.fahLogger = {
       debug: (message?: unknown, ...optionalParams: unknown[]) =>
@@ -71,6 +78,33 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
       this.config.verboseErrors as boolean,
       this.fahLogger
     );
+
+    // React to web socket events
+    this.sysap.on("websocket-open", () => {
+      this.wsConnectionAttempt = 0;
+    });
+    this.sysap.on("websocket-close", (code: number, reason: Buffer) => {
+      if (code === 1000) return;
+
+      this.log.warn(
+        `Websocket to System Access Point was closed with code ${code.toString()}: ${reason.toString()}`
+      );
+      if (this.wsConnectionAttempt >= this.maxWsRetryCount) {
+        this.log.error(
+          "Maximum retry count exceeded. Will not try to reconnect to websocket again."
+        );
+        return;
+      }
+
+      const delay = DelayFactor * 2 ** this.wsConnectionAttempt++;
+      this.log.info(
+        `Attempting to reconnect in ${delay}ms [${this.wsConnectionAttempt}/${this.maxWsRetryCount}]`
+      );
+      setTimeout(
+        () => this.sysap.connectWebSocket(this.config.tlsEnabled as boolean),
+        delay
+      );
+    });
 
     // Subscribe to web socket messages
     this.webSocketSubscription = this.sysap

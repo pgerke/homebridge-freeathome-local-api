@@ -118,14 +118,9 @@ export class RoomTemperatureControllerAccessory extends FreeAtHomeAccessory {
     );
 
     // Heating Cooling State must not be OFF to set the target temperature
-    if (
-      this.stateCurrentHeatingCoolingState ===
-      this.platform.Characteristic.CurrentHeatingCoolingState.OFF
-    ) {
-      await this.setTargetHeatingCoolingState(
-        this.platform.Characteristic.TargetHeatingCoolingState.AUTO
-      );
-    }
+    await this.setTargetHeatingCoolingState(
+      this.platform.Characteristic.TargetHeatingCoolingState.AUTO
+    );
 
     // set data point at SysAP
     await this.platform.sysap.setDatapoint(
@@ -140,6 +135,10 @@ export class RoomTemperatureControllerAccessory extends FreeAtHomeAccessory {
   private async setTargetHeatingCoolingState(
     value: CharacteristicValue
   ): Promise<void> {
+    // avoid unncessary updates or update cache
+    if (value === this.stateTargetHeatingCoolingState) return;
+    else this.controllerOnOff = !!(value as number);
+
     // log event
     this.platform.log.info(
       `${this.accessory.displayName} (Room Temperature Controller ${

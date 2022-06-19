@@ -26,9 +26,9 @@ export class DimmerAccessory extends FreeAtHomeAccessory {
       this.accessory.context.channel.outputs?.odp0000.value ?? "0"
     );
     this.stateBrightness = parseInt(
-      (this.stateOn
-        ? this.accessory.context.channel.outputs?.odp0001.value
-        : this.accessory.context.channel.inputs?.idp0002.value) ?? "0"
+      this.accessory.context.channel.outputs?.odp0001.value ??
+        this.accessory.context.channel.inputs?.idp0002.value ??
+        "0"
     );
 
     // get the Lightbulb service if it exists, otherwise create a new service instance

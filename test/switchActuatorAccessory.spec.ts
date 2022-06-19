@@ -21,13 +21,19 @@ describe("Switch Actuator Accessory", () => {
     channel = {};
     device = {};
     platform = new MockFreeAtHomeHomebridgePlatform();
-    platformAccessory = new PlatformAccessory("Test Accessory", EmptyGuid);
+    platformAccessory = new PlatformAccessory(
+      "Switch Actuator Accessory",
+      EmptyGuid
+    );
     platformAccessory.context = {
       channel: channel,
       channelId: "ch1234",
       device: device,
       deviceSerial: "ABB7xxxxxxxx",
     };
+  });
+  afterEach(() => {
+    platform.resetLoggerCalls();
   });
 
   it("should be created", async () => {
@@ -94,7 +100,7 @@ describe("Switch Actuator Accessory", () => {
     );
     // eslint-disable-next-line @typescript-eslint/unbound-method
     expect(platform.log.info).toHaveBeenCalledWith(
-      "Test Accessory (Switch Actuator ABB7xxxxxxxx (ch1234)) set characteristic On -> true"
+      "Switch Actuator Accessory (Switch Actuator ABB7xxxxxxxx (ch1234)) set characteristic On -> true"
     );
   });
 
@@ -124,7 +130,7 @@ describe("Switch Actuator Accessory", () => {
     );
     // eslint-disable-next-line @typescript-eslint/unbound-method
     expect(platform.log.info).toHaveBeenCalledWith(
-      "Test Accessory (Switch Actuator ABB7xxxxxxxx (ch1234)) set characteristic On -> false"
+      "Switch Actuator Accessory (Switch Actuator ABB7xxxxxxxx (ch1234)) set characteristic On -> false"
     );
   });
 

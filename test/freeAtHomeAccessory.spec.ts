@@ -47,6 +47,9 @@ describe("free@home Accessory", () => {
       deviceSerial: "ABB7xxxxxxxx",
     };
   });
+  afterEach(() => {
+    platform.resetLoggerCalls();
+  });
 
   it("should be created", () => {
     const accessory = new TestAccessory(platform, platformAccessory);

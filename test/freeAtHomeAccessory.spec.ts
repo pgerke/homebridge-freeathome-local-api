@@ -1,33 +1,9 @@
 import { Channel, Device } from "freeathome-local-api-client";
-import { Service } from "homebridge";
 import { PlatformAccessory } from "homebridge/lib/platformAccessory";
-import { FreeAtHomeAccessory } from "../src/freeAtHomeAccessory";
 import { FreeAtHomeContext } from "../src/freeAtHomeContext";
 import { EmptyGuid } from "../src/util";
 import { MockFreeAtHomeHomebridgePlatform } from "./platform.mock";
-
-class TestAccessory extends FreeAtHomeAccessory {
-  readonly service: Service;
-  constructor(
-    readonly platform: MockFreeAtHomeHomebridgePlatform,
-    readonly accessory: PlatformAccessory<FreeAtHomeContext>
-  ) {
-    super(platform, accessory);
-
-    this.service = this.service =
-      this.accessory.getService(this.platform.Service.Diagnostics) ||
-      this.accessory.addService(this.platform.Service.Diagnostics);
-  }
-
-  public override updateDatapoint(datapoint: string, value: string): void {
-    this.doUpdateDatapoint(
-      datapoint,
-      this.service,
-      this.platform.Characteristic.SerialNumber,
-      value
-    );
-  }
-}
+import { TestAccessory } from "./TestAccessory.mock";
 
 describe("free@home Accessory", () => {
   let channel: Channel;

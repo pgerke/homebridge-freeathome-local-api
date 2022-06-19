@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - [PG-186](https://pgerke.atlassian.net/browse/PG-186):
   Automatic reconnection to System Access Point web socket after connection loss.
+- [PG-190](https://pgerke.atlassian.net/browse/PG-190):
+  Meet test coverage target
 
 ### Fixed
 

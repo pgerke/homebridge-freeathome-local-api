@@ -437,6 +437,7 @@ describe("Room Temperature Controller Accessory", () => {
     );
     // eslint-disable-next-line @typescript-eslint/unbound-method
     expect(platform.log.info).toHaveBeenCalledWith(
+      // eslint-disable-next-line max-len
       "Room Temperature Controller Accessory (Room Temperature Controller ABB7xxxxxxxx (ch1234)) set characteristic TargetHeatingCoolingState -> 0"
     );
   });
@@ -489,6 +490,7 @@ describe("Room Temperature Controller Accessory", () => {
     );
     // eslint-disable-next-line @typescript-eslint/unbound-method
     expect(platform.log.info).toHaveBeenCalledWith(
+      // eslint-disable-next-line max-len
       "Room Temperature Controller Accessory (Room Temperature Controller ABB7xxxxxxxx (ch1234)) set characteristic TargetHeatingCoolingState -> 3"
     );
   });

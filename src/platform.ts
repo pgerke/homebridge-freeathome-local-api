@@ -37,8 +37,8 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
   public readonly accessories: Array<PlatformAccessory<FreeAtHomeContext>> = [];
   /** The system access point */
   public readonly sysap: SystemAccessPoint;
-  private fahAccessories = new Map<string, FreeAtHomeAccessory>();
-  private fahLogger: FreeAtHomeLogger;
+  private readonly fahAccessories = new Map<string, FreeAtHomeAccessory>();
+  private readonly fahLogger: FreeAtHomeLogger;
   private readonly webSocketSubscription: Subscription;
   private wsConnectionAttempt = 0;
   private readonly maxWsRetryCount: number;
@@ -60,13 +60,13 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
     // Create a logger for the free&#64;home Local API Client
     this.fahLogger = {
       debug: (message?: unknown, ...optionalParams: unknown[]) =>
-        log.debug((message as string) ?? "", ...optionalParams),
+        log.debug(<string>message, ...optionalParams),
       error: (message?: unknown, ...optionalParams: unknown[]) =>
-        log.error((message as string) ?? "", ...optionalParams),
+        log.error(<string>message, ...optionalParams),
       log: (message?: unknown, ...optionalParams: unknown[]) =>
-        log.info((message as string) ?? "", ...optionalParams),
+        log.info(<string>message, ...optionalParams),
       warn: (message?: unknown, ...optionalParams: unknown[]) =>
-        log.warn((message as string) ?? "", ...optionalParams),
+        log.warn(<string>message, ...optionalParams),
     };
 
     // Create a system access point instance
@@ -171,7 +171,9 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
 
       // Enumerate the channels
       Object.keys(device.channels).forEach((channelId: string) => {
-        const channel = device.channels?.[channelId];
+        // We are enumerating the keys of the channels object. Neither the channels object nor the channelId can possibly be undefined.
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const channel = device.channels![channelId];
         if (
           !this.isViableChannel(
             serial,
@@ -220,7 +222,10 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
           ]);
         }
 
-        // Ignore non free&#64;home accessories
+        // This check is used to apply the type guard so the accessory can be used as a free@home accesory without a cast.
+        // Given that the accessory context is constructed in the previous lines, it is impossible for the type check to fail.
+        // Consequently the branch can never be covered and is excluded from the coverage.
+        /* istanbul ignore next */
         if (!isFreeAtHomeAccessory(accessory, this.fahLogger)) return;
 
         // create accessory
@@ -229,14 +234,13 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
       });
     });
   }
-  isViableChannel(
+
+  private isViableChannel(
     serial: string,
     channelId: string,
-    channel: Channel | undefined,
+    channel: Channel,
     locationConfiguredOnDeviceLevel: boolean
   ): channel is Channel {
-    if (!channel) return false;
-
     // Filter unsupported channels
     if (
       !(
@@ -267,7 +271,7 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
     functionID: string,
     channelId: string,
     accessory: PlatformAccessory<FreeAtHomeContext>
-  ) {
+  ): void {
     switch (functionID) {
       case FunctionID.FID_SWITCH_ACTUATOR:
         this.fahAccessories.set(
@@ -310,13 +314,9 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
         return;
       }
 
-      // Ignore data points we don't have an accessory for
-      const identifier = `${match[1]}_${match[2]}`;
-      if (!this.fahAccessories.has(identifier)) return;
-
-      // Update the accessory data point
+      // Ignore the data point if we don't have an accessory for it or update the accessory
       this.fahAccessories
-        .get(identifier)
+        .get(`${match[1]}_${match[2]}`)
         ?.updateDatapoint(match[3], message[EmptyGuid].datapoints[datapoint]);
     });
   }

@@ -265,6 +265,9 @@ describe("free@home Homebridge Platform", () => {
               ch0000: {
                 functionID: "23",
               },
+              ch0001: {
+                functionID: "20",
+              },
             },
           },
         },

@@ -276,7 +276,7 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
   ): void {
     switch (functionID.toUpperCase()) {
       case FunctionID.FID_DES_AUTOMATIC_DOOR_OPENER_ACTUATOR:
-        // case FunctionID.FID_SWITCH_ACTUATOR:
+      case FunctionID.FID_SWITCH_ACTUATOR:
         this.fahAccessories.set(
           `${serial}_${channelId}`,
           new SwitchActuatorAccessory(this, accessory)

@@ -279,7 +279,7 @@ describe("free@home Homebridge Platform", () => {
     };
     spyOn(platform.sysap, "getConfiguration").and.resolveTo(configuration);
     await instance.discoverDevices();
-    expect(instance.fahAccessories.size).toBe(3);
+    expect(instance.fahAccessories.size).toBe(4);
   });
 
   it("should not create an accessory for an unknown function ID", () => {

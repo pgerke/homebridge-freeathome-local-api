@@ -245,7 +245,9 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
     if (
       !(
         channel.functionID &&
-        Object.values<string>(FunctionID).includes(channel.functionID)
+        Object.values<string>(FunctionID).includes(
+          channel.functionID.toUpperCase()
+        )
       )
     ) {
       this.log.debug(
@@ -272,8 +274,9 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
     channelId: string,
     accessory: PlatformAccessory<FreeAtHomeContext>
   ): void {
-    switch (functionID) {
-      case FunctionID.FID_SWITCH_ACTUATOR:
+    switch (functionID.toUpperCase()) {
+      case FunctionID.FID_DES_AUTOMATIC_DOOR_OPENER_ACTUATOR:
+        // case FunctionID.FID_SWITCH_ACTUATOR:
         this.fahAccessories.set(
           `${serial}_${channelId}`,
           new SwitchActuatorAccessory(this, accessory)

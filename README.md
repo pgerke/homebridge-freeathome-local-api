@@ -20,6 +20,7 @@ A Homebridge plugin that allows the user to control BUSCH-JAEGER free@home devic
 - Switch actuators: Binary switches, outlets, simple (on/off) lights
 - Dimmable Lights
 - Thermostats
+- The automatic door opener (which will be displayed as a switch)
 
 I'll add further accessories over time, but feel free to request your favorite accessory type in a [GitHub issue](https://github.com/pgerke/homebridge-freeathome-local-api/issues).
 

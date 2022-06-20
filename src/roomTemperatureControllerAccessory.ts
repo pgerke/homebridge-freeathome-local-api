@@ -1,14 +1,8 @@
-import {
-  CharacteristicSetHandler,
-  CharacteristicValue,
-  PlatformAccessory,
-  Service,
-} from "homebridge";
+import { CharacteristicValue, PlatformAccessory, Service } from "homebridge";
 import { FreeAtHomeAccessory } from "./freeAtHomeAccessory";
 import { FreeAtHomeContext } from "./freeAtHomeContext";
 import { FreeAtHomeHomebridgePlatform } from "./platform";
-import { DefaultDebounce, EmptyGuid } from "./util";
-import { debounce } from "debounce";
+import { EmptyGuid } from "./util";
 
 /** A room temperature controller accessory. */
 export class RoomTemperatureControllerAccessory extends FreeAtHomeAccessory {
@@ -18,16 +12,6 @@ export class RoomTemperatureControllerAccessory extends FreeAtHomeAccessory {
   private coolingOn: boolean;
   private stateCurrentTemperature: number;
   private stateTargetTemperature: number;
-  private readonly setTargetHeatingCoolingState: CharacteristicSetHandler =
-    debounce(
-      (value: CharacteristicValue) =>
-        this.setTargetHeatingCoolingStateDebounced(value),
-      DefaultDebounce
-    );
-  private readonly setTargetTemperature: CharacteristicSetHandler = debounce(
-    (value: CharacteristicValue) => this.setTargetTemperatureDebounced(value),
-    DefaultDebounce
-  );
 
   private get stateCurrentHeatingCoolingState(): number {
     if (!this.controllerOnOff) {
@@ -119,9 +103,13 @@ export class RoomTemperatureControllerAccessory extends FreeAtHomeAccessory {
       );
   }
 
-  private async setTargetTemperatureDebounced(
+  private async setTargetTemperature(
     value: CharacteristicValue
   ): Promise<void> {
+    // avoid unncessary updates or update cache
+    if (value === this.stateTargetTemperature) return;
+    else this.stateTargetTemperature = value as number;
+
     // log event
     this.platform.log.info(
       `${this.accessory.displayName} (Room Temperature Controller ${
@@ -130,14 +118,9 @@ export class RoomTemperatureControllerAccessory extends FreeAtHomeAccessory {
     );
 
     // Heating Cooling State must not be OFF to set the target temperature
-    if (
-      this.stateCurrentHeatingCoolingState ===
-      this.platform.Characteristic.CurrentHeatingCoolingState.OFF
-    ) {
-      await this.setTargetHeatingCoolingStateDebounced(
-        this.platform.Characteristic.TargetHeatingCoolingState.AUTO
-      );
-    }
+    await this.setTargetHeatingCoolingState(
+      this.platform.Characteristic.TargetHeatingCoolingState.AUTO
+    );
 
     // set data point at SysAP
     await this.platform.sysap.setDatapoint(
@@ -145,13 +128,17 @@ export class RoomTemperatureControllerAccessory extends FreeAtHomeAccessory {
       this.accessory.context.deviceSerial,
       this.accessory.context.channelId,
       "idp0016",
-      (value as number).toFixed(1)
+      this.stateTargetTemperature.toFixed(1)
     );
   }
 
-  private async setTargetHeatingCoolingStateDebounced(
+  private async setTargetHeatingCoolingState(
     value: CharacteristicValue
   ): Promise<void> {
+    // avoid unncessary updates or update cache
+    if (value === this.stateTargetHeatingCoolingState) return;
+    else this.controllerOnOff = !!(value as number);
+
     // log event
     this.platform.log.info(
       `${this.accessory.displayName} (Room Temperature Controller ${

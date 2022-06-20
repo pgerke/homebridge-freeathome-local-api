@@ -1,14 +1,8 @@
-import {
-  CharacteristicSetHandler,
-  CharacteristicValue,
-  PlatformAccessory,
-  Service,
-} from "homebridge";
+import { CharacteristicValue, PlatformAccessory, Service } from "homebridge";
 import { FreeAtHomeAccessory } from "./freeAtHomeAccessory";
 import { FreeAtHomeContext } from "./freeAtHomeContext";
 import { FreeAtHomeHomebridgePlatform } from "./platform";
-import { DefaultDebounce, EmptyGuid } from "./util";
-import { debounce } from "debounce";
+import { EmptyGuid } from "./util";
 
 /**
  * A switch actuator accessory.
@@ -20,10 +14,6 @@ import { debounce } from "debounce";
 export class SwitchActuatorAccessory extends FreeAtHomeAccessory {
   private readonly service: Service;
   private stateOn: boolean;
-  private readonly setOn: CharacteristicSetHandler = debounce(
-    (value: CharacteristicValue) => this.setOnDebounced(value),
-    DefaultDebounce
-  );
 
   /**
    * Constructs a new switch actuator accessory instance.
@@ -53,7 +43,11 @@ export class SwitchActuatorAccessory extends FreeAtHomeAccessory {
       .onGet(() => this.stateOn);
   }
 
-  private async setOnDebounced(value: CharacteristicValue): Promise<void> {
+  private async setOn(value: CharacteristicValue): Promise<void> {
+    // avoid unncessary updates or update cache
+    if (value === this.stateOn) return;
+    else this.stateOn = value as boolean;
+
     // log event
     this.platform.log.info(
       `${this.accessory.displayName} (Switch Actuator ${

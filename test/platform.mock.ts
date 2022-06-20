@@ -19,4 +19,12 @@ export class MockFreeAtHomeHomebridgePlatform extends FreeAtHomeHomebridgePlatfo
   constructor() {
     super(logger, config, api);
   }
+
+  public resetLoggerCalls(): void {
+    (this.log.debug as jasmine.Spy).calls.reset();
+    (this.log.error as jasmine.Spy).calls.reset();
+    (this.log.info as jasmine.Spy).calls.reset();
+    (this.log.warn as jasmine.Spy).calls.reset();
+    (this.log.log as jasmine.Spy).calls.reset();
+  }
 }

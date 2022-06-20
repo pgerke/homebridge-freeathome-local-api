@@ -13,4 +13,6 @@ export enum FunctionID {
   FID_RGB_W_ACTUATOR = "2E",
   /** A dim actuator that can also control the light hue */
   FID_RGB_ACTUATOR = "2F",
+  /** An automatic door opener */
+  FID_DES_AUTOMATIC_DOOR_OPENER_ACTUATOR = "20",
 }

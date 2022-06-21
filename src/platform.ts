@@ -17,12 +17,13 @@ import {
 } from "freeathome-local-api-client";
 import { SwitchActuatorAccessory } from "./switchActuatorAccessory";
 import { FreeAtHomeContext, isFreeAtHomeAccessory } from "./freeAtHomeContext";
-import { FunctionID } from "./functionId";
+import { experimenallySupportedFunctionIDs, FunctionID } from "./functionId";
 import { FreeAtHomeAccessory } from "./freeAtHomeAccessory";
 import { DimmerAccessory } from "./dimmerAccessory";
 import { Subscription } from "rxjs";
 import { RoomTemperatureControllerAccessory } from "./roomTemperatureControllerAccessory";
 import { EmptyGuid } from "./util";
+import { SmokeDetectorAccessory } from "./smokeDetectorAccessory";
 
 const DelayFactor = 200;
 
@@ -42,6 +43,10 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
   private readonly webSocketSubscription: Subscription;
   private wsConnectionAttempt = 0;
   private readonly maxWsRetryCount: number;
+
+  private get experimentalMode(): boolean {
+    return this.config.experimental as boolean;
+  }
 
   /**
    * Constructs a new free&#64;home Homebridge platform instance.
@@ -112,6 +117,8 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
       .subscribe((message: WebSocketMessage) =>
         this.processWebSocketMesage(message)
       );
+
+    if (this.experimentalMode) this.log.warn("Experimental Mode enabled!");
 
     this.log.debug("Finished initializing platform:", this.config.name);
 
@@ -266,6 +273,16 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
       return false;
     }
 
+    // Filter experimental devices
+    if (
+      !this.experimentalMode &&
+      experimenallySupportedFunctionIDs.includes(
+        channel.functionID.toUpperCase() as FunctionID
+      )
+    ) {
+      return false;
+    }
+
     return true;
   }
   private createAccessory(
@@ -294,6 +311,12 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
         this.fahAccessories.set(
           `${serial}_${channelId}`,
           new DimmerAccessory(this, accessory)
+        );
+        return;
+      case FunctionID.FID_SMOKE_DETECTOR:
+        this.fahAccessories.set(
+          `${serial}_${channelId}`,
+          new SmokeDetectorAccessory(this, accessory)
         );
         return;
       default:

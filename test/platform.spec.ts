@@ -58,6 +58,9 @@ const configuration: Configuration = {
           ch0002: {
             functionID: "7D",
           },
+          ch0003: {
+            functionID: "11",
+          },
         },
       },
     },
@@ -300,7 +303,7 @@ describe("free@home Homebridge Platform", () => {
     };
     spyOn(platform.sysap, "getConfiguration").and.resolveTo(configuration);
     await instance.discoverDevices();
-    expect(instance.fahAccessories.size).toBe(5);
+    expect(instance.fahAccessories.size).toBe(6);
   });
 
   it("should not create an accessory for an unknown function ID", () => {

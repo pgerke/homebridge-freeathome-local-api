@@ -29,7 +29,7 @@ export class SmokeDetectorAccessory extends FreeAtHomeAccessory {
       this.accessory.getService(this.platform.Service.SmokeSensor) ||
       this.accessory.addService(this.platform.Service.SmokeSensor);
 
-    // register handlers for the smoke detected dharacteristic
+    // register handlers for the smoke detected characteristic
     this.service
       .getCharacteristic(this.platform.Characteristic.SmokeDetected)
       .onGet(() =>

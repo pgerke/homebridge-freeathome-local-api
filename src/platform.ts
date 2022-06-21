@@ -24,6 +24,7 @@ import { Subscription } from "rxjs";
 import { RoomTemperatureControllerAccessory } from "./roomTemperatureControllerAccessory";
 import { EmptyGuid } from "./util";
 import { SmokeDetectorAccessory } from "./smokeDetectorAccessory";
+import { MotionSensorAccessory } from "./motionSensorAccessory";
 
 const DelayFactor = 200;
 
@@ -317,6 +318,12 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
         this.fahAccessories.set(
           `${serial}_${channelId}`,
           new SmokeDetectorAccessory(this, accessory)
+        );
+        return;
+      case FunctionID.FID_MOVEMENT_DETECTOR:
+        this.fahAccessories.set(
+          `${serial}_${channelId}`,
+          new MotionSensorAccessory(this, accessory)
         );
         return;
       default:

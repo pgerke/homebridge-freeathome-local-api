@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.4.0-pre - 21.06.2022
+
+### Added
+
+- [PG-195](https://pgerke.atlassian.net/browse/PG-195):
+  Experimentally support smoke detectors
+- [PG-197](https://pgerke.atlassian.net/browse/PG-197):
+  Experimentally support motion sensors
+- [PG-177](https://pgerke.atlassian.net/browse/PG-177):
+  Support sponsoring
+
+### Fixed
+
+- [PG-196](https://pgerke.atlassian.net/browse/PG-196):
+  Fixed an issue with a regular expression causing update messages to be rejected
+
 ## 0.3.1-pre - 20.06.2022
 
 ### Fixed

@@ -17,6 +17,60 @@ import { FreeAtHomeHomebridgePlatform } from "../src/platform";
 import { EmptyGuid } from "../src/util";
 import { TestAccessory } from "./TestAccessory.mock";
 
+const configuration: Configuration = {
+  "00000000-0000-0000-0000-000000000000": {
+    sysapName: "Gerke",
+    devices: {
+      FFFF48000001: {},
+      ABB700000000: {},
+      ABB700000001: {
+        channels: {
+          ch0000: {},
+          ch0001: {
+            functionID: "never",
+          },
+          ch0002: {
+            functionID: "7",
+          },
+          ch0003: {
+            functionID: "7",
+            floor: "1",
+            room: "1",
+          },
+          ch0004: {
+            displayName: "Dimmer",
+            functionID: "12",
+            floor: "1",
+            room: "1",
+          },
+        },
+      },
+      ABB700000002: {
+        floor: "1",
+        room: "1",
+        channels: {
+          ch0000: {
+            functionID: "23",
+          },
+          ch0001: {
+            functionID: "20",
+          },
+          ch0002: {
+            functionID: "7D",
+          },
+          ch0003: {
+            functionID: "11",
+          },
+        },
+      },
+    },
+    floorplan: {
+      floors: {},
+    },
+    users: {},
+  },
+};
+
 describe("free@home Homebridge Platform", () => {
   let api: HomebridgeAPI;
   let config: PlatformConfig;
@@ -230,56 +284,26 @@ describe("free@home Homebridge Platform", () => {
     }
 
     platform.accessories.push(knownAccessory);
-    const configuration: Configuration = {
-      "00000000-0000-0000-0000-000000000000": {
-        sysapName: "Gerke",
-        devices: {
-          FFFF48000001: {},
-          ABB700000000: {},
-          ABB700000001: {
-            channels: {
-              ch0000: {},
-              ch0001: {
-                functionID: "never",
-              },
-              ch0002: {
-                functionID: "7",
-              },
-              ch0003: {
-                functionID: "7",
-                floor: "1",
-                room: "1",
-              },
-              ch0004: {
-                displayName: "Dimmer",
-                functionID: "12",
-                floor: "1",
-                room: "1",
-              },
-            },
-          },
-          ABB700000002: {
-            floor: "1",
-            room: "1",
-            channels: {
-              ch0000: {
-                functionID: "23",
-              },
-              ch0001: {
-                functionID: "20",
-              },
-            },
-          },
-        },
-        floorplan: {
-          floors: {},
-        },
-        users: {},
-      },
-    };
     spyOn(platform.sysap, "getConfiguration").and.resolveTo(configuration);
     await instance.discoverDevices();
     expect(instance.fahAccessories.size).toBe(4);
+  });
+
+  it("should discover devices from the system access point in experimental mode", async () => {
+    config.experimental = true;
+    const platform = new FreeAtHomeHomebridgePlatform(logger, config, api);
+    // eslint-disable-next-line @typescript-eslint/unbound-method
+    expect(logger.warn).toHaveBeenCalledWith("Experimental Mode enabled!");
+    const instance = platform as unknown as {
+      readonly fahAccessories: Map<string, FreeAtHomeAccessory>;
+      readonly sysap: {
+        readonly logger: FahLogger;
+      };
+      discoverDevices(): Promise<void>;
+    };
+    spyOn(platform.sysap, "getConfiguration").and.resolveTo(configuration);
+    await instance.discoverDevices();
+    expect(instance.fahAccessories.size).toBe(6);
   });
 
   it("should not create an accessory for an unknown function ID", () => {

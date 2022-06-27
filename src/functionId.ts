@@ -15,4 +15,14 @@ export enum FunctionID {
   FID_RGB_ACTUATOR = "2F",
   /** An automatic door opener */
   FID_DES_AUTOMATIC_DOOR_OPENER_ACTUATOR = "20",
+  /** A smoke detector */
+  FID_SMOKE_DETECTOR = "7D",
+  /** A motion detector */
+  FID_MOVEMENT_DETECTOR = "11",
 }
+
+/** Contains the list of function IDs that are only experimentally supported by the plugin */
+export const experimenallySupportedFunctionIDs: Array<FunctionID> = [
+  FunctionID.FID_SMOKE_DETECTOR,
+  FunctionID.FID_MOVEMENT_DETECTOR,
+];

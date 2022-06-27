@@ -60,7 +60,7 @@ jobs:
       - name: Restore dependencies
         run: npm ci
       - name: Run audit
-        run: npm audit --production
+        run: npm audit --omit=dev
   test:
     name: Test
     runs-on: ubuntu-latest

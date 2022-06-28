@@ -2,6 +2,7 @@
 
 A Homebridge plugin that allows the user to control BUSCH-JAEGER free@home devices using the System Access Point local API.
 
+[![verified-by-homebridge](https://badgen.net/badge/homebridge/verified/purple)](https://github.com/homebridge/homebridge/wiki/Verified-Plugins)
 ![CI](https://img.shields.io/github/workflow/status/pgerke/homebridge-freeathome-local-api/Continuous%20Integration?style=flat-square)
 [![codecov](https://codecov.io/gh/pgerke/homebridge-freeathome-local-api/branch/main/graph/badge.svg?token=V5ICB2MGH0)](https://codecov.io/gh/pgerke/homebridge-freeathome-local-api)
 ![Dependencies](https://img.shields.io/librariesio/release/npm/homebridge-freeathome-local-api?style=flat-square)

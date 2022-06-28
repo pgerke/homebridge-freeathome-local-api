@@ -14,6 +14,10 @@
     "name": "Philip Gerke",
     "url": "https://www.philipgerke.com"
   },
+  "funding": {
+    "type": "paypal",
+    "url": "https://paypal.me/PhilipGerke"
+  },
   "bugs": {
     "url": "https://github.com/pgerke/homebridge-freeathome-local-api/issues"
   },

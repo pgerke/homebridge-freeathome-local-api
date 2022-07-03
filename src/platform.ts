@@ -6,6 +6,7 @@ import {
   PlatformConfig,
   Service,
   Characteristic,
+  UnknownContext,
 } from "homebridge";
 import { PLATFORM_NAME, PLUGIN_NAME } from "./settings";
 import {
@@ -38,6 +39,9 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
     this.api.hap.Characteristic;
   /** The list of restored cached accessories */
   public readonly accessories: Array<PlatformAccessory<FreeAtHomeContext>> = [];
+  private readonly removedAccessories: Array<
+    PlatformAccessory<UnknownContext>
+  > = [];
   /** The system access point */
   public readonly sysap: SystemAccessPoint;
   private readonly fahAccessories = new Map<string, FreeAtHomeAccessory>();
@@ -120,6 +124,7 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
         this.processWebSocketMesage(message)
       );
 
+    // Experimental mode
     if (this.experimentalMode) this.log.warn("Experimental Mode enabled!");
 
     this.log.debug("Finished initializing platform:", this.config.name);
@@ -127,6 +132,14 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
     // When Homebridge has restored all cached accessories from disk we can start discovery of new accessories.
     this.api.on("didFinishLaunching", () => {
       log.debug("Executed didFinishLaunching callback");
+
+      // Unregister removed accessories
+      this.api.unregisterPlatformAccessories(
+        PLUGIN_NAME,
+        PLATFORM_NAME,
+        this.removedAccessories
+      );
+
       // run discovery
       this.discoverDevices()
         .then(() =>
@@ -153,11 +166,34 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
    * It should be used to setup event handlers for characteristics and update respective values.
    */
   public configureAccessory(accessory: PlatformAccessory) {
-    this.log.info("Loading accessory from cache:", accessory.displayName);
+    // Remove cached non-free@home devices
+    if (!isFreeAtHomeAccessory(accessory, this.fahLogger)) {
+      this.removedAccessories.push(accessory);
+      this.log.warn(
+        "Removing accessory from cache (no free@home device):",
+        accessory.displayName
+      );
+      return;
+    }
+
+    // Remove cached ignored devices
+    if (
+      this.isIgnoredChannel(
+        accessory.context.deviceSerial,
+        accessory.context.channelId
+      )
+    ) {
+      this.removedAccessories.push(accessory);
+      this.log.warn(
+        "Removing accessory from cache (channel on ignore list):",
+        accessory.displayName
+      );
+      return;
+    }
 
     // add the restored accessory to the accessories cache so we can track if it has already been registered
-    if (isFreeAtHomeAccessory(accessory, this.fahLogger))
-      this.accessories.push(accessory);
+    this.log.info("Loading accessory from cache:", accessory.displayName);
+    this.accessories.push(accessory);
   }
 
   /** Discovers the supported free&#64;home devices from the System Access Point. */
@@ -275,6 +311,14 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
       return false;
     }
 
+    // Filter ignored devices
+    if (this.isIgnoredChannel(serial, channelId)) {
+      this.log.debug(
+        `Ignored ${serial} (${channelId}): Channel is listed on the ignore list.`
+      );
+      return false;
+    }
+
     // Filter experimental devices
     if (
       !this.experimentalMode &&
@@ -338,6 +382,16 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
           `${serial} (${channelId}): Cannot configure accessory for FunctionID '${functionID}'!`
         );
     }
+  }
+
+  private isIgnoredChannel(device: string, channel: string): boolean {
+    if (!this.config.ignoredChannels) return false;
+
+    return (this.config.ignoredChannels as Array<string>).some(
+      (e) =>
+        e.toUpperCase() === `${device.toUpperCase()}/*` ||
+        e.toUpperCase() === `${device.toUpperCase()}/${channel.toUpperCase()}`
+    );
   }
 
   private processWebSocketMesage(message: WebSocketMessage): void {

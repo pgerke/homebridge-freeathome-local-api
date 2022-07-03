@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - [PG-192](https://pgerke.atlassian.net/browse/PG-192):
   Support door openers
+- [PG-203](https://pgerke.atlassian.net/browse/PG-203):
+  Allow the user to specify channels and devices to ignore
 
 ## [1.0.0](https://github.com/pgerke/homebridge-freeathome-local-api/releases/tag/1.0) - 27.06.2022
 

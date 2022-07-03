@@ -37,6 +37,28 @@ Some more accessories are supported experimentally. The experimental accessories
 - Smoke Detector
 - Motion Sensors
 
+## Ignoring devices and channels
+
+If you don't want to create an accessory for a specific channel, you can add the channel to the ignore list in the settings UI or the `config.json`. This is useful, if you have supported devices you don't want to expose to Apple Home or you have devices that are not usable even though they are configured. A real-world example are unused door openers provided by the Welcome Panel. A request to trigger an unused door opener will always fail with an error, so you can ignore the unused openers, to keep your Apple Home neat and avoid confusion.
+
+The format for an ignored channel is `{DeviceSerial}/{Channel}`. For example: To ignore channel `ch0010` of the device with the serial `ABB700123456`, add `ABB700123456/ch0010` to the ignored channel list. To ignore all channels of a device use an asterisk for the channel part. For example, add `ABB700123456/*` to the ignored channel list to exclude all channels provided by the device with the serial `ABB700123456`.
+
+A sample configuration section for the plugin with ignored channels might look like this:
+
+```json
+{
+  "name": "My free@home Setup",
+  "host": "sysap.home.net",
+  "user": "12345678-9ACB-DEF0-1234-56789ABCDEF0",
+  "password": "s3cre3tP4ssw0rt",
+  "tlsEnabled": false,
+  "verboseErrors": false,
+  "experimental": false,
+  "ignoredChannels": ["ABB700123456/ch0010", "ABB700123457/*"],
+  "platform": "FreeAtHomeLocalApi"
+}
+```
+
 ## Requirements
 
 - free@home Access Point running firmware version >2.6.0

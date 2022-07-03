@@ -61,8 +61,26 @@ const configuration: Configuration = {
           ch0003: {
             functionID: "11",
           },
-          ch004: {
+          ch0004: {
             functionID: "1a",
+          },
+          ch0005: {
+            functionID: "1a",
+          },
+        },
+      },
+      ABB700000003: {
+        channels: {
+          ch0003: {
+            functionID: "7",
+            floor: "1",
+            room: "1",
+          },
+          ch0004: {
+            displayName: "Dimmer",
+            functionID: "12",
+            floor: "1",
+            room: "1",
           },
         },
       },
@@ -84,6 +102,7 @@ describe("free@home Homebridge Platform", () => {
     config = {
       name: "Test Platform Configuration",
       platform: "free@home Unit Testing Platform",
+      ignoredChannels: ["ABB700000002/ch0005", "ABB700000003/*"],
     };
     logger = {
       debug: jasmine.createSpy(),
@@ -252,6 +271,23 @@ describe("free@home Homebridge Platform", () => {
     expect(platform.accessories.length).toBe(0);
   });
 
+  it("should not configure ignored accessory", () => {
+    const platform = new FreeAtHomeHomebridgePlatform(logger, config, api);
+    expect(platform.accessories.length).toBe(0);
+    const platformAccessory = new PlatformAccessory(
+      "Test Accessory",
+      EmptyGuid
+    );
+    platformAccessory.context = {
+      channel: {},
+      channelId: "ch0005",
+      device: {},
+      deviceSerial: "ABB700000002",
+    };
+    platform.configureAccessory(platformAccessory);
+    expect(platform.accessories.length).toBe(0);
+  });
+
   it("should discover devices from the system access point", async () => {
     const platform = new FreeAtHomeHomebridgePlatform(logger, config, api);
     const instance = platform as unknown as {
@@ -290,6 +326,22 @@ describe("free@home Homebridge Platform", () => {
     spyOn(platform.sysap, "getConfiguration").and.resolveTo(configuration);
     await instance.discoverDevices();
     expect(instance.fahAccessories.size).toBe(5);
+  });
+
+  it("should discover devices from the system access point without ignore list", async () => {
+    delete config.ignoredChannels;
+
+    const platform = new FreeAtHomeHomebridgePlatform(logger, config, api);
+    const instance = platform as unknown as {
+      readonly fahAccessories: Map<string, FreeAtHomeAccessory>;
+      readonly sysap: {
+        readonly logger: FahLogger;
+      };
+      discoverDevices(): Promise<void>;
+    };
+    spyOn(platform.sysap, "getConfiguration").and.resolveTo(configuration);
+    await instance.discoverDevices();
+    expect(instance.fahAccessories.size).toBe(8);
   });
 
   it("should discover devices from the system access point in experimental mode", async () => {

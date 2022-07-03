@@ -19,6 +19,8 @@ export enum FunctionID {
   FID_SMOKE_DETECTOR = "7D",
   /** A motion detector */
   FID_MOVEMENT_DETECTOR = "11",
+  /** A door opener */
+  FID_DES_DOOR_OPENER_ACTUATOR = "1A",
 }
 
 /** Contains the list of function IDs that are only experimentally supported by the plugin */

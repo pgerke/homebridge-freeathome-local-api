@@ -25,6 +25,7 @@ import { RoomTemperatureControllerAccessory } from "./roomTemperatureControllerA
 import { EmptyGuid } from "./util";
 import { SmokeDetectorAccessory } from "./smokeDetectorAccessory";
 import { MotionSensorAccessory } from "./motionSensorAccessory";
+import { DoorOpenerAccessory } from "./doorOpenerAccessory";
 
 const DelayFactor = 200;
 
@@ -324,6 +325,12 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
         this.fahAccessories.set(
           `${serial}_${channelId}`,
           new MotionSensorAccessory(this, accessory)
+        );
+        return;
+      case FunctionID.FID_DES_DOOR_OPENER_ACTUATOR:
+        this.fahAccessories.set(
+          `${serial}_${channelId}`,
+          new DoorOpenerAccessory(this, accessory)
         );
         return;
       default:

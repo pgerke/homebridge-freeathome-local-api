@@ -27,6 +27,7 @@ The accessories listed below are well tested with automated unit tests as well a
 - Switch actuators: Binary switches, outlets, simple (on/off) lights
 - Dimmable Lights
 - Thermostats
+- Door Openers
 - The automatic door opener (which will be displayed as a switch)
 
 ### Experimental Support

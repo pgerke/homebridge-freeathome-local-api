@@ -85,7 +85,7 @@ While creating a bug report, please make it easy for me to fix it by giving us a
 
 ## I have a feature request, what do I do?
 
-Please create a [GitHub issue](https://github.com/pgerke/homebridge-freeathome-local-apihomebridge-freeathome-local-api/issues) or drop me an [email](mailto:info@philipgerke.com)!
+Please create a [GitHub issue](https://github.com/pgerke/homebridge-freeathome-local-api/issues) or drop me an [email](mailto:info@philipgerke.com)!
 
 ## Non-Affiliation Disclaimer
 

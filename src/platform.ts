@@ -27,6 +27,7 @@ import { EmptyGuid } from "./util";
 import { SmokeDetectorAccessory } from "./smokeDetectorAccessory";
 import { MotionSensorAccessory } from "./motionSensorAccessory";
 import { DoorOpenerAccessory } from "./doorOpenerAccessory";
+import { DoorRingingSensorAccessory } from "./doorRingingSensorAccessory";
 
 const DelayFactor = 200;
 
@@ -326,6 +327,20 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
         channel.functionID.toUpperCase() as FunctionID
       )
     ) {
+      this.log.debug(
+        `Ignored ${serial} (${channelId}): Experimental devices are disabled.`
+      );
+      return false;
+    }
+
+    if (
+      channel.functionID.toUpperCase() ===
+        FunctionID.FID_DES_DOOR_RINGING_SENSOR &&
+      channel.outputs?.odp0000.value !== "1"
+    ) {
+      this.log.debug(
+        `Ignored ${serial} (${channelId}): The door bell is not connected to a terminal.`
+      );
       return false;
     }
 
@@ -338,43 +353,49 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
     accessory: PlatformAccessory<FreeAtHomeContext>
   ): void {
     switch (functionID.toUpperCase()) {
-      case FunctionID.FID_DES_AUTOMATIC_DOOR_OPENER_ACTUATOR:
-      case FunctionID.FID_SWITCH_ACTUATOR:
+      // case FunctionID.FID_DES_AUTOMATIC_DOOR_OPENER_ACTUATOR:
+      // case FunctionID.FID_SWITCH_ACTUATOR:
+      //   this.fahAccessories.set(
+      //     `${serial}_${channelId}`,
+      //     new SwitchActuatorAccessory(this, accessory)
+      //   );
+      //   return;
+      // case FunctionID.FID_ROOM_TEMPERATURE_CONTROLLER_MASTER_WITHOUT_FAN:
+      //   this.fahAccessories.set(
+      //     `${serial}_${channelId}`,
+      //     new RoomTemperatureControllerAccessory(this, accessory)
+      //   );
+      //   return;
+      // case FunctionID.FID_DIMMING_ACTUATOR:
+      // case FunctionID.FID_RGB_ACTUATOR:
+      // case FunctionID.FID_RGB_W_ACTUATOR:
+      //   this.fahAccessories.set(
+      //     `${serial}_${channelId}`,
+      //     new DimmerAccessory(this, accessory)
+      //   );
+      //   return;
+      // case FunctionID.FID_SMOKE_DETECTOR:
+      //   this.fahAccessories.set(
+      //     `${serial}_${channelId}`,
+      //     new SmokeDetectorAccessory(this, accessory)
+      //   );
+      //   return;
+      // case FunctionID.FID_MOVEMENT_DETECTOR:
+      //   this.fahAccessories.set(
+      //     `${serial}_${channelId}`,
+      //     new MotionSensorAccessory(this, accessory)
+      //   );
+      //   return;
+      // case FunctionID.FID_DES_DOOR_OPENER_ACTUATOR:
+      //   this.fahAccessories.set(
+      //     `${serial}_${channelId}`,
+      //     new DoorOpenerAccessory(this, accessory)
+      //   );
+      //   return;
+      case FunctionID.FID_DES_DOOR_RINGING_SENSOR:
         this.fahAccessories.set(
           `${serial}_${channelId}`,
-          new SwitchActuatorAccessory(this, accessory)
-        );
-        return;
-      case FunctionID.FID_ROOM_TEMPERATURE_CONTROLLER_MASTER_WITHOUT_FAN:
-        this.fahAccessories.set(
-          `${serial}_${channelId}`,
-          new RoomTemperatureControllerAccessory(this, accessory)
-        );
-        return;
-      case FunctionID.FID_DIMMING_ACTUATOR:
-      case FunctionID.FID_RGB_ACTUATOR:
-      case FunctionID.FID_RGB_W_ACTUATOR:
-        this.fahAccessories.set(
-          `${serial}_${channelId}`,
-          new DimmerAccessory(this, accessory)
-        );
-        return;
-      case FunctionID.FID_SMOKE_DETECTOR:
-        this.fahAccessories.set(
-          `${serial}_${channelId}`,
-          new SmokeDetectorAccessory(this, accessory)
-        );
-        return;
-      case FunctionID.FID_MOVEMENT_DETECTOR:
-        this.fahAccessories.set(
-          `${serial}_${channelId}`,
-          new MotionSensorAccessory(this, accessory)
-        );
-        return;
-      case FunctionID.FID_DES_DOOR_OPENER_ACTUATOR:
-        this.fahAccessories.set(
-          `${serial}_${channelId}`,
-          new DoorOpenerAccessory(this, accessory)
+          new DoorRingingSensorAccessory(this, accessory)
         );
         return;
       default:

@@ -29,6 +29,7 @@ The accessories listed below are well tested with automated unit tests as well a
 - Thermostats
 - Door Openers
 - The automatic door opener (which will be displayed as a switch)
+- (Video) Door Bells
 
 ### Experimental Support
 

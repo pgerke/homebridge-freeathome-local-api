@@ -7,7 +7,7 @@ import { EmptyGuid } from "./util";
 /**
  * A switch actuator accessory.
  * @description
- * A switch actuator can be used to control more or less any that free&#64;home device
+ * A switch actuator can be used to control more or less any free&#64;home device
  * that has a binary on/off power state exposed on data point 0000 like, for example,
  * binary switches, outlets or non-dimmable lights.
  */

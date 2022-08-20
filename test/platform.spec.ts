@@ -82,6 +82,18 @@ const configuration: Configuration = {
             floor: "1",
             room: "1",
           },
+          ch0005: {
+            functionID: "9",
+          },
+        },
+      },
+      ABB700000004: {
+        floor: "1",
+        room: "1",
+        channels: {
+          ch0005: {
+            functionID: "9",
+          },
         },
       },
     },
@@ -358,7 +370,7 @@ describe("free@home Homebridge Platform", () => {
     };
     spyOn(platform.sysap, "getConfiguration").and.resolveTo(configuration);
     await instance.discoverDevices();
-    expect(instance.fahAccessories.size).toBe(7);
+    expect(instance.fahAccessories.size).toBe(8);
   });
 
   it("should not create an accessory for an unknown function ID", () => {

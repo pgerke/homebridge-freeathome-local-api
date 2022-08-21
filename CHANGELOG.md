@@ -9,7 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Experimentally support blinds and shutter actuators
+- [PG-211](https://pgerke.atlassian.net/browse/PG-211):
+  Experimentally support blinds and shutter actuators
 
 ## 1.1.1 - 24.07.2022
 

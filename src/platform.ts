@@ -18,7 +18,7 @@ import {
 } from "freeathome-local-api-client";
 import { SwitchActuatorAccessory } from "./switchActuatorAccessory";
 import { FreeAtHomeContext, isFreeAtHomeAccessory } from "./freeAtHomeContext";
-import { experimenallySupportedFunctionIDs, FunctionID } from "./functionId";
+import { experimentallySupportedFunctionIDs, FunctionID } from "./functionId";
 import { FreeAtHomeAccessory } from "./freeAtHomeAccessory";
 import { DimmerAccessory } from "./dimmerAccessory";
 import { Subscription } from "rxjs";
@@ -27,6 +27,7 @@ import { EmptyGuid } from "./util";
 import { SmokeDetectorAccessory } from "./smokeDetectorAccessory";
 import { MotionSensorAccessory } from "./motionSensorAccessory";
 import { DoorOpenerAccessory } from "./doorOpenerAccessory";
+import { ShutterActuatorAccessory } from "./shutterActuatorAccessory";
 import { DoorRingingSensorAccessory } from "./doorRingingSensorAccessory";
 
 const DelayFactor = 200;
@@ -323,7 +324,7 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
     // Filter experimental devices
     if (
       !this.experimentalMode &&
-      experimenallySupportedFunctionIDs.includes(
+      experimentallySupportedFunctionIDs.includes(
         channel.functionID.toUpperCase() as FunctionID
       )
     ) {
@@ -398,6 +399,15 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
           new DoorRingingSensorAccessory(this, accessory)
         );
         return;
+      // case FunctionID.FID_SHUTTER_ACTUATOR:
+      // case FunctionID.FID_BLIND_ACTUATOR:
+      // case FunctionID.FID_ATTIC_WINDOW_ACTUATOR:
+      // case FunctionID.FID_AWNING_ACTUATOR:
+      //   this.fahAccessories.set(
+      //     `${serial}_${channelId}`,
+      //     new ShutterActuatorAccessory(this, accessory)
+      //   );
+      //   return;
       default:
         this.log.error(
           `${serial} (${channelId}): Cannot configure accessory for FunctionID '${functionID}'!`

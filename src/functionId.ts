@@ -21,12 +21,24 @@ export enum FunctionID {
   // FID_MOVEMENT_DETECTOR = "11",
   // /** A door opener */
   // FID_DES_DOOR_OPENER_ACTUATOR = "1A",
+  // /** A shutter actuator */
+  // FID_SHUTTER_ACTUATOR = "9",
+  // /** A roller blind actuator */
+  // FID_BLIND_ACTUATOR = "61",
+  // /** An attic window actuator  */
+  // FID_ATTIC_WINDOW_ACTUATOR = "62",
+  // /** An awning actuator */
+  // FID_AWNING_ACTUATOR = "63",
   /** A door ringing sensor */
   FID_DES_DOOR_RINGING_SENSOR = "1F",
 }
 
 /** Contains the list of function IDs that are only experimentally supported by the plugin */
-export const experimenallySupportedFunctionIDs: Array<FunctionID> = [
+export const experimentallySupportedFunctionIDs: Array<FunctionID> = [
   // FunctionID.FID_SMOKE_DETECTOR,
   // FunctionID.FID_MOVEMENT_DETECTOR,
+  // FunctionID.FID_SHUTTER_ACTUATOR,
+  // FunctionID.FID_BLIND_ACTUATOR,
+  // FunctionID.FID_ATTIC_WINDOW_ACTUATOR,
+  // FunctionID.FID_AWNING_ACTUATOR,
 ];

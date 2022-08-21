@@ -37,6 +37,10 @@ Some more accessories are supported experimentally. The experimental accessories
 
 - Smoke Detector
 - Motion Sensors
+- Blinds Actuators
+- Shutter Actuators
+- Awning Actuators
+- Attic Window Actuators
 
 ## Ignoring devices and channels
 

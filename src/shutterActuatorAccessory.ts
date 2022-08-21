@@ -147,6 +147,7 @@ export class ShutterActuatorAccessory extends FreeAtHomeAccessory {
           this.platform.Characteristic.ObstructionDetected,
           this.stateObstructed
         );
+        return;
       default:
         return;
     }

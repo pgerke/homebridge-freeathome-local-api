@@ -3,7 +3,7 @@
   "pluginType": "platform",
   "singular": true,
   "headerDisplay": "A Homebridge plugin for interfacing with a BUSCH-JAEGER free@home setup.",
-  "footerDisplay": "Control you free@home system with Apple Home using the System Access Point local API.",
+  "footerDisplay": "Control your free@home system with Apple Home using the System Access Point local API.",
   "schema": {
     "type": "object",
     "properties": {
@@ -61,6 +61,23 @@
         "type": "array",
         "items": {
           "type": "string"
+        },
+        "required": false
+      },
+      "typeMappings": {
+        "title": "Type Mappings",
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "channel": {
+              "type": "string"
+            },
+            "type": {
+              "type": "string",
+              "enum": ["Undefined", "Outlet"]
+            }
+          }
         },
         "required": false
       }

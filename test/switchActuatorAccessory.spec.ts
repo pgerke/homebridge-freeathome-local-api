@@ -8,6 +8,7 @@ import {
 import { PlatformAccessory } from "homebridge/lib/platformAccessory";
 import { FreeAtHomeContext } from "../src/freeAtHomeContext";
 import { SwitchActuatorAccessory } from "../src/switchActuatorAccessory";
+import { AccessoryType } from "../src/typeMappings";
 import { EmptyGuid } from "../src/util";
 import { MockFreeAtHomeHomebridgePlatform } from "./platform.mock";
 
@@ -36,7 +37,7 @@ describe("Switch Actuator Accessory", () => {
     platform.resetLoggerCalls();
   });
 
-  it("should be created", async () => {
+  it("should be created as switch", async () => {
     const accessory = new SwitchActuatorAccessory(platform, platformAccessory);
     expect(accessory).toBeTruthy();
     const instance = accessory as unknown as {
@@ -46,6 +47,28 @@ describe("Switch Actuator Accessory", () => {
       accessory.platform.Characteristic.On
     );
     expect(await characteristic.handleGetRequest()).toBeFalse();
+    expect(instance.service.getServiceId()).toBe(
+      "00000049-0000-1000-8000-0026BB765291"
+    );
+  });
+
+  it("should be created as outlet", async () => {
+    const accessory = new SwitchActuatorAccessory(
+      platform,
+      platformAccessory,
+      AccessoryType.Outlet
+    );
+    expect(accessory).toBeTruthy();
+    const instance = accessory as unknown as {
+      service: Service;
+    };
+    const characteristic = instance.service.getCharacteristic(
+      accessory.platform.Characteristic.On
+    );
+    expect(await characteristic.handleGetRequest()).toBeFalse();
+    expect(instance.service.getServiceId()).toBe(
+      "00000047-0000-1000-8000-0026BB765291"
+    );
   });
 
   it("should be created with non-default state", async () => {

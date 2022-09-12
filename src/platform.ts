@@ -439,12 +439,15 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
     switch (mappings.length) {
       case 0:
         return AccessoryType.Undefined;
+      case 1:
+        break;
       default:
         this.log.warn(
           `Multiple type mappings are defined for channel '${key}'. The first mapping is used.`
         );
-      case 1:
-        return AccessoryType[mappings[0].type] ?? AccessoryType.Undefined;
+        break;
     }
+
+    return AccessoryType[mappings[0].type] ?? AccessoryType.Undefined;
   }
 }

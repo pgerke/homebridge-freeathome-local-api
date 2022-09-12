@@ -14,6 +14,8 @@ import {
   isFreeAtHomeAccessory,
 } from "../src/freeAtHomeContext";
 import { FreeAtHomeHomebridgePlatform } from "../src/platform";
+import { SwitchActuatorAccessory } from "../src/switchActuatorAccessory";
+import { AccessoryType } from "../src/typeMappings";
 import { EmptyGuid } from "../src/util";
 import { TestAccessory } from "./TestAccessory.mock";
 
@@ -93,6 +95,15 @@ const configuration: Configuration = {
         channels: {
           ch0005: {
             functionID: "9",
+          },
+        },
+      },
+      ABB700000005: {
+        floor: "1",
+        room: "1",
+        channels: {
+          ch0001: {
+            functionID: "7",
           },
         },
       },
@@ -337,7 +348,7 @@ describe("free@home Homebridge Platform", () => {
     platform.accessories.push(knownAccessory);
     spyOn(platform.sysap, "getConfiguration").and.resolveTo(configuration);
     await instance.discoverDevices();
-    expect(instance.fahAccessories.size).toBe(5);
+    expect(instance.fahAccessories.size).toBe(6);
   });
 
   it("should discover devices from the system access point without ignore list", async () => {
@@ -353,7 +364,7 @@ describe("free@home Homebridge Platform", () => {
     };
     spyOn(platform.sysap, "getConfiguration").and.resolveTo(configuration);
     await instance.discoverDevices();
-    expect(instance.fahAccessories.size).toBe(8);
+    expect(instance.fahAccessories.size).toBe(9);
   });
 
   it("should discover devices from the system access point in experimental mode", async () => {
@@ -370,7 +381,7 @@ describe("free@home Homebridge Platform", () => {
     };
     spyOn(platform.sysap, "getConfiguration").and.resolveTo(configuration);
     await instance.discoverDevices();
-    expect(instance.fahAccessories.size).toBe(8);
+    expect(instance.fahAccessories.size).toBe(9);
   });
 
   it("should not create an accessory for an unknown function ID", () => {
@@ -470,5 +481,63 @@ describe("free@home Homebridge Platform", () => {
     instance.processWebSocketMesage(message);
     expect(spy.calls.count()).toBe(1);
     expect(spy).toHaveBeenCalledWith("odp0000", "2");
+  });
+
+  it("should resolve to mapped type", async () => {
+    config.typeMappings = [{ channel: "ABB700000005/ch0001", type: "Outlet" }];
+    const platform = new FreeAtHomeHomebridgePlatform(logger, config, api);
+    const instance = platform as unknown as {
+      readonly fahAccessories: Map<string, FreeAtHomeAccessory>;
+      discoverDevices(): Promise<void>;
+    };
+    spyOn(platform.sysap, "getConfiguration").and.resolveTo(configuration);
+    await instance.discoverDevices();
+    const accessory = instance.fahAccessories.get("ABB700000005_ch0001");
+    expect(accessory).toBeDefined();
+    expect(accessory).toBeInstanceOf(SwitchActuatorAccessory);
+    expect((accessory as SwitchActuatorAccessory).accessoryType).toBe(
+      AccessoryType.Outlet
+    );
+  });
+
+  it("should resolve to unknown mapped types to Undefined", async () => {
+    config.typeMappings = [{ channel: "ABB700000005/ch0001", type: "outlet" }];
+    const platform = new FreeAtHomeHomebridgePlatform(logger, config, api);
+    const instance = platform as unknown as {
+      readonly fahAccessories: Map<string, FreeAtHomeAccessory>;
+      discoverDevices(): Promise<void>;
+    };
+    spyOn(platform.sysap, "getConfiguration").and.resolveTo(configuration);
+    await instance.discoverDevices();
+    const accessory = instance.fahAccessories.get("ABB700000005_ch0001");
+    expect(accessory).toBeDefined();
+    expect(accessory).toBeInstanceOf(SwitchActuatorAccessory);
+    expect((accessory as SwitchActuatorAccessory).accessoryType).toBe(
+      AccessoryType.Undefined
+    );
+  });
+
+  it("should use the first mapping rule to resolve the mapped types if a channel has multiple mappings", async () => {
+    config.typeMappings = [
+      { channel: "ABB700000005/ch0001", type: "Outlet" },
+      { channel: "ABB700000005/ch0001", type: "outlet" },
+    ];
+    const platform = new FreeAtHomeHomebridgePlatform(logger, config, api);
+    const instance = platform as unknown as {
+      readonly fahAccessories: Map<string, FreeAtHomeAccessory>;
+      discoverDevices(): Promise<void>;
+    };
+    spyOn(platform.sysap, "getConfiguration").and.resolveTo(configuration);
+    await instance.discoverDevices();
+    const accessory = instance.fahAccessories.get("ABB700000005_ch0001");
+    // eslint-disable-next-line @typescript-eslint/unbound-method
+    expect(logger.warn).toHaveBeenCalledWith(
+      "Multiple type mappings are defined for channel 'ABB700000005/CH0001'. The first mapping is used."
+    );
+    expect(accessory).toBeDefined();
+    expect(accessory).toBeInstanceOf(SwitchActuatorAccessory);
+    expect((accessory as SwitchActuatorAccessory).accessoryType).toBe(
+      AccessoryType.Outlet
+    );
   });
 });

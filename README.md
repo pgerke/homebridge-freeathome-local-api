@@ -63,6 +63,34 @@ A sample configuration section for the plugin with ignored channels might look l
 }
 ```
 
+## Type Mappings
+
+Starting with plugin version v1.3.0, you can add type mappings to the config file to determine how certain devices are displayed in Apple Home. For example, a free@home binary switch actuator might be mapped to a light bulb, a regular switch or an outlet. Unfortunately, there is no way to determine the type of the connected device of a switch programmatically. So a type mapping is needed to advise the plugin to use another than the default service.
+
+A sample configuration section for the plugin with type mappings might look like this:
+
+```json
+{
+  "name": "My free@home Setup",
+  "host": "sysap.home.net",
+  "user": "12345678-9ACB-DEF0-1234-56789ABCDEF0",
+  "password": "s3cre3tP4ssw0rt",
+  "tlsEnabled": false,
+  "verboseErrors": false,
+  "experimental": false,
+  "typeMappings": [{ "channel": "ABB700123456/ch0001", "type": "Outlet" }],
+  "platform": "FreeAtHomeLocalApi"
+}
+```
+
+Please note that **the type property is case-sensitive**, `outlet` will not work!
+
+The following type mappings are supported:
+
+| FunctionID               | Default Service | Alternative Service | Mapping Type |
+| ------------------------ | --------------- | ------------------- | ------------ |
+| 7: `FID_SWITCH_ACTUATOR` | Switch          | Outlet              | `Outlet`     |
+
 ## Requirements
 
 - free@home Access Point running firmware version >2.6.0

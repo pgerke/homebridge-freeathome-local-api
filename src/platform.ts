@@ -28,6 +28,7 @@ import { SmokeDetectorAccessory } from "./smokeDetectorAccessory";
 import { MotionSensorAccessory } from "./motionSensorAccessory";
 import { DoorOpenerAccessory } from "./doorOpenerAccessory";
 import { ShutterActuatorAccessory } from "./shutterActuatorAccessory";
+import { AccessoryType, TypeMapping } from "./typeMappings";
 
 const DelayFactor = 200;
 
@@ -338,12 +339,14 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
     channelId: string,
     accessory: PlatformAccessory<FreeAtHomeContext>
   ): void {
+    const accessoryType = this.resolveAccessoryType(serial, channelId);
+
     switch (functionID.toUpperCase()) {
       case FunctionID.FID_DES_AUTOMATIC_DOOR_OPENER_ACTUATOR:
       case FunctionID.FID_SWITCH_ACTUATOR:
         this.fahAccessories.set(
           `${serial}_${channelId}`,
-          new SwitchActuatorAccessory(this, accessory)
+          new SwitchActuatorAccessory(this, accessory, accessoryType)
         );
         return;
       case FunctionID.FID_ROOM_TEMPERATURE_CONTROLLER_MASTER_WITHOUT_FAN:
@@ -423,5 +426,28 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
         .get(`${match[1]}_${match[2]}`)
         ?.updateDatapoint(match[3], message[EmptyGuid].datapoints[datapoint]);
     });
+  }
+
+  private resolveAccessoryType(device: string, channel: string): AccessoryType {
+    if (!this.config.typeMappings) return AccessoryType.Undefined;
+
+    const key = `${device.toUpperCase()}/${channel.toUpperCase()}`;
+    const mappings = (this.config.typeMappings as Array<TypeMapping>).filter(
+      (e) => e.channel.toUpperCase() === key
+    );
+
+    switch (mappings.length) {
+      case 0:
+        return AccessoryType.Undefined;
+      case 1:
+        break;
+      default:
+        this.log.warn(
+          `Multiple type mappings are defined for channel '${key}'. The first mapping is used.`
+        );
+        break;
+    }
+
+    return AccessoryType[mappings[0].type] ?? AccessoryType.Undefined;
   }
 }

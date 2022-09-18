@@ -1,4 +1,5 @@
 import { CharacteristicValue, PlatformAccessory, Service } from "homebridge";
+import { AccessoryType } from "./typeMappings";
 import { FreeAtHomeAccessory } from "./freeAtHomeAccessory";
 import { FreeAtHomeContext } from "./freeAtHomeContext";
 import { FreeAtHomeHomebridgePlatform } from "./platform";
@@ -19,10 +20,12 @@ export class SwitchActuatorAccessory extends FreeAtHomeAccessory {
    * Constructs a new switch actuator accessory instance.
    * @param platform The free&#64;home Homebridge platform controlling the accessory
    * @param accessory The platform accessory.
+   * @param accessoryType The accessory type
    */
   constructor(
     readonly platform: FreeAtHomeHomebridgePlatform,
-    readonly accessory: PlatformAccessory<FreeAtHomeContext>
+    readonly accessory: PlatformAccessory<FreeAtHomeContext>,
+    readonly accessoryType: AccessoryType = AccessoryType.Undefined
   ) {
     super(platform, accessory);
 
@@ -31,10 +34,18 @@ export class SwitchActuatorAccessory extends FreeAtHomeAccessory {
       this.accessory.context.channel.outputs?.odp0000.value ?? "0"
     );
 
-    // get the Switch service if it exists, otherwise create a new service instance
+    /*
+     * Configure the service service for the switch actuator. By default the Switch service will be used.
+     * If the instance was initialized with configureAsOutlet set to true, a Outlet service will be used instead.
+     * In any case, the service instance will be re-used if it exists already, otherwise create a new instance is created.
+     */
+    const serviceType =
+      accessoryType === AccessoryType.Outlet
+        ? this.platform.Service.Outlet
+        : this.platform.Service.Switch;
     this.service =
-      this.accessory.getService(this.platform.Service.Switch) ||
-      this.accessory.addService(this.platform.Service.Switch);
+      this.accessory.getService(serviceType) ||
+      this.accessory.addService(serviceType);
 
     // register handlers for the On/Off Characteristic
     this.service

@@ -28,7 +28,6 @@ import { SmokeDetectorAccessory } from "./smokeDetectorAccessory";
 import { MotionSensorAccessory } from "./motionSensorAccessory";
 import { DoorOpenerAccessory } from "./doorOpenerAccessory";
 import { ShutterActuatorAccessory } from "./shutterActuatorAccessory";
-import { DoorRingingSensorAccessory } from "./doorRingingSensorAccessory";
 
 const DelayFactor = 200;
 
@@ -353,61 +352,63 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
     channelId: string,
     accessory: PlatformAccessory<FreeAtHomeContext>
   ): void {
+    const accessoryType = this.resolveAccessoryType(serial, channelId);
+
     switch (functionID.toUpperCase()) {
-      // case FunctionID.FID_DES_AUTOMATIC_DOOR_OPENER_ACTUATOR:
-      // case FunctionID.FID_SWITCH_ACTUATOR:
-      //   this.fahAccessories.set(
-      //     `${serial}_${channelId}`,
-      //     new SwitchActuatorAccessory(this, accessory)
-      //   );
-      //   return;
-      // case FunctionID.FID_ROOM_TEMPERATURE_CONTROLLER_MASTER_WITHOUT_FAN:
-      //   this.fahAccessories.set(
-      //     `${serial}_${channelId}`,
-      //     new RoomTemperatureControllerAccessory(this, accessory)
-      //   );
-      //   return;
-      // case FunctionID.FID_DIMMING_ACTUATOR:
-      // case FunctionID.FID_RGB_ACTUATOR:
-      // case FunctionID.FID_RGB_W_ACTUATOR:
-      //   this.fahAccessories.set(
-      //     `${serial}_${channelId}`,
-      //     new DimmerAccessory(this, accessory)
-      //   );
-      //   return;
-      // case FunctionID.FID_SMOKE_DETECTOR:
-      //   this.fahAccessories.set(
-      //     `${serial}_${channelId}`,
-      //     new SmokeDetectorAccessory(this, accessory)
-      //   );
-      //   return;
-      // case FunctionID.FID_MOVEMENT_DETECTOR:
-      //   this.fahAccessories.set(
-      //     `${serial}_${channelId}`,
-      //     new MotionSensorAccessory(this, accessory)
-      //   );
-      //   return;
-      // case FunctionID.FID_DES_DOOR_OPENER_ACTUATOR:
-      //   this.fahAccessories.set(
-      //     `${serial}_${channelId}`,
-      //     new DoorOpenerAccessory(this, accessory)
-      //   );
-      //   return;
+      case FunctionID.FID_DES_AUTOMATIC_DOOR_OPENER_ACTUATOR:
+      case FunctionID.FID_SWITCH_ACTUATOR:
+        this.fahAccessories.set(
+          `${serial}_${channelId}`,
+          new SwitchActuatorAccessory(this, accessory, accessoryType)
+        );
+        return;
+      case FunctionID.FID_ROOM_TEMPERATURE_CONTROLLER_MASTER_WITHOUT_FAN:
+        this.fahAccessories.set(
+          `${serial}_${channelId}`,
+          new RoomTemperatureControllerAccessory(this, accessory)
+        );
+        return;
+      case FunctionID.FID_DIMMING_ACTUATOR:
+      case FunctionID.FID_RGB_ACTUATOR:
+      case FunctionID.FID_RGB_W_ACTUATOR:
+        this.fahAccessories.set(
+          `${serial}_${channelId}`,
+          new DimmerAccessory(this, accessory)
+        );
+        return;
+      case FunctionID.FID_SMOKE_DETECTOR:
+        this.fahAccessories.set(
+          `${serial}_${channelId}`,
+          new SmokeDetectorAccessory(this, accessory)
+        );
+        return;
+      case FunctionID.FID_MOVEMENT_DETECTOR:
+        this.fahAccessories.set(
+          `${serial}_${channelId}`,
+          new MotionSensorAccessory(this, accessory)
+        );
+        return;
+      case FunctionID.FID_DES_DOOR_OPENER_ACTUATOR:
+        this.fahAccessories.set(
+          `${serial}_${channelId}`,
+          new DoorOpenerAccessory(this, accessory)
+        );
+        return;
+      case FunctionID.FID_SHUTTER_ACTUATOR:
+      case FunctionID.FID_BLIND_ACTUATOR:
+      case FunctionID.FID_ATTIC_WINDOW_ACTUATOR:
+      case FunctionID.FID_AWNING_ACTUATOR:
+        this.fahAccessories.set(
+          `${serial}_${channelId}`,
+          new ShutterActuatorAccessory(this, accessory)
+        );
+        return;
       case FunctionID.FID_DES_DOOR_RINGING_SENSOR:
         this.fahAccessories.set(
           `${serial}_${channelId}`,
           new DoorRingingSensorAccessory(this, accessory)
         );
         return;
-      // case FunctionID.FID_SHUTTER_ACTUATOR:
-      // case FunctionID.FID_BLIND_ACTUATOR:
-      // case FunctionID.FID_ATTIC_WINDOW_ACTUATOR:
-      // case FunctionID.FID_AWNING_ACTUATOR:
-      //   this.fahAccessories.set(
-      //     `${serial}_${channelId}`,
-      //     new ShutterActuatorAccessory(this, accessory)
-      //   );
-      //   return;
       default:
         this.log.error(
           `${serial} (${channelId}): Cannot configure accessory for FunctionID '${functionID}'!`
@@ -444,5 +445,28 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
         .get(`${match[1]}_${match[2]}`)
         ?.updateDatapoint(match[3], message[EmptyGuid].datapoints[datapoint]);
     });
+  }
+
+  private resolveAccessoryType(device: string, channel: string): AccessoryType {
+    if (!this.config.typeMappings) return AccessoryType.Undefined;
+
+    const key = `${device.toUpperCase()}/${channel.toUpperCase()}`;
+    const mappings = (this.config.typeMappings as Array<TypeMapping>).filter(
+      (e) => e.channel.toUpperCase() === key
+    );
+
+    switch (mappings.length) {
+      case 0:
+        return AccessoryType.Undefined;
+      case 1:
+        break;
+      default:
+        this.log.warn(
+          `Multiple type mappings are defined for channel '${key}'. The first mapping is used.`
+        );
+        break;
+    }
+
+    return AccessoryType[mappings[0].type] ?? AccessoryType.Undefined;
   }
 }

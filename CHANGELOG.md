@@ -5,12 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## 1.3.0 - 2022
+## 1.4.0 - 2022
 
 ### Added
 
 - [PG-198](https://pgerke.atlassian.net/browse/PG-198):
   Support (video) door bells
+
+### Added
+
+- [PG-215](https://pgerke.atlassian.net/browse/PG-215):
+  Support mapping types. You can now define that a switch actuator shall be created as an outlet instead of a switch / light bulb.
 
 ## [1.2.0](https://github.com/pgerke/homebridge-freeathome-local-api/releases/tag/1.2) - 21.08.2022
 

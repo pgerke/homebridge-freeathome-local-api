@@ -56,6 +56,8 @@ export class DoorRingingSensorAccessory extends FreeAtHomeAccessory {
       .setValue(
         this.platform.Characteristic.ProgrammableSwitchEvent.SINGLE_PRESS
       );
+    // this.accessory.c
+    // this.service.getCharacteristic(this.platform.Characteristic.)
     // // ignore unknown data points
     // if (datapoint !== "odp0000") return;
     // this.doUpdateDatapoint(

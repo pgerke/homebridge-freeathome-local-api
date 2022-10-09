@@ -29,6 +29,7 @@ import { MotionSensorAccessory } from "./motionSensorAccessory";
 import { DoorOpenerAccessory } from "./doorOpenerAccessory";
 import { ShutterActuatorAccessory } from "./shutterActuatorAccessory";
 import { AccessoryType, TypeMapping } from "./typeMappings";
+import { globalAgent } from "https";
 
 const DelayFactor = 200;
 
@@ -91,6 +92,8 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
       this.config.verboseErrors as boolean,
       this.fahLogger
     );
+    globalAgent.options.rejectUnauthorized =
+      !this.config.disableCertificateVerification;
 
     // React to web socket events
     this.sysap.on("websocket-open", () => {
@@ -114,7 +117,10 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
         `Attempting to reconnect in ${delay}ms [${this.wsConnectionAttempt}/${this.maxWsRetryCount}]`
       );
       setTimeout(
-        () => this.sysap.connectWebSocket(this.config.tlsEnabled as boolean),
+        () =>
+          this.sysap.connectWebSocket(
+            !this.config.disableCertificateVerification
+          ),
         delay
       );
     });
@@ -152,7 +158,7 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
         .catch((error) => this.log.error("Device discovery failed", error));
 
       // Connect to system access point web socket
-      this.sysap.connectWebSocket(this.config.tlsEnabled as boolean);
+      this.sysap.connectWebSocket(!this.config.disableCertificateVerification);
     });
     this.api.on("shutdown", () => {
       log.debug("Executed shutdown callback");

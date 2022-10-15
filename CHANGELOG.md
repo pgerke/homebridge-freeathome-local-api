@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.0](https://github.com/pgerke/homebridge-freeathome-local-api/releases/tag/1.4) - 09.10.2022
+
+### Added
+
+- [PG-218](https://pgerke.atlassian.net/browse/PG-218):
+  Added an option to disable TLS certificate verification. This is useful if the System Access Point is using a self-signed TLS certificate, but should not be used lightly as it may pose a security risk.
+
 ## [1.3.0](https://github.com/pgerke/homebridge-freeathome-local-api/releases/tag/1.3) - 13.09.2022
 
 ### Added

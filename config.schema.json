@@ -41,6 +41,13 @@
         "required": false,
         "default": true
       },
+      "disableCertificateVerification": {
+        "title": "Disable TLS Certificate Verification",
+        "description": "Disables TLS certificate verification which can be useful in certain scenarios (e.g. self-signed certificates). Disabling TLS certificate verification poses a security risk!",
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
       "verboseErrors": {
         "title": "Verbose Errors",
         "description": "Determines whether verbose error messages shall be used, for example for message validation. This is a debug option that should only be enabled if needed.",

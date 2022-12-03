@@ -21,6 +21,8 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
+      - name: Install latest npm
+        run: npm install -g npm && npm --version
       - name: Install dependencies
         run: npm ci
       - name: Build the project
@@ -47,6 +49,8 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
+      - name: Install latest npm
+        run: npm install -g npm && npm --version
       - name: Restore dependencies
         run: npm ci
       - name: Run linter
@@ -75,6 +79,8 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
+      - name: Install latest npm
+        run: npm install -g npm && npm --version
       - name: Restore dependencies
         run: npm ci
       - name: Run unit test

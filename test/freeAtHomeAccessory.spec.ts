@@ -1,4 +1,11 @@
 import { Channel, Device } from "freeathome-local-api-client";
+import {
+  Characteristic,
+  CharacteristicValue,
+  Nullable,
+  Service,
+  WithUUID,
+} from "homebridge";
 import { PlatformAccessory } from "homebridge/lib/platformAccessory";
 import { FreeAtHomeContext } from "../src/freeAtHomeContext";
 import { EmptyGuid } from "../src/util";
@@ -50,7 +57,15 @@ describe("free@home Accessory", () => {
 
   it("should asynchronously update the data point", () => {
     const accessory = new TestAccessory(platform, platformAccessory);
-    const serviceSpy = spyOn(accessory.service, "updateCharacteristic");
+    const serviceSpy = spyOn(
+      accessory.service as {
+        updateCharacteristic: (
+          name: string | WithUUID<new () => Characteristic>,
+          value: Nullable<CharacteristicValue>
+        ) => Service;
+      },
+      "updateCharacteristic"
+    );
     accessory.updateDatapoint("Test", "New Serial");
     expect(serviceSpy).toHaveBeenCalledWith(
       accessory.platform.Characteristic.SerialNumber,

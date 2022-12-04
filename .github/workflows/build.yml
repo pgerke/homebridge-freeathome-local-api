@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         # the Node.js versions to build on
-        node-version: [12.x, 13.x, 14.x, 15.x, 16.x]
+        node-version: [14.x, 16.x, 18.x]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -21,6 +21,8 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
+      - name: Install latest npm
+        run: npm install -g npm && npm --version
       - name: Install dependencies
         run: npm ci
       - name: Build the project
@@ -39,7 +41,7 @@ jobs:
     strategy:
       matrix:
         # the Node.js versions to build on
-        node-version: [12.x, 13.x, 14.x, 15.x, 16.x]
+        node-version: [14.x, 16.x, 18.x]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -47,6 +49,8 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
+      - name: Install latest npm
+        run: npm install -g npm && npm --version
       - name: Restore dependencies
         run: npm ci
       - name: Run linter
@@ -67,7 +71,7 @@ jobs:
     strategy:
       matrix:
         # the Node.js versions to build on
-        node-version: [12.x, 13.x, 14.x, 15.x, 16.x]
+        node-version: [14.x, 16.x, 18.x]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -75,6 +79,8 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
+      - name: Install latest npm
+        run: npm install -g npm && npm --version
       - name: Restore dependencies
         run: npm ci
       - name: Run unit test

@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.1](https://github.com/pgerke/homebridge-freeathome-local-api/releases/tag/1.4.1) - 04.12.2022
+
+### Added
+
+- [#35](https://github.com/pgerke/homebridge-freeathome-local-api/issues/35):
+  Upgrade to Homebridge v1.6 and adapted NodeJS requirements. In accordance with the homebridge plugin verification criteria the [list of supported NodeJS](https://github.com/homebridge/homebridge/wiki/How-To-Update-Node.js) version has been updated. The plugin now officially supports NodeJS versions 14, 16 and 18. Please note, NodeJS version 12 is no longer supported.
+
+- [#34](https://github.com/pgerke/homebridge-freeathome-local-api/issues/34):
+  Added documentation to the README file about using TLS.
+
 ## [1.4.0](https://github.com/pgerke/homebridge-freeathome-local-api/releases/tag/1.4) - 09.10.2022
 
 ### Added

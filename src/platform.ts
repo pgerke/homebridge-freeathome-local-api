@@ -30,6 +30,7 @@ import { DoorOpenerAccessory } from "./doorOpenerAccessory";
 import { ShutterActuatorAccessory } from "./shutterActuatorAccessory";
 import { AccessoryType, TypeMapping } from "./typeMappings";
 import { globalAgent } from "https";
+import { SceneAccessory } from "./sceneAccessory";
 
 const DelayFactor = 200;
 
@@ -337,6 +338,14 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
       return false;
     }
 
+    // Filter devices during development
+    if (
+      channel.functionID !== FunctionID.FID_SCENE &&
+      channel.functionID !== FunctionID.FID_LIGHT_GROUP
+    ) {
+      return false;
+    }
+
     return true;
   }
   private createAccessory(
@@ -350,6 +359,7 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
     switch (functionID.toUpperCase()) {
       case FunctionID.FID_DES_AUTOMATIC_DOOR_OPENER_ACTUATOR:
       case FunctionID.FID_SWITCH_ACTUATOR:
+      case FunctionID.FID_LIGHT_GROUP:
         this.fahAccessories.set(
           `${serial}_${channelId}`,
           new SwitchActuatorAccessory(this, accessory, accessoryType)
@@ -394,6 +404,12 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
         this.fahAccessories.set(
           `${serial}_${channelId}`,
           new ShutterActuatorAccessory(this, accessory)
+        );
+        return;
+      case FunctionID.FID_SCENE:
+        this.fahAccessories.set(
+          `${serial}_${channelId}`,
+          new SceneAccessory(this, accessory)
         );
         return;
       default:

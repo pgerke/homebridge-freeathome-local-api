@@ -1,8 +1,8 @@
 {
   "displayName": "free@home Local API",
   "name": "homebridge-freeathome-local-api",
-  "version": "1.5.0",
-  "preview": false,
+  "version": "1.5.0-pre.1",
+  "preview": true,
   "description": "Control your free@home setup using the local API provided by your System Access Point",
   "license": "MIT",
   "repository": {

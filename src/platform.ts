@@ -212,8 +212,13 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
 
     // Enmumerate the devices
     Object.keys(config[EmptyGuid].devices).forEach((serial: string) => {
-      // Filter unsupported (pseudo) devices like scenes or third party devices
-      if (!serial.startsWith("ABB")) return;
+      // Filter unsupported (pseudo) devices like third party devices
+      if (
+        !serial.startsWith("ABB") &&
+        !serial.startsWith("FFFF4800") && // Scenes
+        !serial.startsWith("FFFF4000") // Light groups
+      )
+        return;
 
       // Filter devices without channels
       const device = config[EmptyGuid].devices[serial];
@@ -338,13 +343,13 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
       return false;
     }
 
-    // Filter devices during development
-    if (
-      channel.functionID !== FunctionID.FID_SCENE &&
-      channel.functionID !== FunctionID.FID_LIGHT_GROUP
-    ) {
-      return false;
-    }
+    // // Filter devices during development
+    // if (
+    //   channel.functionID !== FunctionID.FID_SCENE &&
+    //   channel.functionID !== FunctionID.FID_LIGHT_GROUP
+    // ) {
+    //   return false;
+    // }
 
     return true;
   }

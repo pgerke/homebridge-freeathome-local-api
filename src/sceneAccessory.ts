@@ -67,6 +67,11 @@ export class SceneAccessory extends FreeAtHomeAccessory {
       "odp0000",
       "1"
     );
+
+    // Reset automatically after 3s
+    setTimeout(() => {
+      this.updateDatapoint("odp0000", "0");
+    }, 3000);
   }
 
   public override updateDatapoint(datapoint: string, value: string): void {

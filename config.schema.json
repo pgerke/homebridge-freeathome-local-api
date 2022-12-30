@@ -48,6 +48,22 @@
         "required": false,
         "default": false
       },
+      "motionSensorAutoReset": {
+        "title": "Automatic Reset for Motion Sensors",
+        "description": "Determines whether motion sensors will be reset automatically.",
+        "type": "boolean",
+        "required": false,
+        "default": true
+      },
+      "motionSensorDefaultResetTimer": {
+        "title": "Motion Sensor Default Reset Timer",
+        "description": "Determines the default reset timer for motion sensors. Only relevant if the automatic reset is enabled.",
+        "type": "integer",
+        "required": false,
+        "default": 20000,
+        "minimum": 500,
+        "maximum": 900000
+      },
       "verboseErrors": {
         "title": "Verbose Errors",
         "description": "Determines whether verbose error messages shall be used, for example for message validation. This is a debug option that should only be enabled if needed.",

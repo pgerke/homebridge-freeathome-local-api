@@ -34,6 +34,7 @@ describe("Motion Sensor Accessory", () => {
   });
   afterEach(() => {
     platform.resetLoggerCalls();
+    jasmine.clock().uninstall();
   });
 
   it("should be created", async () => {
@@ -107,6 +108,107 @@ describe("Motion Sensor Accessory", () => {
       instance.service,
       accessory.platform.Characteristic.MotionDetected,
       true
+    );
+  });
+
+  it("should not set a reset timer if the sensor is reset manually", async () => {
+    platform.config.motionSensorAutoReset = true;
+    const accessory = new MotionSensorAccessory(platform, platformAccessory);
+    const instance = accessory as unknown as {
+      resetTimeout?: NodeJS.Timeout;
+      service: Service;
+      doUpdateDatapoint: (
+        acccessoryDisplayType: string,
+        service: Service,
+        characteristic: WithUUID<new () => Characteristic>,
+        characteristicValue: CharacteristicValue
+      ) => void;
+    };
+    const spy = spyOn(instance, "doUpdateDatapoint");
+    const characteristic = instance.service.getCharacteristic(
+      accessory.platform.Characteristic.MotionDetected
+    );
+    expect(await characteristic.handleGetRequest()).toBeFalse();
+    expect(instance.resetTimeout).toBeUndefined();
+    accessory.updateDatapoint("odp0000", "0");
+    expect(spy).toHaveBeenCalledWith(
+      "Motion Sensor",
+      instance.service,
+      accessory.platform.Characteristic.MotionDetected,
+      false
+    );
+    expect(instance.resetTimeout).toBeUndefined();
+  });
+
+  it("should cancel a set reset timer if the sensor is reset manually", async () => {
+    jasmine.clock().install();
+    platform.config.motionSensorAutoReset = true;
+    const accessory = new MotionSensorAccessory(platform, platformAccessory);
+    const instance = accessory as unknown as {
+      resetTimeout?: NodeJS.Timeout;
+      service: Service;
+      doUpdateDatapoint: (
+        acccessoryDisplayType: string,
+        service: Service,
+        characteristic: WithUUID<new () => Characteristic>,
+        characteristicValue: CharacteristicValue
+      ) => void;
+    };
+    const spy = spyOn(instance, "doUpdateDatapoint");
+    const characteristic = instance.service.getCharacteristic(
+      accessory.platform.Characteristic.MotionDetected
+    );
+    expect(await characteristic.handleGetRequest()).toBeFalse();
+    instance.resetTimeout = setTimeout(
+      () => fail("Timer should be cancelled"),
+      10000
+    );
+    accessory.updateDatapoint("odp0000", "0");
+    expect(spy).toHaveBeenCalledWith(
+      "Motion Sensor",
+      instance.service,
+      accessory.platform.Characteristic.MotionDetected,
+      false
+    );
+    expect(instance.resetTimeout).toBeUndefined();
+    jasmine.clock().tick(15000);
+  });
+
+  it("should reset the sensor automatically after the specified time", async () => {
+    jasmine.clock().install();
+    platform.config.motionSensorAutoReset = true;
+    const accessory = new MotionSensorAccessory(platform, platformAccessory);
+    const instance = accessory as unknown as {
+      resetTimeout?: NodeJS.Timeout;
+      service: Service;
+      doUpdateDatapoint: (
+        acccessoryDisplayType: string,
+        service: Service,
+        characteristic: WithUUID<new () => Characteristic>,
+        characteristicValue: CharacteristicValue
+      ) => void;
+    };
+    const spy = spyOn(instance, "doUpdateDatapoint");
+    const characteristic = instance.service.getCharacteristic(
+      accessory.platform.Characteristic.MotionDetected
+    );
+    expect(await characteristic.handleGetRequest()).toBeFalse();
+    expect(instance.resetTimeout).toBeUndefined();
+    accessory.updateDatapoint("odp0000", "1");
+    expect(spy).toHaveBeenCalledWith(
+      "Motion Sensor",
+      instance.service,
+      accessory.platform.Characteristic.MotionDetected,
+      true
+    );
+    expect(instance.resetTimeout).toBeDefined();
+    jasmine.clock().tick(20000);
+    expect(instance.resetTimeout).toBeUndefined();
+    expect(spy).toHaveBeenCalledWith(
+      "Motion Sensor",
+      instance.service,
+      accessory.platform.Characteristic.MotionDetected,
+      false
     );
   });
 });

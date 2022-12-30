@@ -62,7 +62,7 @@
         "required": false,
         "default": 20000,
         "minimum": 500,
-        "maximum": 900000
+        "maximum": 60000
       },
       "verboseErrors": {
         "title": "Verbose Errors",

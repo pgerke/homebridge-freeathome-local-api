@@ -211,8 +211,12 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
 
     // Enmumerate the devices
     Object.keys(config[EmptyGuid].devices).forEach((serial: string) => {
-      // Filter unsupported (pseudo) devices like scenes or third party devices
-      if (!serial.startsWith("ABB")) return;
+      // Filter unsupported devices by serial range
+      if (
+        !serial.startsWith("ABB") && // free@home default
+        !serial.startsWith("E11") // alarm services
+      )
+        return;
 
       // Filter devices without channels
       const device = config[EmptyGuid].devices[serial];

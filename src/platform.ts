@@ -424,7 +424,7 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
     datapoints.forEach((datapoint) => {
       // Ignore data points that have an unexpected format
       const match = datapoint.match(
-        /^(ABB[a-z0-9]{9})\/(ch[\da-f]{4})\/(odp\d{4})$/i
+        /^([a-z0-9]{12})\/(ch[\da-f]{4})\/(odp\d{4})$/i
       );
       if (!match) {
         this.log.debug(`Ignored datapoint ${datapoint}: Unexpected format`);

@@ -23,6 +23,15 @@ const configuration: Configuration = {
   "00000000-0000-0000-0000-000000000000": {
     sysapName: "Gerke",
     devices: {
+      EXCLUDED0001: {
+        floor: "1",
+        room: "1",
+        channels: {
+          ch0001: {
+            functionID: "7d",
+          },
+        },
+      },
       FFFF48000001: {},
       ABB700000000: {},
       ABB700000001: {
@@ -104,6 +113,15 @@ const configuration: Configuration = {
         channels: {
           ch0001: {
             functionID: "7",
+          },
+        },
+      },
+      E11000000001: {
+        floor: "1",
+        room: "1",
+        channels: {
+          ch0001: {
+            functionID: "7d",
           },
         },
       },
@@ -381,7 +399,7 @@ describe("free@home Homebridge Platform", () => {
     };
     spyOn(platform.sysap, "getConfiguration").and.resolveTo(configuration);
     await instance.discoverDevices();
-    expect(instance.fahAccessories.size).toBe(9);
+    expect(instance.fahAccessories.size).toBe(10);
   });
 
   it("should not create an accessory for an unknown function ID", () => {

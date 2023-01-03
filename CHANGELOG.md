@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - [#48](https://github.com/pgerke/homebridge-freeathome-local-api/issues/48):
-  Fixed an issue that interfered with the correc detection of smoke sensors.
+  Fixed an issue that interfered with the correct detection of smoke sensors.
 
 ## [1.4.1](https://github.com/pgerke/homebridge-freeathome-local-api/releases/tag/1.4.1) - 04.12.2022
 

@@ -30,6 +30,7 @@ import { DoorOpenerAccessory } from "./doorOpenerAccessory";
 import { ShutterActuatorAccessory } from "./shutterActuatorAccessory";
 import { AccessoryType, TypeMapping } from "./typeMappings";
 import { globalAgent } from "https";
+import { ContactSensorAccessory } from "./contactSensorAccessory";
 
 const DelayFactor = 200;
 
@@ -398,6 +399,13 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
         this.fahAccessories.set(
           `${serial}_${channelId}`,
           new ShutterActuatorAccessory(this, accessory)
+        );
+        return;
+      case FunctionID.FID_WINDOW_DOOR_SENSOR:
+      case FunctionID.FID_WINDOW_DOOR_POSITION_SENSOR:
+        this.fahAccessories.set(
+          `${serial}_${channelId}`,
+          new ContactSensorAccessory(this, accessory)
         );
         return;
       default:

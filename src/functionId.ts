@@ -29,6 +29,10 @@ export enum FunctionID {
   FID_ATTIC_WINDOW_ACTUATOR = "62",
   /** An awning actuator */
   FID_AWNING_ACTUATOR = "63",
+  /** A binary door or window sensor */
+  FID_WINDOW_DOOR_SENSOR = "F",
+  /** A door or window sensor that also reports the door or window position */
+  FID_WINDOW_DOOR_POSITION_SENSOR = "64",
 }
 
 /** Contains the list of function IDs that are only experimentally supported by the plugin */

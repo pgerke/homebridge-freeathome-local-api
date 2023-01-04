@@ -33,6 +33,10 @@ export enum FunctionID {
   FID_WINDOW_DOOR_SENSOR = "F",
   /** A door or window sensor that also reports the door or window position */
   FID_WINDOW_DOOR_POSITION_SENSOR = "64",
+  /** A (binary) switch sensor */
+  FID_SWITCH_SENSOR = "0",
+  /** A dimming sensor */
+  FID_DIMMING_SENSOR = "1",
 }
 
 /** Contains the list of function IDs that are only experimentally supported by the plugin */

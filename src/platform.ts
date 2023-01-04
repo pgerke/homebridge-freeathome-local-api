@@ -31,6 +31,7 @@ import { ShutterActuatorAccessory } from "./shutterActuatorAccessory";
 import { AccessoryType, TypeMapping } from "./typeMappings";
 import { globalAgent } from "https";
 import { ContactSensorAccessory } from "./contactSensorAccessory";
+import { SwitchSensorAccessory } from "./switchSensorAccessory";
 
 const DelayFactor = 200;
 
@@ -353,6 +354,13 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
     const accessoryType = this.resolveAccessoryType(serial, channelId);
 
     switch (functionID.toUpperCase()) {
+      case FunctionID.FID_SWITCH_SENSOR:
+      case FunctionID.FID_DIMMING_SENSOR:
+        this.fahAccessories.set(
+          `${serial}_${channelId}`,
+          new SwitchSensorAccessory(this, accessory)
+        );
+        return;
       case FunctionID.FID_DES_AUTOMATIC_DOOR_OPENER_ACTUATOR:
       case FunctionID.FID_SWITCH_ACTUATOR:
         this.fahAccessories.set(
@@ -432,7 +440,7 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
     datapoints.forEach((datapoint) => {
       // Ignore data points that have an unexpected format
       const match = datapoint.match(
-        /^([a-z0-9]{12})\/(ch[\da-f]{4})\/(odp\d{4})$/i
+        /^([a-z0-9]{12})\/(ch[\da-f]{4})\/([io]dp\d{4})$/i
       );
       if (!match) {
         this.log.debug(`Ignored datapoint ${datapoint}: Unexpected format`);

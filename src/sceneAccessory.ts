@@ -2,23 +2,21 @@ import { CharacteristicValue, PlatformAccessory, Service } from "homebridge";
 import { FreeAtHomeAccessory } from "./freeAtHomeAccessory";
 import { FreeAtHomeContext } from "./freeAtHomeContext";
 import { FreeAtHomeHomebridgePlatform } from "./platform";
-import { AccessoryType } from "./typeMappings";
 import { EmptyGuid } from "./util";
 
+/** A scene accessory. */
 export class SceneAccessory extends FreeAtHomeAccessory {
   private readonly service: Service;
   private stateOn: boolean;
 
   /**
-   * Constructs a new switch actuator accessory instance.
+   * Constructs a new scene actuator accessory instance.
    * @param platform The free&#64;home Homebridge platform controlling the accessory
    * @param accessory The platform accessory.
-   * @param accessoryType The accessory type
    */
   constructor(
     readonly platform: FreeAtHomeHomebridgePlatform,
-    readonly accessory: PlatformAccessory<FreeAtHomeContext>,
-    readonly accessoryType: AccessoryType = AccessoryType.Undefined
+    readonly accessory: PlatformAccessory<FreeAtHomeContext>
   ) {
     super(platform, accessory);
 
@@ -27,11 +25,10 @@ export class SceneAccessory extends FreeAtHomeAccessory {
       this.accessory.context.channel.outputs?.odp0000.value ?? "0"
     );
 
-    /* Configure the service service for the switch actuator. */
-    const serviceType = this.platform.Service.Switch;
+    /* Configure the Switch service for the switch actuator. */
     this.service =
-      this.accessory.getService(serviceType) ||
-      this.accessory.addService(serviceType);
+      this.accessory.getService(this.platform.Service.Switch) ||
+      this.accessory.addService(this.platform.Service.Switch);
 
     // register handlers for the On/Off Characteristic
     this.service

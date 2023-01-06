@@ -1,10 +1,5 @@
 import { Channel, Device } from "freeathome-local-api-client";
-import {
-  Characteristic,
-  CharacteristicValue,
-  Service,
-  WithUUID,
-} from "homebridge";
+import { Service } from "homebridge";
 import { PlatformAccessory } from "homebridge/lib/platformAccessory";
 import { SwitchSensorAccessory } from "../src/switchSensorAccessory";
 import { FreeAtHomeContext } from "../src/freeAtHomeContext";

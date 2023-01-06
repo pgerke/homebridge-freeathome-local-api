@@ -29,6 +29,7 @@ The accessories listed below are well tested with automated unit tests as well a
 - Thermostats
 - Door Openers
 - The automatic door opener (which will be displayed as a switch)
+- free@home scenes
 - Binary door and window sensors
 - Switch and dimming sensors (without the state though)
 

@@ -37,6 +37,8 @@ export enum FunctionID {
   FID_SWITCH_SENSOR = "0",
   /** A dimming sensor */
   FID_DIMMING_SENSOR = "1",
+  /** A scene */
+  FID_SCENE = "4800",
 }
 
 /** Contains the list of function IDs that are only experimentally supported by the plugin */

@@ -7,6 +7,7 @@ import { FreeAtHomeHomebridgePlatform } from "./platform";
 export class MotionSensorAccessory extends FreeAtHomeAccessory {
   private readonly service: Service;
   private motionDetected: boolean;
+  private resetTimeout?: NodeJS.Timeout;
 
   /**
    * Constructs a new motion sensor accessory instance.
@@ -23,6 +24,7 @@ export class MotionSensorAccessory extends FreeAtHomeAccessory {
     this.motionDetected = !!parseInt(
       this.accessory.context.channel.outputs?.odp0000.value ?? "0"
     );
+    this.processAutoResetTimer();
 
     // get the MotionSensor service if it exists, otherwise create a new service instance
     this.service =
@@ -41,11 +43,32 @@ export class MotionSensorAccessory extends FreeAtHomeAccessory {
 
     // do the update
     this.motionDetected = !!parseInt(value);
+    this.processAutoResetTimer();
+
     this.doUpdateDatapoint(
       "Motion Sensor",
       this.service,
       this.platform.Characteristic.MotionDetected,
       this.motionDetected
     );
+  }
+
+  private processAutoResetTimer(): void {
+    // Set, reset or cancel a timer, if automatic reset is enabled
+    if (this.platform.config.motionSensorAutoReset as boolean) {
+      // If a timer is running, clear it
+      if (!!this.resetTimeout) {
+        clearTimeout(this.resetTimeout);
+        this.resetTimeout = undefined;
+      }
+
+      // Set a new reset timer, if motion was detected.
+      if (this.motionDetected) {
+        this.resetTimeout = setTimeout(
+          () => this.updateDatapoint("odp0000", "0"),
+          this.platform.config.motionSensorDefaultResetTimer as number
+        );
+      }
+    }
   }
 }

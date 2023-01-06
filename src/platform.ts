@@ -212,9 +212,10 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
 
     // Enmumerate the devices
     Object.keys(config[EmptyGuid].devices).forEach((serial: string) => {
-      // Filter unsupported (pseudo) devices like third party devices
+      // Filter unsupported devices by serial range
       if (
-        !serial.startsWith("ABB") &&
+        !serial.startsWith("ABB") && // free@home default
+        !serial.startsWith("E11") && // alarm services
         !serial.startsWith("FFFF4800") && // Scenes
         !serial.startsWith("FFFF4000") // Light groups
       )
@@ -343,14 +344,6 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
       return false;
     }
 
-    // // Filter devices during development
-    // if (
-    //   channel.functionID !== FunctionID.FID_SCENE &&
-    //   channel.functionID !== FunctionID.FID_LIGHT_GROUP
-    // ) {
-    //   return false;
-    // }
-
     return true;
   }
   private createAccessory(
@@ -364,7 +357,6 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
     switch (functionID.toUpperCase()) {
       case FunctionID.FID_DES_AUTOMATIC_DOOR_OPENER_ACTUATOR:
       case FunctionID.FID_SWITCH_ACTUATOR:
-      case FunctionID.FID_LIGHT_GROUP:
         this.fahAccessories.set(
           `${serial}_${channelId}`,
           new SwitchActuatorAccessory(this, accessory, accessoryType)
@@ -441,7 +433,7 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
     datapoints.forEach((datapoint) => {
       // Ignore data points that have an unexpected format
       const match = datapoint.match(
-        /^(ABB[a-z0-9]{9})\/(ch[\da-f]{4})\/(odp\d{4})$/i
+        /^([a-z0-9]{12})\/(ch[\da-f]{4})\/(odp\d{4})$/i
       );
       if (!match) {
         this.log.debug(`Ignored datapoint ${datapoint}: Unexpected format`);

@@ -1,7 +1,7 @@
 {
   "displayName": "free@home Local API",
   "name": "homebridge-freeathome-local-api",
-  "version": "1.5.0-pre.1",
+  "version": "1.5.0-pre.3",
   "preview": true,
   "description": "Control your free@home setup using the local API provided by your System Access Point",
   "license": "MIT",
@@ -45,20 +45,20 @@
     "smarthome"
   ],
   "dependencies": {
-    "freeathome-local-api-client": "^1.3.5",
+    "freeathome-local-api-client": "^1.3.6",
     "node-fetch": "^2.6.7",
-    "rxjs": "^7.6.0"
+    "rxjs": "^7.8.0"
   },
   "devDependencies": {
     "@istanbuljs/nyc-config-typescript": "^1.0.2",
     "@types/events": "^3.0.0",
     "@types/jasmine": "^4.3.1",
-    "@types/node": "^18.11.13",
+    "@types/node": "^18.11.18",
     "@types/node-fetch": "^2.6.2",
-    "@typescript-eslint/eslint-plugin": "^5.46.0",
-    "@typescript-eslint/parser": "^5.46.0",
-    "eslint": "^8.29.0",
-    "eslint-config-prettier": "^8.5.0",
+    "@typescript-eslint/eslint-plugin": "^5.48.0",
+    "@typescript-eslint/parser": "^5.48.0",
+    "eslint": "^8.31.0",
+    "eslint-config-prettier": "^8.6.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-n": "^15.6.0",
     "eslint-plugin-prettier": "^4.2.1",

@@ -31,8 +31,6 @@ export enum FunctionID {
   FID_AWNING_ACTUATOR = "63",
   /** A scene */
   FID_SCENE = "4800",
-  /** A light group */
-  FID_LIGHT_GROUP = "4000",
 }
 
 /** Contains the list of function IDs that are only experimentally supported by the plugin */

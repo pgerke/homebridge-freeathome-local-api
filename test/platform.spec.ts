@@ -492,6 +492,7 @@ describe("free@home Homebridge Platform", () => {
           "ABB700000002/ch0000/idp0000": "1",
           "ABB700000002/ch0000/odp0000": "2",
           "ABB700000000/ch0000/odp0000": "3",
+          "ABB700000000/ch0000/xdp0000": "0",
         },
         devices: {},
         devicesAdded: [],
@@ -500,7 +501,8 @@ describe("free@home Homebridge Platform", () => {
       },
     };
     instance.processWebSocketMesage(message);
-    expect(spy.calls.count()).toBe(1);
+    expect(spy.calls.count()).toBe(2);
+    expect(spy).toHaveBeenCalledWith("idp0000", "1");
     expect(spy).toHaveBeenCalledWith("odp0000", "2");
   });
 

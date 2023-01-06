@@ -25,7 +25,7 @@ export class SceneAccessory extends FreeAtHomeAccessory {
       this.accessory.context.channel.outputs?.odp0000.value ?? "0"
     );
 
-    /* Configure the Switch service for the switch actuator. */
+    /* Configure the Switch service for the scene actuator. */
     this.service =
       this.accessory.getService(this.platform.Service.Switch) ||
       this.accessory.addService(this.platform.Service.Switch);
@@ -42,6 +42,7 @@ export class SceneAccessory extends FreeAtHomeAccessory {
     if (value === this.stateOn) return;
     else this.stateOn = value as boolean;
 
+    // Don't turn the state off, this is an auto-resetting button
     if (!this.stateOn) {
       this.platform.log.error(
         `${this.accessory.displayName} (Scene Actuator ${this.serialNumber}) cannot be disabled`

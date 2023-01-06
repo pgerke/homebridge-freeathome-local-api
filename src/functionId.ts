@@ -29,6 +29,8 @@ export enum FunctionID {
   FID_ATTIC_WINDOW_ACTUATOR = "62",
   /** An awning actuator */
   FID_AWNING_ACTUATOR = "63",
+  /** A scene */
+  FID_SCENE = "4800",
 }
 
 /** Contains the list of function IDs that are only experimentally supported by the plugin */

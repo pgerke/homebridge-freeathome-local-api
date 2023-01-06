@@ -30,6 +30,7 @@ import { DoorOpenerAccessory } from "./doorOpenerAccessory";
 import { ShutterActuatorAccessory } from "./shutterActuatorAccessory";
 import { AccessoryType, TypeMapping } from "./typeMappings";
 import { globalAgent } from "https";
+import { SceneAccessory } from "./sceneAccessory";
 
 const DelayFactor = 200;
 
@@ -214,7 +215,9 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
       // Filter unsupported devices by serial range
       if (
         !serial.startsWith("ABB") && // free@home default
-        !serial.startsWith("E11") // alarm services
+        !serial.startsWith("E11") && // alarm services
+        !serial.startsWith("FFFF4800") && // Scenes
+        !serial.startsWith("FFFF4000") // Light groups
       )
         return;
 
@@ -398,6 +401,12 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
         this.fahAccessories.set(
           `${serial}_${channelId}`,
           new ShutterActuatorAccessory(this, accessory)
+        );
+        return;
+      case FunctionID.FID_SCENE:
+        this.fahAccessories.set(
+          `${serial}_${channelId}`,
+          new SceneAccessory(this, accessory)
         );
         return;
       default:

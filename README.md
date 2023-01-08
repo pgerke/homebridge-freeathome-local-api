@@ -30,8 +30,10 @@ The accessories listed below are well tested with automated unit tests as well a
 - Door Openers
 - The automatic door opener (which will be displayed as a switch)
 - free@home scenes
-- Binary door and window sensors
-- Switch and dimming sensors (without the state though)
+- Binary door and window sensors 🏠
+- Switch and dimming sensors (without the state though) 🏠
+
+Please note that you need to have a control center running your Apple Home to be able to use sensors. This affects all accessories indicated with the 🏠. Please check https://support.apple.com/en-us/HT207057 for additional information.
 
 ### Experimental Support
 

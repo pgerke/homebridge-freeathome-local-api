@@ -31,6 +31,7 @@ export class SwitchSensorAccessory extends FreeAtHomeAccessory {
     this.service
       .getCharacteristic(this.platform.Characteristic.ProgrammableSwitchEvent)
       .onGet(
+        // istanbul ignore next
         () => this.platform.Characteristic.ProgrammableSwitchEvent.SINGLE_PRESS
       );
   }

@@ -119,6 +119,18 @@ const configuration: Configuration = {
           },
         },
       },
+      ABB700000006: {
+        floor: "1",
+        room: "1",
+        channels: {
+          ch0001: {
+            functionID: "0",
+          },
+          ch0002: {
+            functionID: "F",
+          },
+        },
+      },
       E11000000001: {
         floor: "1",
         room: "1",
@@ -369,7 +381,7 @@ describe("free@home Homebridge Platform", () => {
     platform.accessories.push(knownAccessory);
     spyOn(platform.sysap, "getConfiguration").and.resolveTo(configuration);
     await instance.discoverDevices();
-    expect(instance.fahAccessories.size).toBe(7);
+    expect(instance.fahAccessories.size).toBe(9);
   });
 
   it("should discover devices from the system access point without ignore list", async () => {
@@ -385,7 +397,7 @@ describe("free@home Homebridge Platform", () => {
     };
     spyOn(platform.sysap, "getConfiguration").and.resolveTo(configuration);
     await instance.discoverDevices();
-    expect(instance.fahAccessories.size).toBe(10);
+    expect(instance.fahAccessories.size).toBe(12);
   });
 
   it("should discover devices from the system access point in experimental mode", async () => {
@@ -402,7 +414,7 @@ describe("free@home Homebridge Platform", () => {
     };
     spyOn(platform.sysap, "getConfiguration").and.resolveTo(configuration);
     await instance.discoverDevices();
-    expect(instance.fahAccessories.size).toBe(11);
+    expect(instance.fahAccessories.size).toBe(13);
   });
 
   it("should not create an accessory for an unknown function ID", () => {

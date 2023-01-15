@@ -45,6 +45,7 @@ Some more accessories are supported experimentally. The experimental accessories
 - Shutter Actuators
 - Awning Actuators
 - Attic Window Actuators
+- Scene sensors 🏠
 
 ## Ignoring devices and channels
 

@@ -2,7 +2,15 @@ import { CharacteristicValue, PlatformAccessory, Service } from "homebridge";
 import { FreeAtHomeAccessory } from "./freeAtHomeAccessory";
 import { FreeAtHomeContext } from "./freeAtHomeContext";
 import { FreeAtHomeHomebridgePlatform } from "./platform";
-import { EmptyGuid } from "./util";
+import { EmptyGuid, getDataPointByPairingID } from "./util";
+
+const pidControllerOnOff = 56;
+const pidControllerOnOffRequest = 66;
+const pidHeatingOn = 48;
+const pidCoolingOn = 50;
+const pidCurrentTemperature = 304;
+const pidTargetTemperature = 51;
+const pidTargetTemperatureRequest = 320;
 
 /** A room temperature controller accessory. */
 export class RoomTemperatureControllerAccessory extends FreeAtHomeAccessory {
@@ -12,6 +20,13 @@ export class RoomTemperatureControllerAccessory extends FreeAtHomeAccessory {
   private coolingOn: boolean;
   private stateCurrentTemperature: number;
   private stateTargetTemperature: number;
+  private readonly pdControllerOnOff: string;
+  private readonly pdControllerOnOffRequest: string;
+  private readonly pdHeatingOn: string;
+  private readonly pdCoolingOn: string;
+  private readonly pdCurrentTemperature: string;
+  private readonly pdTargetTemperature: string;
+  private readonly pdTargetTemperatureRequest: string;
 
   private get stateCurrentHeatingCoolingState(): number {
     if (!this.controllerOnOff) {
@@ -45,21 +60,60 @@ export class RoomTemperatureControllerAccessory extends FreeAtHomeAccessory {
   ) {
     super(platform, accessory);
 
+    // Resolve data points
+    if (
+      !this.accessory.context.channel.outputs ||
+      !this.accessory.context.channel.inputs
+    )
+      throw new Error("Channel lacks expected input or output data points.");
+
+    this.pdControllerOnOff = getDataPointByPairingID(
+      this.accessory.context.channel.outputs,
+      pidControllerOnOff
+    );
+    this.pdControllerOnOffRequest = getDataPointByPairingID(
+      this.accessory.context.channel.inputs,
+      pidControllerOnOffRequest
+    );
+    this.pdHeatingOn = getDataPointByPairingID(
+      this.accessory.context.channel.outputs,
+      pidHeatingOn
+    );
+    this.pdCoolingOn = getDataPointByPairingID(
+      this.accessory.context.channel.outputs,
+      pidCoolingOn
+    );
+    this.pdCurrentTemperature = getDataPointByPairingID(
+      this.accessory.context.channel.outputs,
+      pidCurrentTemperature
+    );
+    this.pdTargetTemperature = getDataPointByPairingID(
+      this.accessory.context.channel.outputs,
+      pidTargetTemperature
+    );
+    this.pdTargetTemperatureRequest = getDataPointByPairingID(
+      this.accessory.context.channel.inputs,
+      pidTargetTemperatureRequest
+    );
+
     // set initial state
     this.controllerOnOff = !!parseInt(
-      this.accessory.context.channel.outputs?.odp0008.value ?? "0"
+      this.accessory.context.channel.outputs[this.pdControllerOnOff].value ??
+        "0"
     );
     this.heatingOn = !!parseInt(
-      this.accessory.context.channel.outputs?.odp0000.value ?? "0"
+      this.accessory.context.channel.outputs[this.pdHeatingOn].value ?? "0"
     );
     this.coolingOn = !!parseInt(
-      this.accessory.context.channel.outputs?.odp0001.value ?? "0"
+      this.accessory.context.channel.outputs[this.pdCoolingOn].value ?? "0"
     );
     this.stateCurrentTemperature = parseFloat(
-      this.accessory.context.channel.outputs?.odp0010.value ?? "0.0"
+      this.accessory.context.channel.outputs[this.pdCurrentTemperature].value ??
+        "0.0"
     );
     this.stateTargetTemperature = parseFloat(
-      this.accessory.context.channel.outputs?.odp0006.value ?? "0.0"
+      this.accessory.context.channel.outputs[this.pdTargetTemperature].value ??
+        "0.0"
     );
 
     // get the Thermostat service if it exists, otherwise create a new service instance
@@ -127,7 +181,7 @@ export class RoomTemperatureControllerAccessory extends FreeAtHomeAccessory {
       EmptyGuid,
       this.accessory.context.deviceSerial,
       this.accessory.context.channelId,
-      "idp0016",
+      this.pdTargetTemperatureRequest,
       this.stateTargetTemperature.toFixed(1)
     );
   }
@@ -151,7 +205,7 @@ export class RoomTemperatureControllerAccessory extends FreeAtHomeAccessory {
       EmptyGuid,
       this.accessory.context.deviceSerial,
       this.accessory.context.channelId,
-      "idp0012",
+      this.pdControllerOnOffRequest,
       value === this.platform.Characteristic.TargetHeatingCoolingState.OFF
         ? "0"
         : "1"
@@ -160,7 +214,7 @@ export class RoomTemperatureControllerAccessory extends FreeAtHomeAccessory {
 
   public override updateDatapoint(datapoint: string, value: string): void {
     switch (datapoint) {
-      case "odp0000":
+      case this.pdHeatingOn:
         this.heatingOn = !!parseInt(value);
         this.doUpdateDatapoint(
           "Room Temperature Controller",
@@ -169,7 +223,7 @@ export class RoomTemperatureControllerAccessory extends FreeAtHomeAccessory {
           this.stateCurrentHeatingCoolingState
         );
         return;
-      case "odp0001":
+      case this.pdCoolingOn:
         this.coolingOn = !!parseInt(value);
         this.doUpdateDatapoint(
           "Room Temperature Controller",
@@ -178,7 +232,7 @@ export class RoomTemperatureControllerAccessory extends FreeAtHomeAccessory {
           this.stateCurrentHeatingCoolingState
         );
         return;
-      case "odp0008":
+      case this.pdControllerOnOff:
         this.controllerOnOff = !!parseInt(value);
         this.doUpdateDatapoint(
           "Room Temperature Controller",
@@ -193,7 +247,7 @@ export class RoomTemperatureControllerAccessory extends FreeAtHomeAccessory {
           this.stateTargetHeatingCoolingState
         );
         return;
-      case "odp0006":
+      case this.pdTargetTemperature:
         this.stateTargetTemperature = parseFloat(value);
         this.doUpdateDatapoint(
           "Room Temperature Controller",
@@ -202,7 +256,7 @@ export class RoomTemperatureControllerAccessory extends FreeAtHomeAccessory {
           this.stateTargetTemperature
         );
         return;
-      case "odp0010":
+      case this.pdCurrentTemperature:
         this.stateCurrentTemperature = parseFloat(value);
         this.doUpdateDatapoint(
           "Room Temperature Controller",

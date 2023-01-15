@@ -62,6 +62,27 @@ const configuration: Configuration = {
         channels: {
           ch0000: {
             functionID: "23",
+            outputs: {
+              odp0000: {
+                pairingID: 48,
+              },
+              odp0001: {
+                pairingID: 50,
+              },
+              odp0006: {
+                pairingID: 51,
+              },
+              odp0008: {
+                pairingID: 56,
+              },
+              odp0010: {
+                pairingID: 304,
+              },
+            },
+            inputs: {
+              idp0012: { pairingID: 66 },
+              idp0016: { pairingID: 320 },
+            },
           },
           ch0001: {
             functionID: "20",

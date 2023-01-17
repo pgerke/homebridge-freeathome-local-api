@@ -30,6 +30,8 @@ The accessories listed below are well tested with automated unit tests as well a
 - Door Openers
 - The automatic door opener (which will be displayed as a switch)
 - free@home scenes
+- Smoke Detector
+- Motion Sensors
 - Binary door and window sensors 🏠
 - Switch and dimming sensors (without the state though) 🏠
 
@@ -39,8 +41,6 @@ Please note that you need to have a control center running your Apple Home to be
 
 Some more accessories are supported experimentally. The experimental accessories are implemented according to the BUSCH-JAEGER specification and fully unit tested, but I don't own the hardware, so I cannot perform in-situ tests for functionality, user experience and stability. If you own one or more of the devices listed below and want to help me support those accessories, please create a [GitHub issue](https://github.com/pgerke/homebridge-freeathome-local-api/issues) or reach out to me via [email](mailto:info@philipgerke.com).
 
-- Smoke Detector
-- Motion Sensors
 - Blinds Actuators
 - Shutter Actuators
 - Awning Actuators

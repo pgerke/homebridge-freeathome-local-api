@@ -62,6 +62,27 @@ const configuration: Configuration = {
         channels: {
           ch0000: {
             functionID: "23",
+            outputs: {
+              odp0000: {
+                pairingID: 48,
+              },
+              odp0001: {
+                pairingID: 50,
+              },
+              odp0006: {
+                pairingID: 51,
+              },
+              odp0008: {
+                pairingID: 56,
+              },
+              odp0010: {
+                pairingID: 304,
+              },
+            },
+            inputs: {
+              idp0012: { pairingID: 66 },
+              idp0016: { pairingID: 320 },
+            },
           },
           ch0001: {
             functionID: "20",
@@ -389,7 +410,7 @@ describe("free@home Homebridge Platform", () => {
     platform.accessories.push(knownAccessory);
     spyOn(platform.sysap, "getConfiguration").and.resolveTo(configuration);
     await instance.discoverDevices();
-    expect(instance.fahAccessories.size).toBe(9);
+    expect(instance.fahAccessories.size).toBe(12);
   });
 
   it("should discover devices from the system access point without ignore list", async () => {
@@ -405,7 +426,7 @@ describe("free@home Homebridge Platform", () => {
     };
     spyOn(platform.sysap, "getConfiguration").and.resolveTo(configuration);
     await instance.discoverDevices();
-    expect(instance.fahAccessories.size).toBe(12);
+    expect(instance.fahAccessories.size).toBe(15);
   });
 
   it("should discover devices from the system access point in experimental mode", async () => {

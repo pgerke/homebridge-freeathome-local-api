@@ -45,8 +45,6 @@ export enum FunctionID {
 
 /** Contains the list of function IDs that are only experimentally supported by the plugin */
 export const experimentallySupportedFunctionIDs: Array<FunctionID> = [
-  FunctionID.FID_SMOKE_DETECTOR,
-  FunctionID.FID_MOVEMENT_DETECTOR,
   FunctionID.FID_SHUTTER_ACTUATOR,
   FunctionID.FID_BLIND_ACTUATOR,
   FunctionID.FID_ATTIC_WINDOW_ACTUATOR,

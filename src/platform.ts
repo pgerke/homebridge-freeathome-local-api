@@ -30,7 +30,12 @@ import { DoorOpenerAccessory } from "./doorOpenerAccessory";
 import { ShutterActuatorAccessory } from "./shutterActuatorAccessory";
 import { AccessoryType, TypeMapping } from "./typeMappings";
 import { globalAgent } from "https";
+import { ContactSensorAccessory } from "./contactSensorAccessory";
+import { SwitchSensorAccessory } from "./switchSensorAccessory";
 import { SceneAccessory } from "./sceneAccessory";
+import { SceneSensorAccessory } from "./sceneSensorAccessory";
+import { StaircaseLightSensorAccessory } from "./staircaseLightSensor";
+import { TriggerSensorAccessory } from "./triggerSensorAccessory";
 
 const DelayFactor = 200;
 
@@ -231,66 +236,74 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
 
       // Enumerate the channels
       Object.keys(device.channels).forEach((channelId: string) => {
-        // We are enumerating the keys of the channels object. Neither the channels object nor the channelId can possibly be undefined.
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const channel = device.channels![channelId];
-        if (
-          !this.isViableChannel(
-            serial,
-            channelId,
-            channel,
-            locationConfiguredOnDeviceLevel
+        try {
+          // We are enumerating the keys of the channels object. Neither the channels object nor the channelId can possibly be undefined.
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          const channel = device.channels![channelId];
+          if (
+            !this.isViableChannel(
+              serial,
+              channelId,
+              channel,
+              locationConfiguredOnDeviceLevel
+            )
           )
-        )
-          return;
-
-        // Create or restore the accessory
-        const uuid = this.api.hap.uuid.generate(`${serial}_${channelId}`);
-        let accessory = this.accessories.find((a) => a.UUID === uuid);
-        if (accessory) {
-          // the accessory already exists
-          this.log.info(
-            "Restoring existing accessory from cache:",
-            accessory.displayName
+            return;
+          // Create or restore the accessory
+          const uuid = this.api.hap.uuid.generate(`${serial}_${channelId}`);
+          let accessory = this.accessories.find((a) => a.UUID === uuid);
+          if (accessory) {
+            // the accessory already exists
+            this.log.info(
+              "Restoring existing accessory from cache:",
+              accessory.displayName
+            );
+            // Update context
+            accessory.context.deviceSerial = serial;
+            accessory.context.device = device;
+            accessory.context.channel = channel;
+            accessory.context.channelId = channelId;
+            this.api.updatePlatformAccessories([accessory]);
+            // it is possible to remove platform accessories at any time using `api.unregisterPlatformAccessories`, eg.:
+            // remove platform accessories when no longer present
+            // this.api.unregisterPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [existingAccessory]);
+            // this.log.info('Removing existing accessory from cache:', existingAccessory.displayName);
+          } else {
+            // the accessory does not yet exist, so we need to create it
+            this.log.info("Adding new accessory:", channel.displayName);
+            // create a new accessory
+            accessory = new this.api.platformAccessory<FreeAtHomeContext>(
+              channel.displayName ?? uuid,
+              uuid
+            );
+            accessory.context.deviceSerial = serial;
+            accessory.context.device = device;
+            accessory.context.channel = channel;
+            accessory.context.channelId = channelId;
+            // link the accessory to your platform
+            this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [
+              accessory,
+            ]);
+          }
+          // This check is used to apply the type guard so the accessory can be used as a free@home accesory without a cast.
+          // Given that the accessory context is constructed in the previous lines, it is impossible for the type check to fail.
+          // Consequently the branch can never be covered and is excluded from the coverage.
+          /* istanbul ignore next */
+          if (!isFreeAtHomeAccessory(accessory, this.fahLogger)) return;
+          // create accessory
+          this.createAccessory(
+            serial,
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            channel.functionID!,
+            channelId,
+            accessory
           );
-
-          // Update context
-          accessory.context.deviceSerial = serial;
-          accessory.context.device = device;
-          accessory.context.channel = channel;
-          accessory.context.channelId = channelId;
-          this.api.updatePlatformAccessories([accessory]);
-          // it is possible to remove platform accessories at any time using `api.unregisterPlatformAccessories`, eg.:
-          // remove platform accessories when no longer present
-          // this.api.unregisterPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [existingAccessory]);
-          // this.log.info('Removing existing accessory from cache:', existingAccessory.displayName);
-        } else {
-          // the accessory does not yet exist, so we need to create it
-          this.log.info("Adding new accessory:", channel.displayName);
-          // create a new accessory
-          accessory = new this.api.platformAccessory<FreeAtHomeContext>(
-            channel.displayName ?? uuid,
-            uuid
+        } catch (error) {
+          this.log.error(
+            `Error processing discovered channel ${serial}/${channelId}`,
+            error
           );
-          accessory.context.deviceSerial = serial;
-          accessory.context.device = device;
-          accessory.context.channel = channel;
-          accessory.context.channelId = channelId;
-          // link the accessory to your platform
-          this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [
-            accessory,
-          ]);
         }
-
-        // This check is used to apply the type guard so the accessory can be used as a free@home accesory without a cast.
-        // Given that the accessory context is constructed in the previous lines, it is impossible for the type check to fail.
-        // Consequently the branch can never be covered and is excluded from the coverage.
-        /* istanbul ignore next */
-        if (!isFreeAtHomeAccessory(accessory, this.fahLogger)) return;
-
-        // create accessory
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        this.createAccessory(serial, channel.functionID!, channelId, accessory);
       });
     });
   }
@@ -355,6 +368,13 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
     const accessoryType = this.resolveAccessoryType(serial, channelId);
 
     switch (functionID.toUpperCase()) {
+      case FunctionID.FID_SWITCH_SENSOR:
+      case FunctionID.FID_DIMMING_SENSOR:
+        this.fahAccessories.set(
+          `${serial}_${channelId}`,
+          new SwitchSensorAccessory(this, accessory)
+        );
+        return;
       case FunctionID.FID_DES_AUTOMATIC_DOOR_OPENER_ACTUATOR:
       case FunctionID.FID_SWITCH_ACTUATOR:
         this.fahAccessories.set(
@@ -409,6 +429,31 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
           new SceneAccessory(this, accessory)
         );
         return;
+      case FunctionID.FID_SCENE_SENSOR:
+        this.fahAccessories.set(
+          `${serial}_${channelId}`,
+          new SceneSensorAccessory(this, accessory)
+        );
+        return;
+      case FunctionID.FID_WINDOW_DOOR_SENSOR:
+      case FunctionID.FID_WINDOW_DOOR_POSITION_SENSOR:
+        this.fahAccessories.set(
+          `${serial}_${channelId}`,
+          new ContactSensorAccessory(this, accessory)
+        );
+        return;
+      case FunctionID.FID_STAIRCASE_LIGHT_SENSOR:
+        this.fahAccessories.set(
+          `${serial}_${channelId}`,
+          new StaircaseLightSensorAccessory(this, accessory)
+        );
+        return;
+      case FunctionID.FID_TRIGGER:
+        this.fahAccessories.set(
+          `${serial}_${channelId}`,
+          new TriggerSensorAccessory(this, accessory)
+        );
+        return;
       default:
         this.log.error(
           `${serial} (${channelId}): Cannot configure accessory for FunctionID '${functionID}'!`
@@ -433,7 +478,7 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
     datapoints.forEach((datapoint) => {
       // Ignore data points that have an unexpected format
       const match = datapoint.match(
-        /^([a-z0-9]{12})\/(ch[\da-f]{4})\/(odp\d{4})$/i
+        /^([a-z0-9]{12})\/(ch[\da-f]{4})\/([io]dp\d{4})$/i
       );
       if (!match) {
         this.log.debug(`Ignored datapoint ${datapoint}: Unexpected format`);

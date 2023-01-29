@@ -1,7 +1,7 @@
 {
   "displayName": "free@home Local API",
   "name": "homebridge-freeathome-local-api",
-  "version": "1.5.0-pre.5",
+  "version": "1.5.0-pre.8",
   "preview": true,
   "description": "Control your free@home setup using the local API provided by your System Access Point",
   "license": "MIT",
@@ -45,7 +45,7 @@
     "smarthome"
   ],
   "dependencies": {
-    "freeathome-local-api-client": "^1.3.6",
+    "freeathome-local-api-client": "^1.3.7",
     "node-fetch": "^2.6.8",
     "rxjs": "^7.8.0"
   },
@@ -55,11 +55,11 @@
     "@types/jasmine": "^4.3.1",
     "@types/node": "^18.11.18",
     "@types/node-fetch": "^2.6.2",
-    "@typescript-eslint/eslint-plugin": "^5.48.1",
-    "@typescript-eslint/parser": "^5.48.1",
-    "eslint": "^8.32.0",
+    "@typescript-eslint/eslint-plugin": "^5.49.0",
+    "@typescript-eslint/parser": "^5.49.0",
+    "eslint": "^8.33.0",
     "eslint-config-prettier": "^8.6.0",
-    "eslint-plugin-import": "^2.27.4",
+    "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-n": "^15.6.1",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-promise": "^6.1.1",
@@ -69,7 +69,7 @@
     "nodemon": "^2.0.20",
     "nyc": "^15.1.0",
     "prettier": "^2.8.3",
-    "rimraf": "^4.0.5",
+    "rimraf": "^4.1.2",
     "ts-node": "^10.9.1",
     "typescript": "^4.9.4"
   }

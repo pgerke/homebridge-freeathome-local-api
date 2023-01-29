@@ -29,8 +29,22 @@ export enum FunctionID {
   FID_ATTIC_WINDOW_ACTUATOR = "62",
   /** An awning actuator */
   FID_AWNING_ACTUATOR = "63",
+  /** A binary door or window sensor */
+  FID_WINDOW_DOOR_SENSOR = "F",
+  /** A door or window sensor that also reports the door or window position */
+  FID_WINDOW_DOOR_POSITION_SENSOR = "64",
+  /** A (binary) switch sensor */
+  FID_SWITCH_SENSOR = "0",
+  /** A dimming sensor */
+  FID_DIMMING_SENSOR = "1",
   /** A scene */
   FID_SCENE = "4800",
+  /** A scene sensor */
+  FID_SCENE_SENSOR = "6",
+  /** A staircase light sensor */
+  FID_STAIRCASE_LIGHT_SENSOR = "4",
+  /** A generic trigger */
+  FID_TRIGGER = "45",
 }
 
 /** Contains the list of function IDs that are only experimentally supported by the plugin */
@@ -39,4 +53,7 @@ export const experimentallySupportedFunctionIDs: Array<FunctionID> = [
   FunctionID.FID_BLIND_ACTUATOR,
   FunctionID.FID_ATTIC_WINDOW_ACTUATOR,
   FunctionID.FID_AWNING_ACTUATOR,
+  FunctionID.FID_SCENE_SENSOR,
+  FunctionID.FID_STAIRCASE_LIGHT_SENSOR,
+  FunctionID.FID_TRIGGER,
 ];

@@ -140,6 +140,42 @@ const configuration: Configuration = {
           },
         },
       },
+      ABB700000006: {
+        floor: "1",
+        room: "1",
+        channels: {
+          ch0001: {
+            functionID: "0",
+          },
+          ch0002: {
+            functionID: "F",
+          },
+          ch0003: {
+            functionID: "6",
+            outputs: {
+              dp0: {
+                pairingID: 4,
+              },
+            },
+          },
+          ch0004: {
+            functionID: "4",
+            outputs: {
+              dp0: {
+                pairingID: 2,
+              },
+            },
+          },
+          ch0005: {
+            functionID: "45",
+            inputs: {
+              dp0: {
+                pairingID: 2,
+              },
+            },
+          },
+        },
+      },
       E11000000001: {
         floor: "1",
         room: "1",
@@ -390,7 +426,7 @@ describe("free@home Homebridge Platform", () => {
     platform.accessories.push(knownAccessory);
     spyOn(platform.sysap, "getConfiguration").and.resolveTo(configuration);
     await instance.discoverDevices();
-    expect(instance.fahAccessories.size).toBe(10);
+    expect(instance.fahAccessories.size).toBe(12);
   });
 
   it("should discover devices from the system access point without ignore list", async () => {
@@ -406,7 +442,7 @@ describe("free@home Homebridge Platform", () => {
     };
     spyOn(platform.sysap, "getConfiguration").and.resolveTo(configuration);
     await instance.discoverDevices();
-    expect(instance.fahAccessories.size).toBe(13);
+    expect(instance.fahAccessories.size).toBe(15);
   });
 
   it("should discover devices from the system access point in experimental mode", async () => {
@@ -423,7 +459,48 @@ describe("free@home Homebridge Platform", () => {
     };
     spyOn(platform.sysap, "getConfiguration").and.resolveTo(configuration);
     await instance.discoverDevices();
-    expect(instance.fahAccessories.size).toBe(11);
+    expect(instance.fahAccessories.size).toBe(16);
+  });
+
+  it("should log an error if channel configuration fails during discovery", async () => {
+    config.experimental = true;
+    const testConfig: Configuration = {
+      "00000000-0000-0000-0000-000000000000": {
+        sysapName: "Gerke",
+        devices: {
+          ABB700000001: {
+            channels: {
+              ch0000: {
+                displayName: "Scene Sensor",
+                functionID: "6",
+                floor: "1",
+                room: "1",
+              },
+            },
+          },
+        },
+        floorplan: {
+          floors: {},
+        },
+        users: {},
+      },
+    };
+    const platform = new FreeAtHomeHomebridgePlatform(logger, config, api);
+    const instance = platform as unknown as {
+      readonly fahAccessories: Map<string, FreeAtHomeAccessory>;
+      readonly sysap: {
+        readonly logger: FahLogger;
+      };
+      discoverDevices(): Promise<void>;
+    };
+    spyOn(platform.sysap, "getConfiguration").and.resolveTo(testConfig);
+    await instance.discoverDevices();
+    expect(instance.fahAccessories.size).toBe(0);
+    // eslint-disable-next-line @typescript-eslint/unbound-method
+    expect(logger.error).toHaveBeenCalledWith(
+      "Error processing discovered channel ABB700000001/ch0000",
+      new Error("Data point object is undefined")
+    );
   });
 
   it("should not create an accessory for an unknown function ID", () => {
@@ -513,6 +590,7 @@ describe("free@home Homebridge Platform", () => {
           "ABB700000002/ch0000/idp0000": "1",
           "ABB700000002/ch0000/odp0000": "2",
           "ABB700000000/ch0000/odp0000": "3",
+          "ABB700000000/ch0000/xdp0000": "0",
         },
         devices: {},
         devicesAdded: [],
@@ -521,7 +599,8 @@ describe("free@home Homebridge Platform", () => {
       },
     };
     instance.processWebSocketMesage(message);
-    expect(spy.calls.count()).toBe(1);
+    expect(spy.calls.count()).toBe(2);
+    expect(spy).toHaveBeenCalledWith("idp0000", "1");
     expect(spy).toHaveBeenCalledWith("odp0000", "2");
   });
 

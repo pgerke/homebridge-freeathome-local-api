@@ -32,6 +32,10 @@ The accessories listed below are well tested with automated unit tests as well a
 - free@home scenes
 - Smoke Detector
 - Motion Sensors
+- Binary door and window sensors 🏠
+- Switch and dimming sensors (without the state though) 🏠
+
+Please note that you need to have a control center running your Apple Home to be able to use sensors. This affects all accessories indicated with the 🏠. Please check https://support.apple.com/en-us/HT207057 for additional information.
 
 ### Experimental Support
 
@@ -41,6 +45,9 @@ Some more accessories are supported experimentally. The experimental accessories
 - Shutter Actuators
 - Awning Actuators
 - Attic Window Actuators
+- Scene sensors 🏠
+- Staircase light sensors 🏠
+- Trigger sensors 🏠
 
 ## Ignoring devices and channels
 

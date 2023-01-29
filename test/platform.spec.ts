@@ -166,6 +166,14 @@ const configuration: Configuration = {
               },
             },
           },
+          ch0005: {
+            functionID: "45",
+            inputs: {
+              dp0: {
+                pairingID: 2,
+              },
+            },
+          },
         },
       },
       E11000000001: {
@@ -451,7 +459,7 @@ describe("free@home Homebridge Platform", () => {
     };
     spyOn(platform.sysap, "getConfiguration").and.resolveTo(configuration);
     await instance.discoverDevices();
-    expect(instance.fahAccessories.size).toBe(15);
+    expect(instance.fahAccessories.size).toBe(16);
   });
 
   it("should log an error if channel configuration fails during discovery", async () => {

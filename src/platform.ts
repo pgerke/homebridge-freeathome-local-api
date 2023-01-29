@@ -34,6 +34,7 @@ import { ContactSensorAccessory } from "./contactSensorAccessory";
 import { SwitchSensorAccessory } from "./switchSensorAccessory";
 import { SceneAccessory } from "./sceneAccessory";
 import { SceneSensorAccessory } from "./sceneSensorAccessory";
+import { StaircaseLightSensorAccessory } from "./staircaseLightSensor";
 
 const DelayFactor = 200;
 
@@ -438,6 +439,12 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
         this.fahAccessories.set(
           `${serial}_${channelId}`,
           new ContactSensorAccessory(this, accessory)
+        );
+        return;
+      case FunctionID.FID_STAIRCASE_LIGHT_SENSOR:
+        this.fahAccessories.set(
+          `${serial}_${channelId}`,
+          new StaircaseLightSensorAccessory(this, accessory)
         );
         return;
       default:

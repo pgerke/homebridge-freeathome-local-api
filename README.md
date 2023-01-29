@@ -46,6 +46,7 @@ Some more accessories are supported experimentally. The experimental accessories
 - Awning Actuators
 - Attic Window Actuators
 - Scene sensors 🏠
+- Staircase light sensors 🏠
 
 ## Ignoring devices and channels
 

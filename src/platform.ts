@@ -36,6 +36,8 @@ import { SceneAccessory } from "./sceneAccessory";
 import { SceneSensorAccessory } from "./sceneSensorAccessory";
 import { StaircaseLightSensorAccessory } from "./staircaseLightSensor";
 import { TriggerSensorAccessory } from "./triggerSensorAccessory";
+import { WeatherStationTemperatureSensorAccessory } from "./temperatureSensorAccessory";
+import { WeatherStationBrightnessSensorAccessory } from "./brightnessSensorAccessory";
 
 const DelayFactor = 200;
 
@@ -221,6 +223,7 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
       if (
         !serial.startsWith("ABB") && // free@home default
         !serial.startsWith("E11") && // alarm services
+        !serial.startsWith("7EB1") && // weather station
         !serial.startsWith("FFFF4800") && // Scenes
         !serial.startsWith("FFFF4000") // Light groups
       )
@@ -452,6 +455,18 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
         this.fahAccessories.set(
           `${serial}_${channelId}`,
           new TriggerSensorAccessory(this, accessory)
+        );
+        return;
+      case FunctionID.FID_TEMPERATURE_SENSOR:
+        this.fahAccessories.set(
+          `${serial}_${channelId}`,
+          new WeatherStationTemperatureSensorAccessory(this, accessory)
+        );
+        return;
+      case FunctionID.FID_BRIGHTNESS_SENSOR:
+        this.fahAccessories.set(
+          `${serial}_${channelId}`,
+          new WeatherStationBrightnessSensorAccessory(this, accessory)
         );
         return;
       default:

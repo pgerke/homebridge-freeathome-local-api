@@ -110,7 +110,7 @@ jobs:
       - name: Download artifacts
         uses: actions/download-artifact@v3.0.2
         with:
-          name: coverage (18.x)
+          name: coverage 18.x
           path: "./coverage/"
       - name: SonarQube Scan
         uses: sonarsource/sonarqube-scan-action@master

@@ -14,6 +14,7 @@ jobs:
       matrix:
         # the Node.js versions to build on
         node-version: [14.x, 16.x, 18.x]
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -35,6 +36,7 @@ jobs:
           name: dist
           path: dist
           retention-days: 5 
+
   lint:
     name: Lint
     runs-on: ubuntu-latest
@@ -55,6 +57,7 @@ jobs:
         run: npm ci
       - name: Run linter
         run: npm run lint
+
   audit:
     name: Audit
     runs-on: ubuntu-latest
@@ -65,6 +68,7 @@ jobs:
         run: npm ci
       - name: Run audit
         run: npm audit --omit=dev
+
   test:
     name: Test
     runs-on: ubuntu-latest
@@ -85,7 +89,32 @@ jobs:
         run: npm ci
       - name: Run unit test
         run: npm run test:coverage
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3.1.2
+        with:
+          name: coverage ${{ matrix.node-version }}
+          path: coverage
+          retention-days: 1
       - name: Upload to Codecov
-        uses: codecov/codecov-action@v3.1.0
+        uses: codecov/codecov-action@v3.1.1
         with:
           directory: ./coverage 
+
+  analysis:
+    name: Analyse
+    runs-on: [self-hosted, Linux, X64]
+    needs: [test]
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3.1.0
+      - name: Download artifacts
+        uses: actions/download-artifact@v3.0.2
+        with:
+          name: coverage (18.x)
+          path: "./coverage/"
+      - name: SonarQube Scan
+        uses: sonarsource/sonarqube-scan-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONARQUBE_URL }}
+          SONAR_ROOT_CERT: ${{ secrets.SONARQUBE_ROOT_CERT }}

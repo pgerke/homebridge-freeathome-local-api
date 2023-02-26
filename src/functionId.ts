@@ -37,6 +37,8 @@ export enum FunctionID {
   FID_SWITCH_SENSOR = "0",
   /** A dimming sensor */
   FID_DIMMING_SENSOR = "1",
+  // /** A light group */
+  // FID_LIGHT_GROUP = "4000",
   /** A scene */
   FID_SCENE = "4800",
   /** A scene sensor */

@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.0](https://github.com/pgerke/homebridge-freeathome-local-api/releases/tag/1.5.0) - 26.02.2023
+
+### Added
+
+- [#38](https://github.com/pgerke/homebridge-freeathome-local-api/issues/38):
+  Support free@home scenes as switches in Apple Home
+- [#40](https://github.com/pgerke/homebridge-freeathome-local-api/issues/40):
+  Support the free@home weather station's ambient light and temperature sensors
+- [#41](https://github.com/pgerke/homebridge-freeathome-local-api/issues/41):
+  Sensor support: Switch sensors, dimmer sensors, scene sensors, staircase light sensors, triggers.
+- [#43](https://github.com/pgerke/homebridge-freeathome-local-api/issues/43):
+  Support door and window sensors
+
+### Changed
+
+- [#50](https://github.com/pgerke/homebridge-freeathome-local-api/issues/50):
+  Smoke and motion sensors are now officially supported.
+
 ## [1.4.4](https://github.com/pgerke/homebridge-freeathome-local-api/releases/tag/1.4.4) - 15.01.2023
 
 ### Changed

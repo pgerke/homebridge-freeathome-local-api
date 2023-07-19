@@ -3,7 +3,7 @@ import { AccessoryType } from "./typeMappings";
 import { FreeAtHomeAccessory } from "./freeAtHomeAccessory";
 import { FreeAtHomeContext } from "./freeAtHomeContext";
 import { FreeAtHomeHomebridgePlatform } from "./platform";
-import { EmptyGuid } from "./util";
+import { EmptyGuid, convertToString } from "./util";
 
 /**
  * A switch actuator accessory.
@@ -63,7 +63,7 @@ export class SwitchActuatorAccessory extends FreeAtHomeAccessory {
     this.platform.log.info(
       `${this.accessory.displayName} (Switch Actuator ${
         this.serialNumber
-      }) set characteristic On -> ${value.toString()}`
+      }) set characteristic On -> ${convertToString(value)}`
     );
 
     // set data point at SysAP

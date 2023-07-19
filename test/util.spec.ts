@@ -1,5 +1,6 @@
 import { InOutPut } from "freeathome-local-api-client";
-import { getDataPointByPairingID } from "../src/util";
+import { convertToString, getDataPointByPairingID } from "../src/util";
+import { CharacteristicValue } from "homebridge";
 
 const datapoints: { [key: string]: InOutPut } = {
   dp0: {
@@ -31,5 +32,15 @@ describe("getDataPointByPairingID", () => {
 
   it("should get data point for existing pairing ID", () => {
     expect(getDataPointByPairingID(datapoints, 1)).toBe("dp1");
+  });
+
+  it("should stringify complex value during conversion", () => {
+    const value: CharacteristicValue = {
+      bool: true,
+      number: 123,
+      string: "Test",
+    };
+    const result = JSON.stringify(value, undefined, 2);
+    expect(convertToString(value)).toEqual(result);
   });
 });

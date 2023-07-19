@@ -1,4 +1,5 @@
 import { InOutPut } from "freeathome-local-api-client";
+import { CharacteristicValue } from "homebridge";
 
 /**
  * In the local API the system access point UUID is always an empty UUID. Could be extended later to also support the cloud API.
@@ -24,4 +25,11 @@ export function getDataPointByPairingID(
   }
 
   throw new Error(`No data point found for pairing ID ${pairingID}`);
+}
+
+export function convertToString(value: CharacteristicValue): string {
+  return typeof value.valueOf() === "object"
+    ? JSON.stringify(value, undefined, 2)
+    : // eslint-disable-next-line @typescript-eslint/no-base-to-string, indent
+      value.toString();
 }

@@ -2,7 +2,7 @@ import { CharacteristicValue, PlatformAccessory, Service } from "homebridge";
 import { FreeAtHomeAccessory } from "./freeAtHomeAccessory";
 import { FreeAtHomeContext } from "./freeAtHomeContext";
 import { FreeAtHomeHomebridgePlatform } from "./platform";
-import { EmptyGuid, getDataPointByPairingID } from "./util";
+import { EmptyGuid, convertToString, getDataPointByPairingID } from "./util";
 
 const pidControllerOnOff = 56;
 const pidControllerOnOffRequest = 66;
@@ -168,7 +168,7 @@ export class RoomTemperatureControllerAccessory extends FreeAtHomeAccessory {
     this.platform.log.info(
       `${this.accessory.displayName} (Room Temperature Controller ${
         this.serialNumber
-      }) set characteristic TargetTemperature -> ${value.toString()}`
+      }) set characteristic TargetTemperature -> ${convertToString(value)}`
     );
 
     // Heating Cooling State must not be OFF to set the target temperature
@@ -197,7 +197,9 @@ export class RoomTemperatureControllerAccessory extends FreeAtHomeAccessory {
     this.platform.log.info(
       `${this.accessory.displayName} (Room Temperature Controller ${
         this.serialNumber
-      }) set characteristic TargetHeatingCoolingState -> ${value.toString()}`
+      }) set characteristic TargetHeatingCoolingState -> ${convertToString(
+        value
+      )}`
     );
 
     // set data point at SysAP

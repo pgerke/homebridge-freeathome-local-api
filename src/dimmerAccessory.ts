@@ -2,7 +2,7 @@ import { CharacteristicValue, PlatformAccessory, Service } from "homebridge";
 import { FreeAtHomeAccessory } from "./freeAtHomeAccessory";
 import { FreeAtHomeContext } from "./freeAtHomeContext";
 import { FreeAtHomeHomebridgePlatform } from "./platform";
-import { EmptyGuid } from "./util";
+import { EmptyGuid, convertToString } from "./util";
 
 /** A dimming actuator accessory.*/
 export class DimmerAccessory extends FreeAtHomeAccessory {
@@ -58,7 +58,7 @@ export class DimmerAccessory extends FreeAtHomeAccessory {
     this.platform.log.info(
       `${this.accessory.displayName} (Dimmer Accessory ${
         this.serialNumber
-      }) set characteristic On -> ${value.toString()}`
+      }) set characteristic On -> ${convertToString(value)}`
     );
 
     // set data point at SysAP
@@ -84,7 +84,7 @@ export class DimmerAccessory extends FreeAtHomeAccessory {
     this.platform.log.info(
       `${this.accessory.displayName} (Dimmer Accessory ${
         this.serialNumber
-      }) set characteristic Brightness -> ${value.toString()}`
+      }) set characteristic Brightness -> ${convertToString(value)}`
     );
 
     // set data point at SysAP
@@ -93,7 +93,7 @@ export class DimmerAccessory extends FreeAtHomeAccessory {
       this.accessory.context.deviceSerial,
       this.accessory.context.channelId,
       "idp0002",
-      value.toString()
+      convertToString(value)
     );
   }
 

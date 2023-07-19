@@ -2,7 +2,7 @@ import { CharacteristicValue, PlatformAccessory, Service } from "homebridge";
 import { FreeAtHomeAccessory } from "./freeAtHomeAccessory";
 import { FreeAtHomeContext } from "./freeAtHomeContext";
 import { FreeAtHomeHomebridgePlatform } from "./platform";
-import { EmptyGuid } from "./util";
+import { EmptyGuid, convertToString } from "./util";
 
 /** A door opener accessory.*/
 export class DoorOpenerAccessory extends FreeAtHomeAccessory {
@@ -60,7 +60,7 @@ export class DoorOpenerAccessory extends FreeAtHomeAccessory {
     this.platform.log.info(
       `${this.accessory.displayName} (Door Opener ${
         this.serialNumber
-      }) set characteristic LockTargetState -> ${value.toString()}`
+      }) set characteristic LockTargetState -> ${convertToString(value)}`
     );
 
     // set data point at SysAP
@@ -78,7 +78,9 @@ export class DoorOpenerAccessory extends FreeAtHomeAccessory {
       this.platform.log.error(
         `${this.accessory.displayName} (Door Opener ${
           this.serialNumber
-        }) failed to set characteristic LockTargetState -> ${value.toString()}. Is the door opener configured in free@home?`
+        }) failed to set characteristic LockTargetState -> ${convertToString(
+          value
+        )}. Is the door opener configured in free@home?`
       );
     }
   }

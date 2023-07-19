@@ -7,6 +7,7 @@ import {
 } from "homebridge";
 import { FreeAtHomeContext } from "./freeAtHomeContext";
 import { FreeAtHomeHomebridgePlatform } from "./platform";
+import { convertToString } from "./util";
 
 /** The abstract base class for all free&#64;home accessories.*/
 export abstract class FreeAtHomeAccessory {
@@ -56,9 +57,9 @@ export abstract class FreeAtHomeAccessory {
     this.platform.log.info(
       `${this.accessory.displayName} (${acccessoryDisplayType} ${
         this.serialNumber
-      }) updated characteristic ${
-        characteristic.name
-      } -> ${characteristicValue.toString()}`
+      }) updated characteristic ${characteristic.name} -> ${convertToString(
+        characteristicValue
+      )}`
     );
 
     // asynchoronously update the characteristic

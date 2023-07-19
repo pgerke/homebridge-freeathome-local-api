@@ -2,7 +2,7 @@ import { CharacteristicValue, PlatformAccessory, Service } from "homebridge";
 import { FreeAtHomeAccessory } from "./freeAtHomeAccessory";
 import { FreeAtHomeContext } from "./freeAtHomeContext";
 import { FreeAtHomeHomebridgePlatform } from "./platform";
-import { EmptyGuid } from "./util";
+import { EmptyGuid, convertToString } from "./util";
 
 /**
  * A shutter actuator accessory
@@ -104,7 +104,7 @@ export class ShutterActuatorAccessory extends FreeAtHomeAccessory {
     this.platform.log.info(
       `${this.accessory.displayName} (Shutter Actuator ${
         this.serialNumber
-      }) set characteristic TargetPosition -> ${value.toString()}`
+      }) set characteristic TargetPosition -> ${convertToString(value)}`
     );
 
     // set data point at SysAP
@@ -113,7 +113,7 @@ export class ShutterActuatorAccessory extends FreeAtHomeAccessory {
       this.accessory.context.deviceSerial,
       this.accessory.context.channelId,
       "idp0002",
-      (100 - this.stateTargetPosition).toString()
+      convertToString(100 - this.stateTargetPosition)
     );
   }
 

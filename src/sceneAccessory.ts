@@ -2,7 +2,7 @@ import { CharacteristicValue, PlatformAccessory, Service } from "homebridge";
 import { FreeAtHomeAccessory } from "./freeAtHomeAccessory";
 import { FreeAtHomeContext } from "./freeAtHomeContext";
 import { FreeAtHomeHomebridgePlatform } from "./platform";
-import { EmptyGuid } from "./util";
+import { EmptyGuid, convertToString } from "./util";
 
 /** A scene accessory. */
 export class SceneAccessory extends FreeAtHomeAccessory {
@@ -54,7 +54,7 @@ export class SceneAccessory extends FreeAtHomeAccessory {
     this.platform.log.info(
       `${this.accessory.displayName} (Scene Actuator ${
         this.serialNumber
-      }) set characteristic On -> ${value.toString()}`
+      }) set characteristic On -> ${convertToString(value)}`
     );
 
     // set data point at SysAP

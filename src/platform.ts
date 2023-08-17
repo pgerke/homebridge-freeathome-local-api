@@ -38,6 +38,7 @@ import { StaircaseLightSensorAccessory } from "./staircaseLightSensor";
 import { TriggerSensorAccessory } from "./triggerSensorAccessory";
 import { WeatherStationTemperatureSensorAccessory } from "./temperatureSensorAccessory";
 import { WeatherStationBrightnessSensorAccessory } from "./brightnessSensorAccessory";
+import { RadiatorActuatorAccessory } from "./radiatorActuatorAccessory";
 
 const DelayFactor = 200;
 
@@ -469,6 +470,11 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
           new WeatherStationBrightnessSensorAccessory(this, accessory)
         );
         return;
+      case FunctionID.FID_RADIATOR_ACTUATOR_MASTER:
+        this.fahAccessories.set(
+          `${serial}_${channelId}`,
+          new RadiatorActuatorAccessory(this, accessory)
+        );
       default:
         this.log.error(
           `${serial} (${channelId}): Cannot configure accessory for FunctionID '${functionID}'!`

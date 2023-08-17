@@ -49,6 +49,7 @@ Some more accessories are supported experimentally. The experimental accessories
 - Staircase light sensors 🏠
 - Trigger sensors 🏠
 - The free@home weather station's ambient light and temperature sensors
+- Wireless radiator actuators 🆕
 
 ## Ignoring devices and channels
 

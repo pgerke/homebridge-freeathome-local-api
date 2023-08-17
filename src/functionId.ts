@@ -51,6 +51,8 @@ export enum FunctionID {
   FID_BRIGHTNESS_SENSOR = "41",
   /** A temperature sensor */
   FID_TEMPERATURE_SENSOR = "43",
+  /** A master radiator actuator */
+  FID_RADIATOR_ACTUATOR_MASTER = "3E",
 }
 
 /** Contains the list of function IDs that are only experimentally supported by the plugin */
@@ -64,4 +66,5 @@ export const experimentallySupportedFunctionIDs: Array<FunctionID> = [
   FunctionID.FID_TRIGGER,
   FunctionID.FID_BRIGHTNESS_SENSOR,
   FunctionID.FID_TEMPERATURE_SENSOR,
+  FunctionID.FID_RADIATOR_ACTUATOR_MASTER,
 ];

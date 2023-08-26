@@ -475,6 +475,7 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
           `${serial}_${channelId}`,
           new RadiatorActuatorAccessory(this, accessory)
         );
+        return;
       default:
         this.log.error(
           `${serial} (${channelId}): Cannot configure accessory for FunctionID '${functionID}'!`

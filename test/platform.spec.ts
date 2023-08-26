@@ -463,7 +463,7 @@ describe("free@home Homebridge Platform", () => {
     platform.accessories.push(knownAccessory);
     spyOn(platform.sysap, "getConfiguration").and.resolveTo(configuration);
     await instance.discoverDevices();
-    expect(instance.fahAccessories.size).toBe(12);
+    expect(instance.fahAccessories.size).toBe(15);
   });
 
   it("should discover devices from the system access point without ignore list", async () => {
@@ -479,7 +479,7 @@ describe("free@home Homebridge Platform", () => {
     };
     spyOn(platform.sysap, "getConfiguration").and.resolveTo(configuration);
     await instance.discoverDevices();
-    expect(instance.fahAccessories.size).toBe(15);
+    expect(instance.fahAccessories.size).toBe(18);
   });
 
   it("should discover devices from the system access point in experimental mode", async () => {

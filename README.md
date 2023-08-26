@@ -34,6 +34,8 @@ The accessories listed below are well tested with automated unit tests as well a
 - Motion Sensors
 - Binary door and window sensors 🏠
 - Switch and dimming sensors (without the state though) 🏠
+- The free@home weather station's ambient light and temperature sensors
+- Wireless radiator actuators 🆕
 
 Please note that you need to have a control center running your Apple Home to be able to use sensors. This affects all accessories indicated with the 🏠. Please check https://support.apple.com/en-us/HT207057 for additional information.
 
@@ -48,8 +50,6 @@ Some more accessories are supported experimentally. The experimental accessories
 - Scene sensors 🏠
 - Staircase light sensors 🏠
 - Trigger sensors 🏠
-- The free@home weather station's ambient light and temperature sensors
-- Wireless radiator actuators 🆕
 
 ## Ignoring devices and channels
 

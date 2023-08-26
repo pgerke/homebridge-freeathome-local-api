@@ -64,7 +64,4 @@ export const experimentallySupportedFunctionIDs: Array<FunctionID> = [
   FunctionID.FID_SCENE_SENSOR,
   FunctionID.FID_STAIRCASE_LIGHT_SENSOR,
   FunctionID.FID_TRIGGER,
-  FunctionID.FID_BRIGHTNESS_SENSOR,
-  FunctionID.FID_TEMPERATURE_SENSOR,
-  FunctionID.FID_RADIATOR_ACTUATOR_MASTER,
 ];

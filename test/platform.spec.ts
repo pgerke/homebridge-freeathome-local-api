@@ -138,6 +138,27 @@ const configuration: Configuration = {
           ch0002: {
             functionID: "4800",
           },
+          ch0006: {
+            functionID: "3e",
+            outputs: {
+              odp0000: {
+                pairingID: 331,
+              },
+              odp0006: {
+                pairingID: 51,
+              },
+              odp0008: {
+                pairingID: 56,
+              },
+              odp0010: {
+                pairingID: 304,
+              },
+            },
+            inputs: {
+              idp0012: { pairingID: 66 },
+              idp0016: { pairingID: 320 },
+            },
+          },
         },
       },
       ABB700000006: {
@@ -442,7 +463,7 @@ describe("free@home Homebridge Platform", () => {
     platform.accessories.push(knownAccessory);
     spyOn(platform.sysap, "getConfiguration").and.resolveTo(configuration);
     await instance.discoverDevices();
-    expect(instance.fahAccessories.size).toBe(12);
+    expect(instance.fahAccessories.size).toBe(15);
   });
 
   it("should discover devices from the system access point without ignore list", async () => {
@@ -458,7 +479,7 @@ describe("free@home Homebridge Platform", () => {
     };
     spyOn(platform.sysap, "getConfiguration").and.resolveTo(configuration);
     await instance.discoverDevices();
-    expect(instance.fahAccessories.size).toBe(15);
+    expect(instance.fahAccessories.size).toBe(18);
   });
 
   it("should discover devices from the system access point in experimental mode", async () => {
@@ -475,7 +496,7 @@ describe("free@home Homebridge Platform", () => {
     };
     spyOn(platform.sysap, "getConfiguration").and.resolveTo(configuration);
     await instance.discoverDevices();
-    expect(instance.fahAccessories.size).toBe(18);
+    expect(instance.fahAccessories.size).toBe(19);
   });
 
   it("should log an error if channel configuration fails during discovery", async () => {

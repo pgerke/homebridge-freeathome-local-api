@@ -38,6 +38,7 @@ import { StaircaseLightSensorAccessory } from "./staircaseLightSensor";
 import { TriggerSensorAccessory } from "./triggerSensorAccessory";
 import { WeatherStationTemperatureSensorAccessory } from "./temperatureSensorAccessory";
 import { WeatherStationBrightnessSensorAccessory } from "./brightnessSensorAccessory";
+import { RadiatorActuatorAccessory } from "./radiatorActuatorAccessory";
 
 const DelayFactor = 200;
 
@@ -467,6 +468,12 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
         this.fahAccessories.set(
           `${serial}_${channelId}`,
           new WeatherStationBrightnessSensorAccessory(this, accessory)
+        );
+        return;
+      case FunctionID.FID_RADIATOR_ACTUATOR_MASTER:
+        this.fahAccessories.set(
+          `${serial}_${channelId}`,
+          new RadiatorActuatorAccessory(this, accessory)
         );
         return;
       default:

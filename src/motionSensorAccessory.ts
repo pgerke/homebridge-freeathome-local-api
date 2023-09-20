@@ -57,7 +57,7 @@ export class MotionSensorAccessory extends FreeAtHomeAccessory {
     // Set, reset or cancel a timer, if automatic reset is enabled
     if (this.platform.config.motionSensorAutoReset as boolean) {
       // If a timer is running, clear it
-      if (!!this.resetTimeout) {
+      if (this.resetTimeout) {
         clearTimeout(this.resetTimeout);
         this.resetTimeout = undefined;
       }

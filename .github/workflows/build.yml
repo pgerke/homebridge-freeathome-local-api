@@ -123,9 +123,15 @@ jobs:
         with:
           name: coverage Node 18
           path: "./coverage/"
+      - name: Extract version
+        id: version-extraction
+        run: echo "APP_VERSION=$(jq -r .version package.json)" >> "$GITHUB_OUTPUT"
       - name: SonarQube Scan
         uses: sonarsource/sonarqube-scan-action@master
         env:
           SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONARQUBE_URL }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
           SONAR_ROOT_CERT: ${{ secrets.SONARQUBE_ROOT_CERT }}
+        with:
+          args: >
+            -Dsonar.projectVersion=${{ steps.version-extraction.outputs.APP_VERSION }}

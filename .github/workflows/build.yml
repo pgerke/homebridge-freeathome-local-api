@@ -130,7 +130,7 @@ jobs:
         uses: sonarsource/sonarqube-scan-action@master
         env:
           SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+          SONAR_HOST_URL: ${{ secrets.SONARQUBE_URL }}
           SONAR_ROOT_CERT: ${{ secrets.SONARQUBE_ROOT_CERT }}
         with:
           args: >

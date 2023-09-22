@@ -2,9 +2,8 @@ name: Continuous Integration
 
 on:
   push:
-    branches: [ main* ]
+    branches: [ main ]
   pull_request:
-    branches: [ main* ]
   workflow_dispatch:
 
 jobs:
@@ -13,7 +12,11 @@ jobs:
     strategy:
       matrix:
         # the Node.js versions to build on
-        node-version: [14.x, 16.x, 18.x]
+        node-version: [14, 16, 18]
+        include:
+          - npm-version: 9
+          - npm-version: latest
+            node-version: 18
 
     steps:
       - name: Checkout repository
@@ -23,7 +26,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: Install latest npm
-        run: npm install -g npm && npm --version
+        run: npm install -g npm@${{ matrix.npm-version }} && npm --version
       - name: Install dependencies
         run: npm ci
       - name: Build the project
@@ -43,7 +46,11 @@ jobs:
     strategy:
       matrix:
         # the Node.js versions to build on
-        node-version: [16.x, 18.x]
+        node-version: [16, 18]
+        include:
+          - npm-version: 9
+          - npm-version: latest
+            node-version: 18
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -52,7 +59,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: Install latest npm
-        run: npm install -g npm && npm --version
+        run: npm install -g npm@${{ matrix.npm-version }} && npm --version
       - name: Restore dependencies
         run: npm ci
       - name: Run linter
@@ -75,7 +82,11 @@ jobs:
     strategy:
       matrix:
         # the Node.js versions to build on
-        node-version: [14.x, 16.x, 18.x]
+        node-version: [14, 16, 18]
+        include:
+          - npm-version: 9
+          - npm-version: latest
+            node-version: 18
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -84,7 +95,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: Install latest npm
-        run: npm install -g npm && npm --version
+        run: npm install -g npm@${{ matrix.npm-version }} && npm --version
       - name: Restore dependencies
         run: npm ci
       - name: Run unit test
@@ -92,7 +103,7 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v3.1.2
         with:
-          name: coverage ${{ matrix.node-version }}
+          name: coverage Node ${{ matrix.node-version }}
           path: coverage
           retention-days: 1
       - name: Upload to Codecov
@@ -110,11 +121,17 @@ jobs:
       - name: Download artifacts
         uses: actions/download-artifact@v3.0.2
         with:
-          name: coverage 18.x
+          name: coverage Node 18
           path: "./coverage/"
+      - name: Extract version
+        id: version-extraction
+        run: echo "APP_VERSION=$(jq -r .version package.json)" >> "$GITHUB_OUTPUT"
       - name: SonarQube Scan
         uses: sonarsource/sonarqube-scan-action@master
         env:
           SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONARQUBE_URL }}
           SONAR_ROOT_CERT: ${{ secrets.SONARQUBE_ROOT_CERT }}
+        with:
+          args: >
+            -Dsonar.projectVersion=${{ steps.version-extraction.outputs.APP_VERSION }}

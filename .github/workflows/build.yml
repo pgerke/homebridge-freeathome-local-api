@@ -12,11 +12,9 @@ jobs:
     strategy:
       matrix:
         # the Node.js versions to build on
-        node-version: [14, 16, 18]
+        node-version: [18, 20]
         include:
-          - npm-version: 9
           - npm-version: latest
-            node-version: 18
 
     steps:
       - name: Checkout repository
@@ -46,11 +44,9 @@ jobs:
     strategy:
       matrix:
         # the Node.js versions to build on
-        node-version: [16, 18]
+        node-version: [18, 20]
         include:
-          - npm-version: 9
           - npm-version: latest
-            node-version: 18
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -82,11 +78,9 @@ jobs:
     strategy:
       matrix:
         # the Node.js versions to build on
-        node-version: [14, 16, 18]
+        node-version: [18, 20]
         include:
-          - npm-version: 9
           - npm-version: latest
-            node-version: 18
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -121,7 +115,7 @@ jobs:
       - name: Download artifacts
         uses: actions/download-artifact@v3.0.2
         with:
-          name: coverage Node 18
+          name: coverage Node 20
           path: "./coverage/"
       - name: Extract version
         id: version-extraction

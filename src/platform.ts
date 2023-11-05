@@ -39,6 +39,7 @@ import { TriggerSensorAccessory } from "./triggerSensorAccessory";
 import { WeatherStationTemperatureSensorAccessory } from "./temperatureSensorAccessory";
 import { WeatherStationBrightnessSensorAccessory } from "./brightnessSensorAccessory";
 import { RadiatorActuatorAccessory } from "./radiatorActuatorAccessory";
+import { Agent, setGlobalDispatcher } from "undici";
 
 const DelayFactor = 200;
 
@@ -100,6 +101,15 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
       this.config.tlsEnabled as boolean,
       this.config.verboseErrors as boolean,
       this.fahLogger
+    );
+
+    // TLS Verification
+    setGlobalDispatcher(
+      new Agent({
+        connect: {
+          rejectUnauthorized: !this.config.disableCertificateVerification,
+        },
+      })
     );
     globalAgent.options.rejectUnauthorized =
       !this.config.disableCertificateVerification;

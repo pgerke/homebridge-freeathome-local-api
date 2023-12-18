@@ -381,7 +381,7 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
   ): void {
     const accessoryType = this.resolveAccessoryType(serial, channelId);
 
-    switch (functionID.toUpperCase()) {
+    switch (functionID.toUpperCase() as FunctionID) {
       case FunctionID.FID_SWITCH_SENSOR:
       case FunctionID.FID_DIMMING_SENSOR:
         this.fahAccessories.set(

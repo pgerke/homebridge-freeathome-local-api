@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 1.11.0 - XX.01.2024
+
+### Added
+
+- [#84](https://github.com/pgerke/homebridge-freeathome-local-api/issues/84):
+  Support additional wireless dimmers
+
 ## 1.10.0 - 18.12.2023
 
 ### Changed

@@ -405,6 +405,7 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
       case FunctionID.FID_DIMMING_ACTUATOR:
       case FunctionID.FID_RGB_ACTUATOR:
       case FunctionID.FID_RGB_W_ACTUATOR:
+      case FunctionID.FID_DIMMING_ACTUATOR_TYPE0:
         this.fahAccessories.set(
           `${serial}_${channelId}`,
           new DimmerAccessory(this, accessory)

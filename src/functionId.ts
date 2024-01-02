@@ -7,11 +7,11 @@ export enum FunctionID {
   FID_SWITCH_ACTUATOR = "7",
   /** A master room temperature controller that does not include a fan */
   FID_ROOM_TEMPERATURE_CONTROLLER_MASTER_WITHOUT_FAN = "23",
-  /** A dim actuator  */
+  /** A dimming actuator  */
   FID_DIMMING_ACTUATOR = "12",
-  /** A dim actuator that can also control the light hue */
+  /** A dimming actuator that can also control the light hue */
   FID_RGB_W_ACTUATOR = "2E",
-  /** A dim actuator that can also control the light hue */
+  /** A dimming actuator that can also control the light hue */
   FID_RGB_ACTUATOR = "2F",
   /** An automatic door opener */
   FID_DES_AUTOMATIC_DOOR_OPENER_ACTUATOR = "20",
@@ -53,6 +53,12 @@ export enum FunctionID {
   FID_TEMPERATURE_SENSOR = "43",
   /** A master radiator actuator */
   FID_RADIATOR_ACTUATOR_MASTER = "3E",
+  // /** A wireless rocker type dimming sensor */
+  // FID_DIMMING_SENSOR_ROCKER_TYPE0 = "1010",
+  // /** A wireless push button type dimming sensor */
+  // FID_DIMMING_SENSOR_PUSHBUTTON_TYPE2 = "101A",
+  /** A wireless dimming actuator */
+  FID_DIMMING_ACTUATOR_TYPE0 = "1810",
 }
 
 /** Contains the list of function IDs that are only experimentally supported by the plugin */

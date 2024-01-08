@@ -107,7 +107,7 @@ jobs:
 
   analysis:
     name: Analyse
-    runs-on: [self-hosted, Linux, X64]
+    runs-on: [pgnet]
     needs: [test]
     steps:
       - name: Checkout Repository

@@ -107,7 +107,7 @@ jobs:
 
   analysis:
     name: Analyse
-    runs-on: [pgnet]
+    runs-on: [behemoth]
     needs: [test]
     steps:
       - name: Checkout Repository

@@ -170,6 +170,11 @@ const configuration: Configuration = {
           },
           ch0002: {
             functionID: "F",
+            outputs: {
+              dp0: {
+                pairingID: 53,
+              },
+            },
           },
           ch0003: {
             functionID: "6",

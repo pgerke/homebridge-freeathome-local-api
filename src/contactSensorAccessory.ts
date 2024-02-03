@@ -2,11 +2,15 @@ import { PlatformAccessory, Service } from "homebridge";
 import { FreeAtHomeAccessory } from "./freeAtHomeAccessory";
 import { FreeAtHomeContext } from "./freeAtHomeContext";
 import { FreeAtHomeHomebridgePlatform } from "./platform";
+import { getDataPointByPairingID } from "./util";
+
+const pidOpenClosed = 53;
 
 /** A contact sensor accessory. */
 export class ContactSensorAccessory extends FreeAtHomeAccessory {
   private readonly service: Service;
   private contactOpen: boolean;
+  private readonly dpOpenClosed: string;
 
   /**
    * Constructs a new contact sensor accessory instance.
@@ -19,9 +23,18 @@ export class ContactSensorAccessory extends FreeAtHomeAccessory {
   ) {
     super(platform, accessory);
 
+    // Resolve data points
+    if (!this.accessory.context.channel.outputs)
+      throw new Error("Channel lacks expected input or output data points.");
+
+    this.dpOpenClosed = getDataPointByPairingID(
+      this.accessory.context.channel.outputs,
+      pidOpenClosed
+    );
+
     // set initial state
     this.contactOpen = !!parseInt(
-      this.accessory.context.channel.outputs?.odp0000.value ?? "0"
+      this.accessory.context.channel.outputs[this.dpOpenClosed].value ?? "0"
     );
 
     // get the ContactSensor service if it exists, otherwise create a new service instance
@@ -41,7 +54,7 @@ export class ContactSensorAccessory extends FreeAtHomeAccessory {
 
   public override updateDatapoint(datapoint: string, value: string): void {
     // ignore unknown data points
-    if (datapoint !== "odp0000") return;
+    if (datapoint !== this.dpOpenClosed) return;
 
     // do the update
     this.contactOpen = !!parseInt(value);

@@ -37,7 +37,20 @@ describe("Contact Sensor Accessory", () => {
     jasmine.clock().uninstall();
   });
 
+  it("should throw if expected data points are missing on channel", () => {
+    channel.outputs = undefined;
+
+    expect(
+      () => new ContactSensorAccessory(platform, platformAccessory)
+    ).toThrowError("Channel lacks expected input or output data points.");
+  });
+
   it("should be created", async () => {
+    channel.outputs = {
+      odp0000: {
+        pairingID: 53,
+      },
+    };
     const accessory = new ContactSensorAccessory(platform, platformAccessory);
     expect(accessory).toBeTruthy();
     const instance = accessory as unknown as {
@@ -54,6 +67,7 @@ describe("Contact Sensor Accessory", () => {
   it("should be created with non-default state", async () => {
     channel.outputs = {
       odp0000: {
+        pairingID: 53,
         value: "1",
       },
     };
@@ -71,6 +85,11 @@ describe("Contact Sensor Accessory", () => {
   });
 
   it("should ignore update if datapoint is unknown", async () => {
+    channel.outputs = {
+      odp0000: {
+        pairingID: 53,
+      },
+    };
     const accessory = new ContactSensorAccessory(platform, platformAccessory);
     const instance = accessory as unknown as {
       service: Service;
@@ -93,6 +112,11 @@ describe("Contact Sensor Accessory", () => {
   });
 
   it("should process update to when contact is not detected", async () => {
+    channel.outputs = {
+      odp0123: {
+        pairingID: 53,
+      },
+    };
     const accessory = new ContactSensorAccessory(platform, platformAccessory);
     const instance = accessory as unknown as {
       service: Service;
@@ -110,7 +134,7 @@ describe("Contact Sensor Accessory", () => {
     expect(await characteristic.handleGetRequest()).toBe(
       platform.Characteristic.ContactSensorState.CONTACT_DETECTED
     );
-    accessory.updateDatapoint("odp0000", "1");
+    accessory.updateDatapoint("odp0123", "1");
     expect(spy).toHaveBeenCalledWith(
       "Contact Sensor",
       instance.service,
@@ -121,7 +145,8 @@ describe("Contact Sensor Accessory", () => {
 
   it("should process update to when contact is detected", async () => {
     channel.outputs = {
-      odp0000: {
+      odp0123: {
+        pairingID: 53,
         value: "1",
       },
     };
@@ -142,7 +167,7 @@ describe("Contact Sensor Accessory", () => {
     expect(await characteristic.handleGetRequest()).toBe(
       platform.Characteristic.ContactSensorState.CONTACT_NOT_DETECTED
     );
-    accessory.updateDatapoint("odp0000", "0");
+    accessory.updateDatapoint("odp0123", "0");
     expect(spy).toHaveBeenCalledWith(
       "Contact Sensor",
       instance.service,

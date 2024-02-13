@@ -92,6 +92,11 @@ const configuration: Configuration = {
           },
           ch0003: {
             functionID: "11",
+            outputs: {
+              odp0123: {
+                pairingID: 6,
+              },
+            },
           },
           ch0004: {
             functionID: "1a",

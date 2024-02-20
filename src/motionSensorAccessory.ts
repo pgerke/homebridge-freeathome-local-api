@@ -2,12 +2,16 @@ import { PlatformAccessory, Service } from "homebridge";
 import { FreeAtHomeAccessory } from "./freeAtHomeAccessory";
 import { FreeAtHomeContext } from "./freeAtHomeContext";
 import { FreeAtHomeHomebridgePlatform } from "./platform";
+import { getDataPointByPairingID } from "./util";
+
+const pidTimedMovement = 6;
 
 /** A motion sensor accessory. */
 export class MotionSensorAccessory extends FreeAtHomeAccessory {
   private readonly service: Service;
   private motionDetected: boolean;
   private resetTimeout?: NodeJS.Timeout;
+  private readonly dpTimedMovement: string;
 
   /**
    * Constructs a new motion sensor accessory instance.
@@ -20,9 +24,18 @@ export class MotionSensorAccessory extends FreeAtHomeAccessory {
   ) {
     super(platform, accessory);
 
+    // Resolve data points
+    if (!this.accessory.context.channel.outputs)
+      throw new Error("Channel lacks expected input or output data points.");
+
+    this.dpTimedMovement = getDataPointByPairingID(
+      this.accessory.context.channel.outputs,
+      pidTimedMovement
+    );
+
     // set initial state
     this.motionDetected = !!parseInt(
-      this.accessory.context.channel.outputs?.odp0000.value ?? "0"
+      this.accessory.context.channel.outputs[this.dpTimedMovement].value ?? "0"
     );
     this.processAutoResetTimer();
 
@@ -39,7 +52,7 @@ export class MotionSensorAccessory extends FreeAtHomeAccessory {
 
   public override updateDatapoint(datapoint: string, value: string): void {
     // ignore unknown data points
-    if (datapoint !== "odp0000") return;
+    if (datapoint !== this.dpTimedMovement) return;
 
     // do the update
     this.motionDetected = !!parseInt(value);
@@ -65,7 +78,7 @@ export class MotionSensorAccessory extends FreeAtHomeAccessory {
       // Set a new reset timer, if motion was detected.
       if (this.motionDetected) {
         this.resetTimeout = setTimeout(
-          () => this.updateDatapoint("odp0000", "0"),
+          () => this.updateDatapoint(this.dpTimedMovement, "0"),
           this.platform.config.motionSensorDefaultResetTimer as number
         );
       }

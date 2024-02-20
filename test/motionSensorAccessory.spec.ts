@@ -37,7 +37,21 @@ describe("Motion Sensor Accessory", () => {
     jasmine.clock().uninstall();
   });
 
+  it("should throw if expected data points are missing on channel", () => {
+    channel.outputs = undefined;
+
+    expect(
+      () => new MotionSensorAccessory(platform, platformAccessory)
+    ).toThrowError("Channel lacks expected input or output data points.");
+  });
+
   it("should be created", async () => {
+    channel.outputs = {
+      odp123: {
+        pairingID: 6,
+        value: "0",
+      },
+    };
     const accessory = new MotionSensorAccessory(platform, platformAccessory);
     expect(accessory).toBeTruthy();
     const instance = accessory as unknown as {
@@ -51,7 +65,8 @@ describe("Motion Sensor Accessory", () => {
 
   it("should be created with non-default state", async () => {
     channel.outputs = {
-      odp0000: {
+      odp123: {
+        pairingID: 6,
         value: "1",
       },
     };
@@ -67,6 +82,12 @@ describe("Motion Sensor Accessory", () => {
   });
 
   it("should ignore update if datapoint is unknown", async () => {
+    channel.outputs = {
+      odp123: {
+        pairingID: 6,
+        value: "0",
+      },
+    };
     const accessory = new MotionSensorAccessory(platform, platformAccessory);
     const instance = accessory as unknown as {
       service: Service;
@@ -87,6 +108,12 @@ describe("Motion Sensor Accessory", () => {
   });
 
   it("should process update to known datapoint", async () => {
+    channel.outputs = {
+      odp123: {
+        pairingID: 6,
+        value: "0",
+      },
+    };
     const accessory = new MotionSensorAccessory(platform, platformAccessory);
     const instance = accessory as unknown as {
       service: Service;
@@ -102,7 +129,7 @@ describe("Motion Sensor Accessory", () => {
       accessory.platform.Characteristic.MotionDetected
     );
     expect(await characteristic.handleGetRequest()).toBeFalse();
-    accessory.updateDatapoint("odp0000", "1");
+    accessory.updateDatapoint("odp123", "1");
     expect(spy).toHaveBeenCalledWith(
       "Motion Sensor",
       instance.service,
@@ -113,6 +140,12 @@ describe("Motion Sensor Accessory", () => {
 
   it("should not set a reset timer if the sensor is reset manually", async () => {
     platform.config.motionSensorAutoReset = true;
+    channel.outputs = {
+      odp123: {
+        pairingID: 6,
+        value: "0",
+      },
+    };
     const accessory = new MotionSensorAccessory(platform, platformAccessory);
     const instance = accessory as unknown as {
       resetTimeout?: NodeJS.Timeout;
@@ -130,7 +163,7 @@ describe("Motion Sensor Accessory", () => {
     );
     expect(await characteristic.handleGetRequest()).toBeFalse();
     expect(instance.resetTimeout).toBeUndefined();
-    accessory.updateDatapoint("odp0000", "0");
+    accessory.updateDatapoint("odp123", "0");
     expect(spy).toHaveBeenCalledWith(
       "Motion Sensor",
       instance.service,
@@ -143,6 +176,12 @@ describe("Motion Sensor Accessory", () => {
   it("should cancel a set reset timer if the sensor is reset manually", async () => {
     jasmine.clock().install();
     platform.config.motionSensorAutoReset = true;
+    channel.outputs = {
+      odp123: {
+        pairingID: 6,
+        value: "0",
+      },
+    };
     const accessory = new MotionSensorAccessory(platform, platformAccessory);
     const instance = accessory as unknown as {
       resetTimeout?: NodeJS.Timeout;
@@ -163,7 +202,7 @@ describe("Motion Sensor Accessory", () => {
       () => fail("Timer should be cancelled"),
       10000
     );
-    accessory.updateDatapoint("odp0000", "0");
+    accessory.updateDatapoint("odp123", "0");
     expect(spy).toHaveBeenCalledWith(
       "Motion Sensor",
       instance.service,
@@ -177,6 +216,12 @@ describe("Motion Sensor Accessory", () => {
   it("should reset the sensor automatically after the specified time", async () => {
     jasmine.clock().install();
     platform.config.motionSensorAutoReset = true;
+    channel.outputs = {
+      odp123: {
+        pairingID: 6,
+        value: "0",
+      },
+    };
     const accessory = new MotionSensorAccessory(platform, platformAccessory);
     const instance = accessory as unknown as {
       resetTimeout?: NodeJS.Timeout;
@@ -194,7 +239,7 @@ describe("Motion Sensor Accessory", () => {
     );
     expect(await characteristic.handleGetRequest()).toBeFalse();
     expect(instance.resetTimeout).toBeUndefined();
-    accessory.updateDatapoint("odp0000", "1");
+    accessory.updateDatapoint("odp123", "1");
     expect(spy).toHaveBeenCalledWith(
       "Motion Sensor",
       instance.service,

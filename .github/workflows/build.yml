@@ -34,7 +34,7 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: dist
+          name: dist-${{ matrix.node-version }}
           path: dist
           retention-days: 5 
 

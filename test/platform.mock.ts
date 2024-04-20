@@ -9,6 +9,7 @@ const logger: Logger = {
   info: jasmine.createSpy(),
   warn: jasmine.createSpy(),
   log: jasmine.createSpy(),
+  success: jasmine.createSpy(),
 };
 function config(): PlatformConfig {
   return {

@@ -258,6 +258,7 @@ describe("free@home Homebridge Platform", () => {
       info: jasmine.createSpy(),
       warn: jasmine.createSpy(),
       log: jasmine.createSpy(),
+      success: jasmine.createSpy(),
     };
   });
 

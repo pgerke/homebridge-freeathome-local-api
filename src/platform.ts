@@ -439,6 +439,10 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
         );
         return;
       case FunctionID.FID_SCENE:
+      case FunctionID.FID_SPECIAL_SCENE_PANIC:
+      case FunctionID.FID_SPECIAL_SCENE_ALL_OFF:
+      case FunctionID.FID_SPECIAL_SCENE_ALL_BLINDS_UP:
+      case FunctionID.FID_SPECIAL_SCENE_ALL_BLINDS_DOWN:
         this.fahAccessories.set(
           `${serial}_${channelId}`,
           new SceneAccessory(this, accessory)

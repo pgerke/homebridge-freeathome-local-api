@@ -41,6 +41,14 @@ export enum FunctionID {
   // FID_LIGHT_GROUP = "4000",
   /** A scene */
   FID_SCENE = "4800",
+  /** The special panic scene */
+  FID_SPECIAL_SCENE_PANIC = "4801",
+  /** The special all-off scene */
+  FID_SPECIAL_SCENE_ALL_OFF = "4802",
+  /** The special all blinds up scene */
+  FID_SPECIAL_SCENE_ALL_BLINDS_UP = "4803",
+  /** The special all blinds down scene */
+  FID_SPECIAL_SCENE_ALL_BLINDS_DOWN = "4804",
   /** A scene sensor */
   FID_SCENE_SENSOR = "6",
   /** A staircase light sensor */

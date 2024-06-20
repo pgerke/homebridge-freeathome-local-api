@@ -235,7 +235,7 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
         !serial.startsWith("ABB") && // free@home default
         !serial.startsWith("E11") && // alarm services
         !serial.startsWith("7EB1") && // weather station
-        !serial.startsWith("FFFF4800") // Scenes
+        !serial.startsWith("FFFF480") // Scenes
         // !serial.startsWith("FFFF4000") // Light groups
       )
         return;

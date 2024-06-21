@@ -235,7 +235,7 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
         !serial.startsWith("ABB") && // free@home default
         !serial.startsWith("E11") && // alarm services
         !serial.startsWith("7EB1") && // weather station
-        !serial.startsWith("FFFF4800") // Scenes
+        !serial.startsWith("FFFF480") // Scenes
         // !serial.startsWith("FFFF4000") // Light groups
       )
         return;
@@ -439,6 +439,10 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
         );
         return;
       case FunctionID.FID_SCENE:
+      case FunctionID.FID_SPECIAL_SCENE_PANIC:
+      case FunctionID.FID_SPECIAL_SCENE_ALL_OFF:
+      case FunctionID.FID_SPECIAL_SCENE_ALL_BLINDS_UP:
+      case FunctionID.FID_SPECIAL_SCENE_ALL_BLINDS_DOWN:
         this.fahAccessories.set(
           `${serial}_${channelId}`,
           new SceneAccessory(this, accessory)

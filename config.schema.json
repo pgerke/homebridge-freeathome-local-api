@@ -73,7 +73,7 @@
       },
       "experimental": {
         "title": "Experimental Accessories",
-        "description": "Determines whether accessories that are only experimentally supported shall be configured. Please refer to the READMEa file and continue at your own risk!",
+        "description": "Determines whether accessories that are only experimentally supported shall be configured. Please refer to the README file and continue at your own risk!",
         "type": "boolean",
         "required": false,
         "default": false
@@ -98,7 +98,10 @@
             },
             "type": {
               "type": "string",
-              "enum": ["Undefined", "Outlet"]
+              "enum": [
+                "Undefined",
+                "Outlet"
+              ]
             }
           }
         },

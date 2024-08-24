@@ -72,7 +72,7 @@ export class DoorOpenerAccessory extends FreeAtHomeAccessory {
         "idp0000",
         booleanTargetState ? "1" : "0"
       );
-    } catch (error) {
+    } catch {
       // Reset to previous state and log error
       this.stateActive = !this.stateActive;
       this.platform.log.error(

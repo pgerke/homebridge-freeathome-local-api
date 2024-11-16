@@ -46,10 +46,9 @@ const DelayFactor = 200;
 /** The free&#64;home Homebridge platform. */
 export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
   /** The service reference */
-  public readonly Service: typeof Service = this.api.hap.Service;
+  public readonly Service: typeof Service;
   /** The characteristic reference */
-  public readonly Characteristic: typeof Characteristic =
-    this.api.hap.Characteristic;
+  public readonly Characteristic: typeof Characteristic;
   /** The list of restored cached accessories */
   public readonly accessories: Array<PlatformAccessory<FreeAtHomeContext>> = [];
   private readonly removedAccessories: Array<
@@ -78,6 +77,8 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
     public readonly config: PlatformConfig,
     public readonly api: API
   ) {
+    this.Service = this.api.hap.Service;
+    this.Characteristic = this.api.hap.Characteristic;
     // set maximum reconnection attempt count
     this.maxWsRetryCount = (this.config.maxWsRetryCount as number) ?? 10;
 
@@ -252,7 +253,7 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
       Object.keys(device.channels).forEach((channelId: string) => {
         try {
           // We are enumerating the keys of the channels object. Neither the channels object nor the channelId can possibly be undefined.
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+
           const channel = device.channels![channelId];
           if (
             !this.isViableChannel(
@@ -307,7 +308,7 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
           // create accessory
           this.createAccessory(
             serial,
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+
             channel.functionID!,
             channelId,
             accessory

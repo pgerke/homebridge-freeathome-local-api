@@ -101,12 +101,10 @@ describe("Radiator Actuator Accessory", () => {
   });
 
   it("should be created with heating state", async () => {
-    /* eslint-disable @typescript-eslint/no-non-null-assertion */
     channel.outputs!.odp0000.value = "1";
     channel.outputs!.odp0006.value = "21.5";
     channel.outputs!.odp0008.value = "1";
     channel.outputs!.odp0010.value = "20";
-    /* eslint-enable @typescript-eslint/no-non-null-assertion */
 
     const accessory = new RadiatorActuatorAccessory(
       platform,
@@ -139,12 +137,10 @@ describe("Radiator Actuator Accessory", () => {
   });
 
   it("should be created with controller active but not heating or cooling", async () => {
-    /* eslint-disable @typescript-eslint/no-non-null-assertion */
     channel.outputs!.odp0000.value = "0";
     channel.outputs!.odp0006.value = "21.5";
     channel.outputs!.odp0008.value = "1";
     channel.outputs!.odp0010.value = "23";
-    /* eslint-enable @typescript-eslint/no-non-null-assertion */
 
     const accessory = new RadiatorActuatorAccessory(
       platform,
@@ -220,12 +216,10 @@ describe("Radiator Actuator Accessory", () => {
   // });
 
   it("should not handle a request to set TargetTemperature characteristic if the value has not changed", async () => {
-    /* eslint-disable @typescript-eslint/no-non-null-assertion */
     channel.outputs!.odp0000.value = "1";
     channel.outputs!.odp0006.value = "21.5";
     channel.outputs!.odp0008.value = "1";
     channel.outputs!.odp0010.value = "20";
-    /* eslint-enable @typescript-eslint/no-non-null-assertion */
 
     const accessory = new RadiatorActuatorAccessory(
       platform,
@@ -245,12 +239,10 @@ describe("Radiator Actuator Accessory", () => {
   });
 
   it("should handle request to set TargetTemperature characteristic if the value has changed", async () => {
-    /* eslint-disable @typescript-eslint/no-non-null-assertion */
     channel.outputs!.odp0000.value = "1";
     channel.outputs!.odp0006.value = "21.5";
     channel.outputs!.odp0008.value = "1";
     channel.outputs!.odp0010.value = "20";
-    /* eslint-enable @typescript-eslint/no-non-null-assertion */
 
     const accessory = new RadiatorActuatorAccessory(
       platform,
@@ -281,12 +273,10 @@ describe("Radiator Actuator Accessory", () => {
   });
 
   it("should not handle a request to set TargetHeatingCoolingState characteristic if the value has not changed", async () => {
-    /* eslint-disable @typescript-eslint/no-non-null-assertion */
     channel.outputs!.odp0000.value = "1";
     channel.outputs!.odp0006.value = "21.5";
     channel.outputs!.odp0008.value = "1";
     channel.outputs!.odp0010.value = "20";
-    /* eslint-enable @typescript-eslint/no-non-null-assertion */
 
     const accessory = new RadiatorActuatorAccessory(
       platform,
@@ -310,12 +300,10 @@ describe("Radiator Actuator Accessory", () => {
   });
 
   it("should handle request to set TargetHeatingCoolingState characteristic to off", async () => {
-    /* eslint-disable @typescript-eslint/no-non-null-assertion */
     channel.outputs!.odp0000.value = "1";
     channel.outputs!.odp0006.value = "21.5";
     channel.outputs!.odp0008.value = "1";
     channel.outputs!.odp0010.value = "20";
-    /* eslint-enable @typescript-eslint/no-non-null-assertion */
 
     const accessory = new RadiatorActuatorAccessory(
       platform,
@@ -347,18 +335,15 @@ describe("Radiator Actuator Accessory", () => {
     );
     // eslint-disable-next-line @typescript-eslint/unbound-method
     expect(platform.log.info).toHaveBeenCalledWith(
-      // eslint-disable-next-line max-len
       "Radiator Actuator Accessory (Radiator Actuator ABB7xxxxxxxx (ch1234)) set characteristic TargetHeatingCoolingState -> 0"
     );
   });
 
   it("should handle request to set TargetHeatingCoolingState characteristic to off", async () => {
-    /* eslint-disable @typescript-eslint/no-non-null-assertion */
     channel.outputs!.odp0000.value = "1";
     channel.outputs!.odp0006.value = "21.5";
     channel.outputs!.odp0008.value = "0";
     channel.outputs!.odp0010.value = "20";
-    /* eslint-enable @typescript-eslint/no-non-null-assertion */
 
     const accessory = new RadiatorActuatorAccessory(
       platform,
@@ -390,7 +375,6 @@ describe("Radiator Actuator Accessory", () => {
     );
     // eslint-disable-next-line @typescript-eslint/unbound-method
     expect(platform.log.info).toHaveBeenCalledWith(
-      // eslint-disable-next-line max-len
       "Radiator Actuator Accessory (Radiator Actuator ABB7xxxxxxxx (ch1234)) set characteristic TargetHeatingCoolingState -> 3"
     );
   });
@@ -435,12 +419,10 @@ describe("Radiator Actuator Accessory", () => {
   });
 
   it("should process update to heating mode datapoint", async () => {
-    /* eslint-disable @typescript-eslint/no-non-null-assertion */
     channel.outputs!.odp0000.value = "0";
     channel.outputs!.odp0006.value = "21.5";
     channel.outputs!.odp0008.value = "1";
     channel.outputs!.odp0010.value = "20";
-    /* eslint-enable @typescript-eslint/no-non-null-assertion */
 
     const accessory = new RadiatorActuatorAccessory(
       platform,
@@ -538,12 +520,10 @@ describe("Radiator Actuator Accessory", () => {
   // });
 
   it("should process update to controller on/off datapoint", async () => {
-    /* eslint-disable @typescript-eslint/no-non-null-assertion */
     channel.outputs!.odp0000.value = "1";
     channel.outputs!.odp0006.value = "21.5";
     channel.outputs!.odp0008.value = "0";
     channel.outputs!.odp0010.value = "20";
-    /* eslint-enable @typescript-eslint/no-non-null-assertion */
 
     const accessory = new RadiatorActuatorAccessory(
       platform,
@@ -595,12 +575,10 @@ describe("Radiator Actuator Accessory", () => {
   });
 
   it("should process update to target temperature datapoint", async () => {
-    /* eslint-disable @typescript-eslint/no-non-null-assertion */
     channel.outputs!.odp0000.value = "1";
     channel.outputs!.odp0006.value = "21.5";
     channel.outputs!.odp0008.value = "1";
     channel.outputs!.odp0010.value = "20";
-    /* eslint-enable @typescript-eslint/no-non-null-assertion */
 
     const accessory = new RadiatorActuatorAccessory(
       platform,
@@ -646,12 +624,10 @@ describe("Radiator Actuator Accessory", () => {
   });
 
   it("should process update to current temperature datapoint", async () => {
-    /* eslint-disable @typescript-eslint/no-non-null-assertion */
     channel.outputs!.odp0000.value = "1";
     channel.outputs!.odp0006.value = "21.5";
     channel.outputs!.odp0008.value = "1";
     channel.outputs!.odp0010.value = "20";
-    /* eslint-enable @typescript-eslint/no-non-null-assertion */
 
     const accessory = new RadiatorActuatorAccessory(
       platform,

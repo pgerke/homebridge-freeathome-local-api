@@ -12,7 +12,7 @@ import { convertToString } from "./util";
 /** The abstract base class for all free&#64;home accessories.*/
 export abstract class FreeAtHomeAccessory {
   /** The serial number consisting of the free&#64;home device serial and the channel ID. */
-  protected readonly serialNumber = `${this.accessory.context.deviceSerial} (${this.accessory.context.channelId})`;
+  protected readonly serialNumber: string;
 
   /**
    * Constructs a new free&#64;home accessory instance.
@@ -23,6 +23,8 @@ export abstract class FreeAtHomeAccessory {
     protected readonly platform: FreeAtHomeHomebridgePlatform,
     protected readonly accessory: PlatformAccessory<FreeAtHomeContext>
   ) {
+    // set the serial number
+    this.serialNumber = `${this.accessory.context.deviceSerial} (${this.accessory.context.channelId})`;
     // set accessory information
     this.accessory
       .getService(this.platform.Service.AccessoryInformation)

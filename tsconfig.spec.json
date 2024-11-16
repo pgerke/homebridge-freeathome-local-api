@@ -3,6 +3,6 @@
   "compilerOptions": {
     "types": ["jasmine", "node"]
   },
-  "include": ["src", "test/**/*.ts", "test.ts"],
+  "include": ["src", "test/**/*.ts", "test.ts", "eslint.config.mjs"],
   "exclude": ["node_modules", "dist"]
 }

@@ -64,7 +64,6 @@ describe("Brightness Sensor Accessory", () => {
   });
 
   it("should be created with non-default state", async () => {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     platformAccessory.context.channel.outputs!.dp1.value = "12.3";
     const accessory = new WeatherStationBrightnessSensorAccessory(
       platform,

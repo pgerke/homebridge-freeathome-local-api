@@ -104,13 +104,11 @@ describe("Room Temperature Controller Accessory", () => {
   });
 
   it("should be created with heating state", async () => {
-    /* eslint-disable @typescript-eslint/no-non-null-assertion */
     channel.outputs!.odp0000.value = "1";
     channel.outputs!.odp0001.value = "0";
     channel.outputs!.odp0006.value = "21.5";
     channel.outputs!.odp0008.value = "1";
     channel.outputs!.odp0010.value = "20";
-    /* eslint-enable @typescript-eslint/no-non-null-assertion */
 
     const accessory = new RoomTemperatureControllerAccessory(
       platform,
@@ -143,13 +141,11 @@ describe("Room Temperature Controller Accessory", () => {
   });
 
   it("should be created with cooling state", async () => {
-    /* eslint-disable @typescript-eslint/no-non-null-assertion */
     channel.outputs!.odp0000.value = "0";
     channel.outputs!.odp0001.value = "1";
     channel.outputs!.odp0006.value = "21.5";
     channel.outputs!.odp0008.value = "1";
     channel.outputs!.odp0010.value = "23";
-    /* eslint-enable @typescript-eslint/no-non-null-assertion */
 
     const accessory = new RoomTemperatureControllerAccessory(
       platform,
@@ -182,13 +178,11 @@ describe("Room Temperature Controller Accessory", () => {
   });
 
   it("should be created with controller active but not heating or cooling", async () => {
-    /* eslint-disable @typescript-eslint/no-non-null-assertion */
     channel.outputs!.odp0000.value = "0";
     channel.outputs!.odp0001.value = "0";
     channel.outputs!.odp0006.value = "21.5";
     channel.outputs!.odp0008.value = "1";
     channel.outputs!.odp0010.value = "23";
-    /* eslint-enable @typescript-eslint/no-non-null-assertion */
 
     const accessory = new RoomTemperatureControllerAccessory(
       platform,
@@ -221,13 +215,11 @@ describe("Room Temperature Controller Accessory", () => {
   });
 
   it("should be created with invalid CurrentHeatingCooling state", async () => {
-    /* eslint-disable @typescript-eslint/no-non-null-assertion */
     channel.outputs!.odp0000.value = "1";
     channel.outputs!.odp0001.value = "1";
     channel.outputs!.odp0006.value = "21.5";
     channel.outputs!.odp0008.value = "1";
     channel.outputs!.odp0010.value = "23";
-    /* eslint-enable @typescript-eslint/no-non-null-assertion */
 
     const accessory = new RoomTemperatureControllerAccessory(
       platform,
@@ -264,13 +256,11 @@ describe("Room Temperature Controller Accessory", () => {
   });
 
   it("should not handle a request to set TargetTemperature characteristic if the value has not changed", async () => {
-    /* eslint-disable @typescript-eslint/no-non-null-assertion */
     channel.outputs!.odp0000.value = "1";
     channel.outputs!.odp0001.value = "0";
     channel.outputs!.odp0006.value = "21.5";
     channel.outputs!.odp0008.value = "1";
     channel.outputs!.odp0010.value = "20";
-    /* eslint-enable @typescript-eslint/no-non-null-assertion */
 
     const accessory = new RoomTemperatureControllerAccessory(
       platform,
@@ -290,13 +280,11 @@ describe("Room Temperature Controller Accessory", () => {
   });
 
   it("should handle request to set TargetTemperature characteristic if the value has changed", async () => {
-    /* eslint-disable @typescript-eslint/no-non-null-assertion */
     channel.outputs!.odp0000.value = "1";
     channel.outputs!.odp0001.value = "0";
     channel.outputs!.odp0006.value = "21.5";
     channel.outputs!.odp0008.value = "1";
     channel.outputs!.odp0010.value = "20";
-    /* eslint-enable @typescript-eslint/no-non-null-assertion */
 
     const accessory = new RoomTemperatureControllerAccessory(
       platform,
@@ -327,13 +315,11 @@ describe("Room Temperature Controller Accessory", () => {
   });
 
   it("should not handle a request to set TargetHeatingCoolingState characteristic if the value has not changed", async () => {
-    /* eslint-disable @typescript-eslint/no-non-null-assertion */
     channel.outputs!.odp0000.value = "1";
     channel.outputs!.odp0001.value = "0";
     channel.outputs!.odp0006.value = "21.5";
     channel.outputs!.odp0008.value = "1";
     channel.outputs!.odp0010.value = "20";
-    /* eslint-enable @typescript-eslint/no-non-null-assertion */
 
     const accessory = new RoomTemperatureControllerAccessory(
       platform,
@@ -357,13 +343,11 @@ describe("Room Temperature Controller Accessory", () => {
   });
 
   it("should handle request to set TargetHeatingCoolingState characteristic to off", async () => {
-    /* eslint-disable @typescript-eslint/no-non-null-assertion */
     channel.outputs!.odp0000.value = "1";
     channel.outputs!.odp0001.value = "0";
     channel.outputs!.odp0006.value = "21.5";
     channel.outputs!.odp0008.value = "1";
     channel.outputs!.odp0010.value = "20";
-    /* eslint-enable @typescript-eslint/no-non-null-assertion */
 
     const accessory = new RoomTemperatureControllerAccessory(
       platform,
@@ -401,13 +385,11 @@ describe("Room Temperature Controller Accessory", () => {
   });
 
   it("should handle request to set TargetHeatingCoolingState characteristic to off", async () => {
-    /* eslint-disable @typescript-eslint/no-non-null-assertion */
     channel.outputs!.odp0000.value = "1";
     channel.outputs!.odp0001.value = "0";
     channel.outputs!.odp0006.value = "21.5";
     channel.outputs!.odp0008.value = "0";
     channel.outputs!.odp0010.value = "20";
-    /* eslint-enable @typescript-eslint/no-non-null-assertion */
 
     const accessory = new RoomTemperatureControllerAccessory(
       platform,
@@ -484,13 +466,11 @@ describe("Room Temperature Controller Accessory", () => {
   });
 
   it("should process update to heating mode datapoint", async () => {
-    /* eslint-disable @typescript-eslint/no-non-null-assertion */
     channel.outputs!.odp0000.value = "0";
     channel.outputs!.odp0001.value = "0";
     channel.outputs!.odp0006.value = "21.5";
     channel.outputs!.odp0008.value = "1";
     channel.outputs!.odp0010.value = "20";
-    /* eslint-enable @typescript-eslint/no-non-null-assertion */
 
     const accessory = new RoomTemperatureControllerAccessory(
       platform,
@@ -536,13 +516,11 @@ describe("Room Temperature Controller Accessory", () => {
   });
 
   it("should process update to cooling mode datapoint", async () => {
-    /* eslint-disable @typescript-eslint/no-non-null-assertion */
     channel.outputs!.odp0000.value = "0";
     channel.outputs!.odp0001.value = "0";
     channel.outputs!.odp0006.value = "21.5";
     channel.outputs!.odp0008.value = "1";
     channel.outputs!.odp0010.value = "23";
-    /* eslint-enable @typescript-eslint/no-non-null-assertion */
 
     const accessory = new RoomTemperatureControllerAccessory(
       platform,
@@ -588,13 +566,11 @@ describe("Room Temperature Controller Accessory", () => {
   });
 
   it("should process update to controller on/off datapoint", async () => {
-    /* eslint-disable @typescript-eslint/no-non-null-assertion */
     channel.outputs!.odp0000.value = "1";
     channel.outputs!.odp0001.value = "0";
     channel.outputs!.odp0006.value = "21.5";
     channel.outputs!.odp0008.value = "0";
     channel.outputs!.odp0010.value = "20";
-    /* eslint-enable @typescript-eslint/no-non-null-assertion */
 
     const accessory = new RoomTemperatureControllerAccessory(
       platform,
@@ -646,13 +622,11 @@ describe("Room Temperature Controller Accessory", () => {
   });
 
   it("should process update to target temperature datapoint", async () => {
-    /* eslint-disable @typescript-eslint/no-non-null-assertion */
     channel.outputs!.odp0000.value = "1";
     channel.outputs!.odp0001.value = "0";
     channel.outputs!.odp0006.value = "21.5";
     channel.outputs!.odp0008.value = "1";
     channel.outputs!.odp0010.value = "20";
-    /* eslint-enable @typescript-eslint/no-non-null-assertion */
 
     const accessory = new RoomTemperatureControllerAccessory(
       platform,
@@ -698,13 +672,11 @@ describe("Room Temperature Controller Accessory", () => {
   });
 
   it("should process update to current temperature datapoint", async () => {
-    /* eslint-disable @typescript-eslint/no-non-null-assertion */
     channel.outputs!.odp0000.value = "1";
     channel.outputs!.odp0001.value = "0";
     channel.outputs!.odp0006.value = "21.5";
     channel.outputs!.odp0008.value = "1";
     channel.outputs!.odp0010.value = "20";
-    /* eslint-enable @typescript-eslint/no-non-null-assertion */
 
     const accessory = new RoomTemperatureControllerAccessory(
       platform,

@@ -252,7 +252,7 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
       Object.keys(device.channels).forEach((channelId: string) => {
         try {
           // We are enumerating the keys of the channels object. Neither the channels object nor the channelId can possibly be undefined.
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+
           const channel = device.channels![channelId];
           if (
             !this.isViableChannel(
@@ -307,7 +307,7 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
           // create accessory
           this.createAccessory(
             serial,
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+
             channel.functionID!,
             channelId,
             accessory

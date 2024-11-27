@@ -1,7 +1,7 @@
 {
   "displayName": "free@home Local API",
   "name": "homebridge-freeathome-local-api",
-  "version": "1.13.1",
+  "version": "1.14.0",
   "preview": false,
   "description": "Control your free@home setup using the local API provided by your System Access Point",
   "license": "MIT",
@@ -22,8 +22,8 @@
     "url": "https://github.com/pgerke/homebridge-freeathome-local-api/issues"
   },
   "engines": {
-    "node": ">=18.15.0",
-    "homebridge": ">=1.7.0"
+    "homebridge": ">=1.7.0 || ^2.0.0-beta.0",
+    "node": "^18.15.0 || >=20.15.1"
   },
   "main": "dist/index.js",
   "scripts": {
@@ -47,7 +47,7 @@
   "dependencies": {
     "freeathome-local-api-client": "^1.4.9",
     "rxjs": "^7.8.1",
-    "undici": "^6.21.0"
+    "undici": "^7.0.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
@@ -55,24 +55,24 @@
     "@istanbuljs/nyc-config-typescript": "^1.0.2",
     "@types/events": "^3.0.3",
     "@types/jasmine": "^5.1.4",
-    "@types/node": "^22.9.0",
+    "@types/node": "^22.10.0",
     "@types/node-fetch": "^2.6.12",
-    "@typescript-eslint/eslint-plugin": "^8.14.0",
-    "@typescript-eslint/parser": "^8.14.0",
-    "eslint": "9.14.0",
+    "@typescript-eslint/eslint-plugin": "^8.16.0",
+    "@typescript-eslint/parser": "^8.16.0",
+    "eslint": "9.15.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.31.0",
-    "eslint-plugin-n": "^17.13.2",
+    "eslint-plugin-n": "^17.14.0",
     "eslint-plugin-prettier": "^5.2.1",
-    "eslint-plugin-promise": "^7.1.0",
-    "homebridge": "^1.8.5",
+    "eslint-plugin-promise": "^7.2.1",
+    "homebridge": "^2.0.0-beta.0",
     "jasmine": "^5.4.0",
     "jasmine-spec-reporter": "^7.0.0",
     "nodemon": "^3.1.7",
     "nyc": "^17.1.0",
-    "prettier": "^3.3.3",
+    "prettier": "^3.4.1",
     "rimraf": "^6.0.1",
     "ts-node": "^10.9.2",
-    "typescript": "~5.6.3"
+    "typescript": "~5.7.2"
   }
 }

@@ -12,7 +12,7 @@ jobs:
     strategy:
       matrix:
         # the Node.js versions to build on
-        node-version: [18, 20]
+        node-version: [18, 20, 22]
         include:
           - npm-version: latest
 
@@ -44,7 +44,7 @@ jobs:
     strategy:
       matrix:
         # the Node.js versions to build on
-        node-version: [18, 20]
+        node-version: [18, 20, 22]
         include:
           - npm-version: latest
     steps:
@@ -78,7 +78,7 @@ jobs:
     strategy:
       matrix:
         # the Node.js versions to build on
-        node-version: [18, 20]
+        node-version: [18, 20, 22]
         include:
           - npm-version: latest
     steps:

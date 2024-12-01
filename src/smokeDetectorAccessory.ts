@@ -1,7 +1,7 @@
 import { PlatformAccessory, Service } from "homebridge";
-import { FreeAtHomeAccessory } from "./freeAtHomeAccessory";
-import { FreeAtHomeContext } from "./freeAtHomeContext";
-import { FreeAtHomeHomebridgePlatform } from "./platform";
+import { FreeAtHomeAccessory } from "./freeAtHomeAccessory.js";
+import { FreeAtHomeContext } from "./freeAtHomeContext.js";
+import { FreeAtHomeHomebridgePlatform } from "./platform.js";
 
 /** A smoke detector accessory. */
 export class SmokeDetectorAccessory extends FreeAtHomeAccessory {

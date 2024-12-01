@@ -19,6 +19,7 @@ export default [
       "**/.vscode",
       "**/coverage",
       "**/dist",
+      "**/tsc-out",
       "**/node_modules",
       "package-lock.json",
       "eslint.config.mjs",

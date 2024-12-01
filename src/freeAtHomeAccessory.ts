@@ -5,9 +5,9 @@ import {
   Service,
   WithUUID,
 } from "homebridge";
-import { FreeAtHomeContext } from "./freeAtHomeContext";
-import { FreeAtHomeHomebridgePlatform } from "./platform";
-import { convertToString } from "./util";
+import { FreeAtHomeContext } from "./freeAtHomeContext.js";
+import { FreeAtHomeHomebridgePlatform } from "./platform.js";
+import { convertToString } from "./util.js";
 
 /** The abstract base class for all free&#64;home accessories.*/
 export abstract class FreeAtHomeAccessory {

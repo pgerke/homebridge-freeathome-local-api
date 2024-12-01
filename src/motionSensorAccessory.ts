@@ -1,8 +1,8 @@
 import { PlatformAccessory, Service } from "homebridge";
-import { FreeAtHomeAccessory } from "./freeAtHomeAccessory";
-import { FreeAtHomeContext } from "./freeAtHomeContext";
-import { FreeAtHomeHomebridgePlatform } from "./platform";
-import { getDataPointByPairingID } from "./util";
+import { FreeAtHomeAccessory } from "./freeAtHomeAccessory.js";
+import { FreeAtHomeContext } from "./freeAtHomeContext.js";
+import { FreeAtHomeHomebridgePlatform } from "./platform.js";
+import { getDataPointByPairingID } from "./util.js";
 
 const pidTimedMovement = 6;
 

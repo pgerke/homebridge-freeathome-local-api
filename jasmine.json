@@ -1,7 +1,11 @@
 {
-  "spec_dir": "test",
-  "spec_files": ["**/*[sS]pec.ts"],
-  "helpers": ["test.ts"],
+  "spec_dir": "tsc-out/test",
+  "spec_files": [
+    "**/*[sS]pec.js"
+  ],
+  "helpers": [
+    "test.js"
+  ],
   "env": {
     "stopSpecOnExpectationFailure": false,
     "random": true

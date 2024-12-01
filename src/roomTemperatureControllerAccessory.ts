@@ -1,8 +1,8 @@
 import { CharacteristicValue, PlatformAccessory, Service } from "homebridge";
-import { FreeAtHomeAccessory } from "./freeAtHomeAccessory";
-import { FreeAtHomeContext } from "./freeAtHomeContext";
-import { FreeAtHomeHomebridgePlatform } from "./platform";
-import { EmptyGuid, convertToString, getDataPointByPairingID } from "./util";
+import { FreeAtHomeAccessory } from "./freeAtHomeAccessory.js";
+import { FreeAtHomeContext } from "./freeAtHomeContext.js";
+import { FreeAtHomeHomebridgePlatform } from "./platform.js";
+import { EmptyGuid, convertToString, getDataPointByPairingID } from "./util.js";
 
 const pidControllerOnOff = 56;
 const pidControllerOnOffRequest = 66;

@@ -1,45 +1,51 @@
 import {
+  Channel,
+  Configuration,
+  Logger as FreeAtHomeLogger,
+  SystemAccessPoint,
+  WebSocketMessage,
+} from "freeathome-local-api-client";
+import {
   API,
+  Characteristic,
   DynamicPlatformPlugin,
   Logger,
   PlatformAccessory,
   PlatformConfig,
   Service,
-  Characteristic,
   UnknownContext,
 } from "homebridge";
-import { PLATFORM_NAME, PLUGIN_NAME } from "./settings";
-import {
-  Channel,
-  SystemAccessPoint,
-  Logger as FreeAtHomeLogger,
-  Configuration,
-  WebSocketMessage,
-} from "freeathome-local-api-client";
-import { SwitchActuatorAccessory } from "./switchActuatorAccessory";
-import { FreeAtHomeContext, isFreeAtHomeAccessory } from "./freeAtHomeContext";
-import { experimentallySupportedFunctionIDs, FunctionID } from "./functionId";
-import { FreeAtHomeAccessory } from "./freeAtHomeAccessory";
-import { DimmerAccessory } from "./dimmerAccessory";
-import { Subscription } from "rxjs";
-import { RoomTemperatureControllerAccessory } from "./roomTemperatureControllerAccessory";
-import { EmptyGuid } from "./util";
-import { SmokeDetectorAccessory } from "./smokeDetectorAccessory";
-import { MotionSensorAccessory } from "./motionSensorAccessory";
-import { DoorOpenerAccessory } from "./doorOpenerAccessory";
-import { ShutterActuatorAccessory } from "./shutterActuatorAccessory";
-import { AccessoryType, TypeMapping } from "./typeMappings";
 import { globalAgent } from "https";
-import { ContactSensorAccessory } from "./contactSensorAccessory";
-import { SwitchSensorAccessory } from "./switchSensorAccessory";
-import { SceneAccessory } from "./sceneAccessory";
-import { SceneSensorAccessory } from "./sceneSensorAccessory";
-import { StaircaseLightSensorAccessory } from "./staircaseLightSensor";
-import { TriggerSensorAccessory } from "./triggerSensorAccessory";
-import { WeatherStationTemperatureSensorAccessory } from "./temperatureSensorAccessory";
-import { WeatherStationBrightnessSensorAccessory } from "./brightnessSensorAccessory";
-import { RadiatorActuatorAccessory } from "./radiatorActuatorAccessory";
+import { Subscription } from "rxjs";
 import { Agent, setGlobalDispatcher } from "undici";
+import { WeatherStationBrightnessSensorAccessory } from "./brightnessSensorAccessory.js";
+import { ContactSensorAccessory } from "./contactSensorAccessory.js";
+import { DimmerAccessory } from "./dimmerAccessory.js";
+import { DoorOpenerAccessory } from "./doorOpenerAccessory.js";
+import { FreeAtHomeAccessory } from "./freeAtHomeAccessory.js";
+import {
+  FreeAtHomeContext,
+  isFreeAtHomeAccessory,
+} from "./freeAtHomeContext.js";
+import {
+  experimentallySupportedFunctionIDs,
+  FunctionID,
+} from "./functionId.js";
+import { MotionSensorAccessory } from "./motionSensorAccessory.js";
+import { RadiatorActuatorAccessory } from "./radiatorActuatorAccessory.js";
+import { RoomTemperatureControllerAccessory } from "./roomTemperatureControllerAccessory.js";
+import { SceneAccessory } from "./sceneAccessory.js";
+import { SceneSensorAccessory } from "./sceneSensorAccessory.js";
+import { PLATFORM_NAME, PLUGIN_NAME } from "./settings.js";
+import { ShutterActuatorAccessory } from "./shutterActuatorAccessory.js";
+import { SmokeDetectorAccessory } from "./smokeDetectorAccessory.js";
+import { StaircaseLightSensorAccessory } from "./staircaseLightSensor.js";
+import { SwitchActuatorAccessory } from "./switchActuatorAccessory.js";
+import { SwitchSensorAccessory } from "./switchSensorAccessory.js";
+import { WeatherStationTemperatureSensorAccessory } from "./temperatureSensorAccessory.js";
+import { TriggerSensorAccessory } from "./triggerSensorAccessory.js";
+import { AccessoryType, TypeMapping } from "./typeMappings.js";
+import { EmptyGuid } from "./util.js";
 
 const DelayFactor = 200;
 
@@ -309,7 +315,7 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
           this.createAccessory(
             serial,
 
-            channel.functionID!,
+            channel.functionID ?? "",
             channelId,
             accessory
           );

@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "module": "Node16",
+    "module": "NodeNext",
     "lib": ["DOM", "ESNext"],
-    "moduleResolution": "node16",
+    "moduleResolution": "nodenext",
     "declaration": true,
     "declarationMap": true,
     "forceConsistentCasingInFileNames": true,

@@ -1,4 +1,4 @@
-import { PlatformAccessory, Service } from "homebridge";
+import type { PlatformAccessory, Service } from "homebridge";
 import { FreeAtHomeAccessory } from "./freeAtHomeAccessory.js";
 import { FreeAtHomeContext } from "./freeAtHomeContext.js";
 import { FreeAtHomeHomebridgePlatform } from "./platform.js";
@@ -35,7 +35,7 @@ export class WeatherStationBrightnessSensorAccessory extends FreeAtHomeAccessory
     // set initial state
     this.currentLightLevel = parseFloat(
       this.accessory.context.channel.outputs[this.pdCurrentLightLevel].value ??
-        "0.0"
+        "0.0001"
     );
 
     // get the LightSensor service if it exists, otherwise create a new service instance

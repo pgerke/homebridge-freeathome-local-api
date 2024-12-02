@@ -1,14 +1,14 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "types": ["jasmine", "node"],
-    "outDir": "tsc-out",
-    "rootDir": ".",
-    "baseUrl": ".",
-    "paths": {
-      "@homebridge/api": ["./node_modules/homebridge/dist/api.js"]
-    }
+    "types": ["jasmine", "node"]
   },
-  "include": ["src", "test/**/*.ts", "test.ts", "eslint.config.mjs"],
+  "include": [
+    "src",
+    "test/**/*.ts",
+    "test.ts",
+    "eslint.config.mjs",
+    "jasmine.mjs"
+  ],
   "exclude": ["node_modules", "dist"]
 }

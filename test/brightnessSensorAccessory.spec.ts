@@ -2,14 +2,16 @@ import { Channel, Device } from "freeathome-local-api-client";
 import {
   Characteristic,
   CharacteristicValue,
+  PlatformAccessory,
   Service,
   WithUUID,
 } from "homebridge";
-import { PlatformAccessory } from "homebridge/lib/platformAccessory";
-import { WeatherStationBrightnessSensorAccessory } from "../src/brightnessSensorAccessory";
-import { FreeAtHomeContext } from "../src/freeAtHomeContext";
-import { EmptyGuid } from "../src/util";
-import { MockFreeAtHomeHomebridgePlatform } from "./platform.mock";
+import { WeatherStationBrightnessSensorAccessory } from "../src/brightnessSensorAccessory.js";
+import { FreeAtHomeContext } from "../src/freeAtHomeContext.js";
+import {
+  createPlatformAccessory,
+  MockFreeAtHomeHomebridgePlatform,
+} from "./platform.mock.js";
 
 describe("Brightness Sensor Accessory", () => {
   let channel: Channel;
@@ -27,10 +29,7 @@ describe("Brightness Sensor Accessory", () => {
     };
     device = {};
     platform = new MockFreeAtHomeHomebridgePlatform();
-    platformAccessory = new PlatformAccessory(
-      "Brightness Sensor Accessory",
-      EmptyGuid
-    );
+    platformAccessory = createPlatformAccessory("Brightness Sensor Accessory");
     platformAccessory.context = {
       channel: channel,
       channelId: "ch1234",
@@ -100,7 +99,7 @@ describe("Brightness Sensor Accessory", () => {
       accessory.platform.Characteristic.CurrentAmbientLightLevel
     );
     expect(await characteristic.handleGetRequest()).toBe(0.0001);
-    accessory.updateDatapoint("test", "0");
+    accessory.updateDatapoint("test", "0.001");
     expect(spy).not.toHaveBeenCalled();
   });
 

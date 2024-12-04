@@ -58,6 +58,8 @@ jobs:
         run: npm install -g npm@${{ matrix.npm-version }} && npm --version
       - name: Restore dependencies
         run: npm ci
+      - name: Patch homebridge package
+        run: node patch-homebridge-exports.mjs
       - name: Run linter
         run: npm run lint
 
@@ -92,6 +94,8 @@ jobs:
         run: npm install -g npm@${{ matrix.npm-version }} && npm --version
       - name: Restore dependencies
         run: npm ci
+      - name: Patch homebridge package
+        run: node patch-homebridge-exports.mjs
       - name: Run unit test
         run: npm run test:ci
       - name: Upload artifacts

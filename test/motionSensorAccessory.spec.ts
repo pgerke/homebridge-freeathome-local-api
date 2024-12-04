@@ -4,12 +4,14 @@ import {
   CharacteristicValue,
   Service,
   WithUUID,
+  PlatformAccessory,
 } from "homebridge";
-import { PlatformAccessory } from "homebridge/lib/platformAccessory";
-import { FreeAtHomeContext } from "../src/freeAtHomeContext";
-import { MotionSensorAccessory } from "../src/motionSensorAccessory";
-import { EmptyGuid } from "../src/util";
-import { MockFreeAtHomeHomebridgePlatform } from "./platform.mock";
+import { FreeAtHomeContext } from "../src/freeAtHomeContext.js";
+import { MotionSensorAccessory } from "../src/motionSensorAccessory.js";
+import {
+  createPlatformAccessory,
+  MockFreeAtHomeHomebridgePlatform,
+} from "./platform.mock.js";
 
 describe("Motion Sensor Accessory", () => {
   let channel: Channel;
@@ -21,10 +23,7 @@ describe("Motion Sensor Accessory", () => {
     channel = {};
     device = {};
     platform = new MockFreeAtHomeHomebridgePlatform();
-    platformAccessory = new PlatformAccessory(
-      "Motion Sensor Accessory",
-      EmptyGuid
-    );
+    platformAccessory = createPlatformAccessory("Motion Sensor Accessory");
     platformAccessory.context = {
       channel: channel,
       channelId: "ch1234",

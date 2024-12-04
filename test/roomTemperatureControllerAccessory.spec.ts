@@ -2,14 +2,17 @@ import { Channel, Device } from "freeathome-local-api-client";
 import {
   Characteristic,
   CharacteristicValue,
+  PlatformAccessory,
   Service,
   WithUUID,
 } from "homebridge";
-import { PlatformAccessory } from "homebridge/lib/platformAccessory";
-import { FreeAtHomeContext } from "../src/freeAtHomeContext";
-import { RoomTemperatureControllerAccessory } from "../src/roomTemperatureControllerAccessory";
-import { EmptyGuid } from "../src/util";
-import { MockFreeAtHomeHomebridgePlatform } from "./platform.mock";
+import { FreeAtHomeContext } from "../src/freeAtHomeContext.js";
+import { RoomTemperatureControllerAccessory } from "../src/roomTemperatureControllerAccessory.js";
+import { EmptyGuid } from "../src/util.js";
+import {
+  createPlatformAccessory,
+  MockFreeAtHomeHomebridgePlatform,
+} from "./platform.mock.js";
 
 describe("Room Temperature Controller Accessory", () => {
   let channel: Channel;
@@ -43,9 +46,8 @@ describe("Room Temperature Controller Accessory", () => {
     };
     device = {};
     platform = new MockFreeAtHomeHomebridgePlatform();
-    platformAccessory = new PlatformAccessory(
-      "Room Temperature Controller Accessory",
-      EmptyGuid
+    platformAccessory = createPlatformAccessory(
+      "Room Temperature Controller Accessory"
     );
     platformAccessory.context = {
       channel: channel,
@@ -249,6 +251,7 @@ describe("Room Temperature Controller Accessory", () => {
     );
     expect(await characteristicCt.handleGetRequest()).toBe(23);
     expect(await characteristicTt.handleGetRequest()).toBe(21.5);
+
     // eslint-disable-next-line @typescript-eslint/unbound-method
     expect(accessory.platform.log.error).toHaveBeenCalledWith(
       "Invalid State: Heating and cooling cannot be on simultaneously!"
@@ -308,6 +311,7 @@ describe("Room Temperature Controller Accessory", () => {
       "idp0016",
       "22.0"
     );
+
     // eslint-disable-next-line @typescript-eslint/unbound-method
     expect(platform.log.info).toHaveBeenCalledWith(
       "Room Temperature Controller Accessory (Room Temperature Controller ABB7xxxxxxxx (ch1234)) set characteristic TargetTemperature -> 22"
@@ -377,6 +381,7 @@ describe("Room Temperature Controller Accessory", () => {
       "idp0012",
       "0"
     );
+
     // eslint-disable-next-line @typescript-eslint/unbound-method
     expect(platform.log.info).toHaveBeenCalledWith(
       // eslint-disable-next-line max-len
@@ -419,6 +424,7 @@ describe("Room Temperature Controller Accessory", () => {
       "idp0012",
       "1"
     );
+
     // eslint-disable-next-line @typescript-eslint/unbound-method
     expect(platform.log.info).toHaveBeenCalledWith(
       // eslint-disable-next-line max-len

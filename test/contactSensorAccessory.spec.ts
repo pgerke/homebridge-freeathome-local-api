@@ -2,14 +2,16 @@ import { Channel, Device } from "freeathome-local-api-client";
 import {
   Characteristic,
   CharacteristicValue,
+  PlatformAccessory,
   Service,
   WithUUID,
 } from "homebridge";
-import { PlatformAccessory } from "homebridge/lib/platformAccessory";
-import { ContactSensorAccessory } from "../src/contactSensorAccessory";
-import { FreeAtHomeContext } from "../src/freeAtHomeContext";
-import { EmptyGuid } from "../src/util";
-import { MockFreeAtHomeHomebridgePlatform } from "./platform.mock";
+import { ContactSensorAccessory } from "../src/contactSensorAccessory.js";
+import { FreeAtHomeContext } from "../src/freeAtHomeContext.js";
+import {
+  createPlatformAccessory,
+  MockFreeAtHomeHomebridgePlatform,
+} from "./platform.mock.js";
 
 describe("Contact Sensor Accessory", () => {
   let channel: Channel;
@@ -21,10 +23,7 @@ describe("Contact Sensor Accessory", () => {
     channel = {};
     device = {};
     platform = new MockFreeAtHomeHomebridgePlatform();
-    platformAccessory = new PlatformAccessory(
-      "Contact Sensor Accessory",
-      EmptyGuid
-    );
+    platformAccessory = createPlatformAccessory("Contact Sensor Accessory");
     platformAccessory.context = {
       channel: channel,
       channelId: "ch1234",

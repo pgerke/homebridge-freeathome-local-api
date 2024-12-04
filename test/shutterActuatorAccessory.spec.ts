@@ -2,14 +2,17 @@ import { Channel, Device } from "freeathome-local-api-client";
 import {
   Characteristic,
   CharacteristicValue,
+  PlatformAccessory,
   Service,
   WithUUID,
 } from "homebridge";
-import { PlatformAccessory } from "homebridge/lib/platformAccessory";
-import { FreeAtHomeContext } from "../src/freeAtHomeContext";
-import { ShutterActuatorAccessory } from "../src/shutterActuatorAccessory";
-import { EmptyGuid } from "../src/util";
-import { MockFreeAtHomeHomebridgePlatform } from "./platform.mock";
+import { FreeAtHomeContext } from "../src/freeAtHomeContext.js";
+import { ShutterActuatorAccessory } from "../src/shutterActuatorAccessory.js";
+import { EmptyGuid } from "../src/util.js";
+import {
+  createPlatformAccessory,
+  MockFreeAtHomeHomebridgePlatform,
+} from "./platform.mock.js";
 
 describe("Shutter Accessory", () => {
   let channel: Channel;
@@ -21,7 +24,7 @@ describe("Shutter Accessory", () => {
     channel = {};
     device = {};
     platform = new MockFreeAtHomeHomebridgePlatform();
-    platformAccessory = new PlatformAccessory("Shutter Accessory", EmptyGuid);
+    platformAccessory = createPlatformAccessory("Shutter Accessory");
     platformAccessory.context = {
       channel: channel,
       channelId: "ch1234",
@@ -251,6 +254,7 @@ describe("Shutter Accessory", () => {
       "idp0002",
       "30"
     );
+
     // eslint-disable-next-line @typescript-eslint/unbound-method
     expect(platform.log.info).toHaveBeenCalledWith(
       "Shutter Accessory (Shutter Actuator ABB7xxxxxxxx (ch1234)) set characteristic TargetPosition -> 70"

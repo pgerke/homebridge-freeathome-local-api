@@ -1,10 +1,11 @@
 import { Channel, Device } from "freeathome-local-api-client";
-import { Service } from "homebridge";
-import { PlatformAccessory } from "homebridge/lib/platformAccessory";
-import { SceneSensorAccessory } from "../src/sceneSensorAccessory";
-import { FreeAtHomeContext } from "../src/freeAtHomeContext";
-import { EmptyGuid } from "../src/util";
-import { MockFreeAtHomeHomebridgePlatform } from "./platform.mock";
+import { PlatformAccessory, Service } from "homebridge";
+import { FreeAtHomeContext } from "../src/freeAtHomeContext.js";
+import { SceneSensorAccessory } from "../src/sceneSensorAccessory.js";
+import {
+  createPlatformAccessory,
+  MockFreeAtHomeHomebridgePlatform,
+} from "./platform.mock.js";
 
 describe("Scene Sensor Accessory", () => {
   let channel: Channel;
@@ -22,10 +23,7 @@ describe("Scene Sensor Accessory", () => {
     };
     device = {};
     platform = new MockFreeAtHomeHomebridgePlatform();
-    platformAccessory = new PlatformAccessory(
-      "Scene Sensor Accessory",
-      EmptyGuid
-    );
+    platformAccessory = createPlatformAccessory("Scene Sensor Accessory");
     platformAccessory.context = {
       channel: channel,
       channelId: "ch1234",

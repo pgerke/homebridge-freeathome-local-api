@@ -2,14 +2,16 @@ import { Channel, Device } from "freeathome-local-api-client";
 import {
   Characteristic,
   CharacteristicValue,
+  PlatformAccessory,
   Service,
   WithUUID,
 } from "homebridge";
-import { PlatformAccessory } from "homebridge/lib/platformAccessory";
-import { FreeAtHomeContext } from "../src/freeAtHomeContext";
-import { WeatherStationTemperatureSensorAccessory } from "../src/temperatureSensorAccessory";
-import { EmptyGuid } from "../src/util";
-import { MockFreeAtHomeHomebridgePlatform } from "./platform.mock";
+import { FreeAtHomeContext } from "../src/freeAtHomeContext.js";
+import { WeatherStationTemperatureSensorAccessory } from "../src/temperatureSensorAccessory.js";
+import {
+  createPlatformAccessory,
+  MockFreeAtHomeHomebridgePlatform,
+} from "./platform.mock.js";
 
 describe("Temperature Sensor Accessory", () => {
   let channel: Channel;
@@ -27,10 +29,7 @@ describe("Temperature Sensor Accessory", () => {
     };
     device = {};
     platform = new MockFreeAtHomeHomebridgePlatform();
-    platformAccessory = new PlatformAccessory(
-      "Temperature Sensor Accessory",
-      EmptyGuid
-    );
+    platformAccessory = createPlatformAccessory("Temperature Sensor Accessory");
     platformAccessory.context = {
       channel: channel,
       channelId: "ch1234",

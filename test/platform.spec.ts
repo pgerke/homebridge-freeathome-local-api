@@ -1,23 +1,22 @@
 import {
+  Configuration,
+  Logger as FahLogger,
   SystemAccessPoint,
   WebSocketMessage,
-  Logger as FahLogger,
-  Configuration,
 } from "freeathome-local-api-client";
-import { Logger, PlatformConfig } from "homebridge";
-import { HomebridgeAPI } from "homebridge/lib/api";
-import { PlatformAccessory } from "homebridge/lib/platformAccessory";
+import { Logger, PlatformAccessory, PlatformConfig } from "homebridge";
+import { HomebridgeAPI } from "homebridge/api";
 import { Subject, Subscription } from "rxjs";
-import { FreeAtHomeAccessory } from "../src/freeAtHomeAccessory";
+import { FreeAtHomeAccessory } from "../src/freeAtHomeAccessory.js";
 import {
   FreeAtHomeContext,
   isFreeAtHomeAccessory,
-} from "../src/freeAtHomeContext";
-import { FreeAtHomeHomebridgePlatform } from "../src/platform";
-import { SwitchActuatorAccessory } from "../src/switchActuatorAccessory";
-import { AccessoryType } from "../src/typeMappings";
-import { EmptyGuid } from "../src/util";
-import { TestAccessory } from "./TestAccessory.mock";
+} from "../src/freeAtHomeContext.js";
+import { FreeAtHomeHomebridgePlatform } from "../src/platform.js";
+import { SwitchActuatorAccessory } from "../src/switchActuatorAccessory.js";
+import { AccessoryType } from "../src/typeMappings.js";
+import { TestAccessory } from "./TestAccessory.mock.js";
+import { createPlatformAccessory } from "./platform.mock.js";
 
 const configuration: Configuration = {
   "00000000-0000-0000-0000-000000000000": {
@@ -389,10 +388,7 @@ describe("free@home Homebridge Platform", () => {
       };
     };
     expect(platform.accessories.length).toBe(0);
-    const platformAccessory = new PlatformAccessory(
-      "Test Accessory",
-      EmptyGuid
-    );
+    const platformAccessory = createPlatformAccessory("Test Accessory");
     platformAccessory.context = {
       channel: {},
       channelId: "ch1234",
@@ -411,10 +407,7 @@ describe("free@home Homebridge Platform", () => {
   it("should not configure non-free@home accessory", () => {
     const platform = new FreeAtHomeHomebridgePlatform(logger, config, api);
     expect(platform.accessories.length).toBe(0);
-    const platformAccessory = new PlatformAccessory(
-      "Test Accessory",
-      EmptyGuid
-    );
+    const platformAccessory = createPlatformAccessory("Test Accessory");
     platformAccessory.context = {};
     platform.configureAccessory(platformAccessory);
     expect(platform.accessories.length).toBe(0);
@@ -423,10 +416,7 @@ describe("free@home Homebridge Platform", () => {
   it("should not configure ignored accessory", () => {
     const platform = new FreeAtHomeHomebridgePlatform(logger, config, api);
     expect(platform.accessories.length).toBe(0);
-    const platformAccessory = new PlatformAccessory(
-      "Test Accessory",
-      EmptyGuid
-    );
+    const platformAccessory = createPlatformAccessory("Test Accessory");
     platformAccessory.context = {
       channel: {},
       channelId: "ch0005",
@@ -446,7 +436,7 @@ describe("free@home Homebridge Platform", () => {
       };
       discoverDevices(): Promise<void>;
     };
-    const knownAccessory = new PlatformAccessory(
+    const knownAccessory = createPlatformAccessory(
       "Known Device",
       api.hap.uuid.generate("ABB700000002_ch0000")
     );
@@ -565,7 +555,7 @@ describe("free@home Homebridge Platform", () => {
         accessory: PlatformAccessory<FreeAtHomeContext>
       ) => void;
     };
-    const platformAccessory = new PlatformAccessory(
+    const platformAccessory = createPlatformAccessory(
       "Known Device",
       api.hap.uuid.generate("ABB700000002_ch0000")
     );
@@ -604,7 +594,7 @@ describe("free@home Homebridge Platform", () => {
       };
       processWebSocketMesage: (message: WebSocketMessage) => void;
     };
-    const platformAccessory = new PlatformAccessory(
+    const platformAccessory = createPlatformAccessory(
       "Known Device",
       api.hap.uuid.generate("ABB700000002_ch0000")
     );

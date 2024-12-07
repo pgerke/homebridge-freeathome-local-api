@@ -309,13 +309,13 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
           // This check is used to apply the type guard so the accessory can be used as a free@home accesory without a cast.
           // Given that the accessory context is constructed in the previous lines, it is impossible for the type check to fail.
           // Consequently the branch can never be covered and is excluded from the coverage.
-          /* istanbul ignore next */
+          /* c8 ignore next */
           if (!isFreeAtHomeAccessory(accessory, this.fahLogger)) return;
           // create accessory
           this.createAccessory(
             serial,
 
-            channel.functionID ?? "",
+            channel.functionID!, // The functionID is guaranteed to be defined by the isViableChannel function.
             channelId,
             accessory
           );

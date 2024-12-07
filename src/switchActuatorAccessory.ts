@@ -1,9 +1,9 @@
 import { CharacteristicValue, PlatformAccessory, Service } from "homebridge";
-import { AccessoryType } from "./typeMappings";
-import { FreeAtHomeAccessory } from "./freeAtHomeAccessory";
-import { FreeAtHomeContext } from "./freeAtHomeContext";
-import { FreeAtHomeHomebridgePlatform } from "./platform";
-import { EmptyGuid, convertToString } from "./util";
+import { AccessoryType } from "./typeMappings.js";
+import { FreeAtHomeAccessory } from "./freeAtHomeAccessory.js";
+import { FreeAtHomeContext } from "./freeAtHomeContext.js";
+import { FreeAtHomeHomebridgePlatform } from "./platform.js";
+import { EmptyGuid, convertToString } from "./util.js";
 
 /**
  * A switch actuator accessory.

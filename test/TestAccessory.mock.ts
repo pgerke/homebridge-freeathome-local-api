@@ -1,7 +1,7 @@
 import { PlatformAccessory, Service } from "homebridge";
-import { FreeAtHomeHomebridgePlatform } from "../src/platform";
-import { FreeAtHomeAccessory } from "./../src/freeAtHomeAccessory";
-import { FreeAtHomeContext } from "./../src/freeAtHomeContext";
+import { FreeAtHomeHomebridgePlatform } from "../src/platform.js";
+import { FreeAtHomeAccessory } from "./../src/freeAtHomeAccessory.js";
+import { FreeAtHomeContext } from "./../src/freeAtHomeContext.js";
 
 export class TestAccessory extends FreeAtHomeAccessory {
   readonly service: Service;

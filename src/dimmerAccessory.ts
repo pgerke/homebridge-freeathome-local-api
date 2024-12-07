@@ -1,8 +1,8 @@
 import { CharacteristicValue, PlatformAccessory, Service } from "homebridge";
-import { FreeAtHomeAccessory } from "./freeAtHomeAccessory";
-import { FreeAtHomeContext } from "./freeAtHomeContext";
-import { FreeAtHomeHomebridgePlatform } from "./platform";
-import { EmptyGuid, convertToString } from "./util";
+import { FreeAtHomeAccessory } from "./freeAtHomeAccessory.js";
+import { FreeAtHomeContext } from "./freeAtHomeContext.js";
+import { FreeAtHomeHomebridgePlatform } from "./platform.js";
+import { EmptyGuid, convertToString } from "./util.js";
 
 /** A dimming actuator accessory.*/
 export class DimmerAccessory extends FreeAtHomeAccessory {

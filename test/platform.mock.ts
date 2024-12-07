@@ -1,8 +1,11 @@
-import { Logger, PlatformConfig } from "homebridge";
-import { HomebridgeAPI } from "homebridge/lib/api";
-import { FreeAtHomeHomebridgePlatform } from "./../src/platform";
+import { Categories } from "hap-nodejs";
+import { Logger, PlatformAccessory, PlatformConfig } from "homebridge";
+import { HomebridgeAPI } from "homebridge/api";
+import { PlatformAccessory as PlatformAccessoryInternal } from "homebridge/platformAccessory";
+import { FreeAtHomeContext } from "../src/freeAtHomeContext.js";
+import { EmptyGuid } from "../src/util.js";
+import { FreeAtHomeHomebridgePlatform } from "./../src/platform.js";
 
-const api = new HomebridgeAPI();
 const logger: Logger = {
   debug: jasmine.createSpy(),
   error: jasmine.createSpy(),
@@ -11,6 +14,7 @@ const logger: Logger = {
   log: jasmine.createSpy(),
   success: jasmine.createSpy(),
 };
+
 function config(): PlatformConfig {
   return {
     name: "Test Platform Configuration",
@@ -20,6 +24,27 @@ function config(): PlatformConfig {
   };
 }
 
+/**
+ * Creates a new platform accessory.
+ *
+ * @param displayName - The display name of the accessory.
+ * @param UUID - The unique identifier for the accessory. Defaults to `EmptyGuid`.
+ * @param category - The category of the accessory (optional).
+ * @returns A new instance of `PlatformAccessory` with the specified context.
+ */
+export function createPlatformAccessory(
+  displayName: string,
+  UUID: string = EmptyGuid,
+  category?: Categories
+): PlatformAccessory<FreeAtHomeContext> {
+  return new PlatformAccessoryInternal<FreeAtHomeContext>(
+    displayName,
+    UUID,
+    category
+  );
+}
+
+const api = new HomebridgeAPI();
 export class MockFreeAtHomeHomebridgePlatform extends FreeAtHomeHomebridgePlatform {
   constructor() {
     super(logger, config(), api);

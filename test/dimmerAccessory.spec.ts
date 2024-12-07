@@ -2,14 +2,17 @@ import { Channel, Device } from "freeathome-local-api-client";
 import {
   Characteristic,
   CharacteristicValue,
+  PlatformAccessory,
   Service,
   WithUUID,
 } from "homebridge";
-import { PlatformAccessory } from "homebridge/lib/platformAccessory";
-import { DimmerAccessory } from "../src/dimmerAccessory";
-import { FreeAtHomeContext } from "../src/freeAtHomeContext";
-import { EmptyGuid } from "../src/util";
-import { MockFreeAtHomeHomebridgePlatform } from "./platform.mock";
+import { DimmerAccessory } from "../src/dimmerAccessory.js";
+import { FreeAtHomeContext } from "../src/freeAtHomeContext.js";
+import { EmptyGuid } from "../src/util.js";
+import {
+  createPlatformAccessory,
+  MockFreeAtHomeHomebridgePlatform,
+} from "./platform.mock.js";
 
 describe("Dimmer Accessory", () => {
   let channel: Channel;
@@ -21,7 +24,7 @@ describe("Dimmer Accessory", () => {
     channel = {};
     device = {};
     platform = new MockFreeAtHomeHomebridgePlatform();
-    platformAccessory = new PlatformAccessory("Dimmer Accessory", EmptyGuid);
+    platformAccessory = createPlatformAccessory("Dimmer Accessory");
     platformAccessory.context = {
       channel: channel,
       channelId: "ch1234",

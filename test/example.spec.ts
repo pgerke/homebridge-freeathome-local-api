@@ -1,5 +1,5 @@
-import { originalTimeout } from "./../test";
-import { PLUGIN_NAME } from "./../src/settings";
+import { originalTimeout } from "./../test.js";
+import { PLUGIN_NAME } from "./../src/settings.js";
 
 describe("Example Test Suite", () => {
   afterAll(() => {

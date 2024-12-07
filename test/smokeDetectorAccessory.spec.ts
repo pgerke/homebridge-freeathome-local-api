@@ -2,14 +2,16 @@ import { Channel, Device } from "freeathome-local-api-client";
 import {
   Characteristic,
   CharacteristicValue,
+  PlatformAccessory,
   Service,
   WithUUID,
 } from "homebridge";
-import { PlatformAccessory } from "homebridge/lib/platformAccessory";
-import { FreeAtHomeContext } from "../src/freeAtHomeContext";
-import { SmokeDetectorAccessory } from "../src/smokeDetectorAccessory";
-import { EmptyGuid } from "../src/util";
-import { MockFreeAtHomeHomebridgePlatform } from "./platform.mock";
+import { FreeAtHomeContext } from "../src/freeAtHomeContext.js";
+import { SmokeDetectorAccessory } from "../src/smokeDetectorAccessory.js";
+import {
+  createPlatformAccessory,
+  MockFreeAtHomeHomebridgePlatform,
+} from "./platform.mock.js";
 
 describe("Smoke Detector Accessory", () => {
   let channel: Channel;
@@ -21,10 +23,7 @@ describe("Smoke Detector Accessory", () => {
     channel = {};
     device = {};
     platform = new MockFreeAtHomeHomebridgePlatform();
-    platformAccessory = new PlatformAccessory(
-      "Smoke Detector Accessory",
-      EmptyGuid
-    );
+    platformAccessory = createPlatformAccessory("Smoke Detector Accessory");
     platformAccessory.context = {
       channel: channel,
       channelId: "ch1234",

@@ -1,6 +1,6 @@
 import { InOutPut } from "freeathome-local-api-client";
-import { convertToString, getDataPointByPairingID } from "../src/util";
 import { CharacteristicValue } from "homebridge";
+import { convertToString, getDataPointByPairingID } from "../src/util.js";
 
 const datapoints: { [key: string]: InOutPut } = {
   dp0: {

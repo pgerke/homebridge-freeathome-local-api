@@ -1,9 +1,8 @@
-import { Service } from "hap-nodejs";
-import { PlatformAccessory } from "homebridge";
-import { FreeAtHomeAccessory } from "./freeAtHomeAccessory";
-import { FreeAtHomeContext } from "./freeAtHomeContext";
-import { FreeAtHomeHomebridgePlatform } from "./platform";
-import { getDataPointByPairingID } from "./util";
+import type { PlatformAccessory, Service } from "homebridge";
+import { FreeAtHomeAccessory } from "./freeAtHomeAccessory.js";
+import { FreeAtHomeContext } from "./freeAtHomeContext.js";
+import { FreeAtHomeHomebridgePlatform } from "./platform.js";
+import { getDataPointByPairingID } from "./util.js";
 
 const pidCurrentLightLevel = 1027;
 
@@ -36,7 +35,7 @@ export class WeatherStationBrightnessSensorAccessory extends FreeAtHomeAccessory
     // set initial state
     this.currentLightLevel = parseFloat(
       this.accessory.context.channel.outputs[this.pdCurrentLightLevel].value ??
-        "0.0"
+        "0.0001"
     );
 
     // get the LightSensor service if it exists, otherwise create a new service instance

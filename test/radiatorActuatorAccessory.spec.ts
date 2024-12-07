@@ -2,14 +2,17 @@ import { Channel, Device } from "freeathome-local-api-client";
 import {
   Characteristic,
   CharacteristicValue,
+  PlatformAccessory,
   Service,
   WithUUID,
 } from "homebridge";
-import { PlatformAccessory } from "homebridge/lib/platformAccessory";
-import { FreeAtHomeContext } from "../src/freeAtHomeContext";
-import { EmptyGuid } from "../src/util";
-import { MockFreeAtHomeHomebridgePlatform } from "./platform.mock";
-import { RadiatorActuatorAccessory } from "../src/radiatorActuatorAccessory";
+import { FreeAtHomeContext } from "../src/freeAtHomeContext.js";
+import { RadiatorActuatorAccessory } from "../src/radiatorActuatorAccessory.js";
+import { EmptyGuid } from "../src/util.js";
+import {
+  createPlatformAccessory,
+  MockFreeAtHomeHomebridgePlatform,
+} from "./platform.mock.js";
 
 describe("Radiator Actuator Accessory", () => {
   let channel: Channel;
@@ -40,10 +43,7 @@ describe("Radiator Actuator Accessory", () => {
     };
     device = {};
     platform = new MockFreeAtHomeHomebridgePlatform();
-    platformAccessory = new PlatformAccessory(
-      "Radiator Actuator Accessory",
-      EmptyGuid
-    );
+    platformAccessory = createPlatformAccessory("Radiator Actuator Accessory");
     platformAccessory.context = {
       channel: channel,
       channelId: "ch1234",
@@ -266,6 +266,7 @@ describe("Radiator Actuator Accessory", () => {
       "idp0016",
       "22.0"
     );
+
     // eslint-disable-next-line @typescript-eslint/unbound-method
     expect(platform.log.info).toHaveBeenCalledWith(
       "Radiator Actuator Accessory (Radiator Actuator ABB7xxxxxxxx (ch1234)) set characteristic TargetTemperature -> 22"
@@ -333,6 +334,7 @@ describe("Radiator Actuator Accessory", () => {
       "idp0012",
       "0"
     );
+
     // eslint-disable-next-line @typescript-eslint/unbound-method
     expect(platform.log.info).toHaveBeenCalledWith(
       "Radiator Actuator Accessory (Radiator Actuator ABB7xxxxxxxx (ch1234)) set characteristic TargetHeatingCoolingState -> 0"
@@ -373,6 +375,7 @@ describe("Radiator Actuator Accessory", () => {
       "idp0012",
       "1"
     );
+
     // eslint-disable-next-line @typescript-eslint/unbound-method
     expect(platform.log.info).toHaveBeenCalledWith(
       "Radiator Actuator Accessory (Radiator Actuator ABB7xxxxxxxx (ch1234)) set characteristic TargetHeatingCoolingState -> 3"

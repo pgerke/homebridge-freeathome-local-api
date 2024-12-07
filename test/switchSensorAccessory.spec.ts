@@ -1,10 +1,11 @@
 import { Channel, Device } from "freeathome-local-api-client";
-import { Service } from "homebridge";
-import { PlatformAccessory } from "homebridge/lib/platformAccessory";
-import { SwitchSensorAccessory } from "../src/switchSensorAccessory";
-import { FreeAtHomeContext } from "../src/freeAtHomeContext";
-import { EmptyGuid } from "../src/util";
-import { MockFreeAtHomeHomebridgePlatform } from "./platform.mock";
+import { PlatformAccessory, Service } from "homebridge";
+import { FreeAtHomeContext } from "../src/freeAtHomeContext.js";
+import { SwitchSensorAccessory } from "../src/switchSensorAccessory.js";
+import {
+  createPlatformAccessory,
+  MockFreeAtHomeHomebridgePlatform,
+} from "./platform.mock.js";
 
 describe("Switch Sensor Accessory", () => {
   let channel: Channel;
@@ -16,10 +17,7 @@ describe("Switch Sensor Accessory", () => {
     channel = {};
     device = {};
     platform = new MockFreeAtHomeHomebridgePlatform();
-    platformAccessory = new PlatformAccessory(
-      "Switch Sensor Accessory",
-      EmptyGuid
-    );
+    platformAccessory = createPlatformAccessory("Switch Sensor Accessory");
     platformAccessory.context = {
       channel: channel,
       channelId: "ch1234",

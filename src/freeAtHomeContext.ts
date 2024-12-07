@@ -5,10 +5,7 @@ import {
   isDevice,
   Logger,
 } from "freeathome-local-api-client";
-import {
-  PlatformAccessory,
-  UnknownContext,
-} from "homebridge/lib/platformAccessory";
+import type { PlatformAccessory, UnknownContext } from "homebridge";
 
 /** Describes the context of a free&#64;home accessory. */
 export interface FreeAtHomeContext {

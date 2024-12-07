@@ -19,9 +19,11 @@ export default [
       "**/.vscode",
       "**/coverage",
       "**/dist",
+      "**/tsc-out",
       "**/node_modules",
       "package-lock.json",
       "eslint.config.mjs",
+      "patch-homebridge-exports.mjs",
     ],
   },
   ...compat.extends(
@@ -32,9 +34,8 @@ export default [
   {
     languageOptions: {
       parser: tsParser,
-      ecmaVersion: 2022,
+      ecmaVersion: 2023,
       sourceType: "module",
-
       parserOptions: {
         project: ["./tsconfig.json", "./tsconfig.spec.json"],
       },

@@ -2,14 +2,17 @@ import { Channel, Device } from "freeathome-local-api-client";
 import {
   Characteristic,
   CharacteristicValue,
+  PlatformAccessory,
   Service,
   WithUUID,
 } from "homebridge";
-import { PlatformAccessory } from "homebridge/lib/platformAccessory";
-import { DoorOpenerAccessory } from "../src/doorOpenerAccessory";
-import { FreeAtHomeContext } from "../src/freeAtHomeContext";
-import { EmptyGuid } from "../src/util";
-import { MockFreeAtHomeHomebridgePlatform } from "./platform.mock";
+import { DoorOpenerAccessory } from "../src/doorOpenerAccessory.js";
+import { FreeAtHomeContext } from "../src/freeAtHomeContext.js";
+import { EmptyGuid } from "../src/util.js";
+import {
+  createPlatformAccessory,
+  MockFreeAtHomeHomebridgePlatform,
+} from "./platform.mock.js";
 
 describe("Door Opener Accessory", () => {
   let channel: Channel;
@@ -21,10 +24,7 @@ describe("Door Opener Accessory", () => {
     channel = {};
     device = {};
     platform = new MockFreeAtHomeHomebridgePlatform();
-    platformAccessory = new PlatformAccessory(
-      "Door Opener Accessory",
-      EmptyGuid
-    );
+    platformAccessory = createPlatformAccessory("Door Opener Accessory");
     platformAccessory.context = {
       channel: channel,
       channelId: "ch1234",

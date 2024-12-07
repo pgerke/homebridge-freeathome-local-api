@@ -2,15 +2,18 @@ import { Channel, Device } from "freeathome-local-api-client";
 import {
   Characteristic,
   CharacteristicValue,
+  PlatformAccessory,
   Service,
   WithUUID,
 } from "homebridge";
-import { PlatformAccessory } from "homebridge/lib/platformAccessory";
-import { FreeAtHomeContext } from "../src/freeAtHomeContext";
-import { SwitchActuatorAccessory } from "../src/switchActuatorAccessory";
-import { AccessoryType } from "../src/typeMappings";
-import { EmptyGuid } from "../src/util";
-import { MockFreeAtHomeHomebridgePlatform } from "./platform.mock";
+import { FreeAtHomeContext } from "../src/freeAtHomeContext.js";
+import { SwitchActuatorAccessory } from "../src/switchActuatorAccessory.js";
+import { AccessoryType } from "../src/typeMappings.js";
+import { EmptyGuid } from "../src/util.js";
+import {
+  createPlatformAccessory,
+  MockFreeAtHomeHomebridgePlatform,
+} from "./platform.mock.js";
 
 describe("Switch Actuator Accessory", () => {
   let channel: Channel;
@@ -22,10 +25,7 @@ describe("Switch Actuator Accessory", () => {
     channel = {};
     device = {};
     platform = new MockFreeAtHomeHomebridgePlatform();
-    platformAccessory = new PlatformAccessory(
-      "Switch Actuator Accessory",
-      EmptyGuid
-    );
+    platformAccessory = createPlatformAccessory("Switch Actuator Accessory");
     platformAccessory.context = {
       channel: channel,
       channelId: "ch1234",
@@ -121,6 +121,7 @@ describe("Switch Actuator Accessory", () => {
       "idp0000",
       "1"
     );
+
     // eslint-disable-next-line @typescript-eslint/unbound-method
     expect(platform.log.info).toHaveBeenCalledWith(
       "Switch Actuator Accessory (Switch Actuator ABB7xxxxxxxx (ch1234)) set characteristic On -> true"
@@ -151,6 +152,7 @@ describe("Switch Actuator Accessory", () => {
       "idp0000",
       "0"
     );
+
     // eslint-disable-next-line @typescript-eslint/unbound-method
     expect(platform.log.info).toHaveBeenCalledWith(
       "Switch Actuator Accessory (Switch Actuator ABB7xxxxxxxx (ch1234)) set characteristic On -> false"

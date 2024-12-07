@@ -3,14 +3,16 @@ import {
   Characteristic,
   CharacteristicValue,
   Nullable,
+  PlatformAccessory,
   Service,
   WithUUID,
 } from "homebridge";
-import { PlatformAccessory } from "homebridge/lib/platformAccessory";
-import { FreeAtHomeContext } from "../src/freeAtHomeContext";
-import { EmptyGuid } from "../src/util";
-import { MockFreeAtHomeHomebridgePlatform } from "./platform.mock";
-import { TestAccessory } from "./TestAccessory.mock";
+import { FreeAtHomeContext } from "../src/freeAtHomeContext.js";
+import {
+  createPlatformAccessory,
+  MockFreeAtHomeHomebridgePlatform,
+} from "./platform.mock.js";
+import { TestAccessory } from "./TestAccessory.mock.js";
 
 describe("free@home Accessory", () => {
   let channel: Channel;
@@ -22,7 +24,7 @@ describe("free@home Accessory", () => {
     channel = {};
     device = {};
     platform = new MockFreeAtHomeHomebridgePlatform();
-    platformAccessory = new PlatformAccessory("Test Accessory", EmptyGuid);
+    platformAccessory = createPlatformAccessory("Test Accessory");
     platformAccessory.context = {
       channel: channel,
       channelId: "ch1234",

@@ -2,14 +2,17 @@ import { Channel, Device } from "freeathome-local-api-client";
 import {
   Characteristic,
   CharacteristicValue,
+  PlatformAccessory,
   Service,
   WithUUID,
 } from "homebridge";
-import { PlatformAccessory } from "homebridge/lib/platformAccessory";
-import { FreeAtHomeContext } from "../src/freeAtHomeContext";
-import { SceneAccessory } from "../src/sceneAccessory";
-import { EmptyGuid } from "../src/util";
-import { MockFreeAtHomeHomebridgePlatform } from "./platform.mock";
+import { FreeAtHomeContext } from "../src/freeAtHomeContext.js";
+import { SceneAccessory } from "../src/sceneAccessory.js";
+import { EmptyGuid } from "../src/util.js";
+import {
+  createPlatformAccessory,
+  MockFreeAtHomeHomebridgePlatform,
+} from "./platform.mock.js";
 
 describe("Scene Accessory", () => {
   let channel: Channel;
@@ -21,7 +24,7 @@ describe("Scene Accessory", () => {
     channel = {};
     device = {};
     platform = new MockFreeAtHomeHomebridgePlatform();
-    platformAccessory = new PlatformAccessory("Scene Accessory", EmptyGuid);
+    platformAccessory = createPlatformAccessory("Scene Accessory");
     platformAccessory.context = {
       channel: channel,
       channelId: "ch1234",
@@ -98,6 +101,7 @@ describe("Scene Accessory", () => {
       "odp0000",
       "1"
     );
+
     // eslint-disable-next-line @typescript-eslint/unbound-method
     expect(platform.log.info).toHaveBeenCalledWith(
       "Scene Accessory (Scene Actuator ABB7xxxxxxxx (ch1234)) set characteristic On -> true"
@@ -124,6 +128,7 @@ describe("Scene Accessory", () => {
     await characteristic.handleSetRequest(false);
     expect(await characteristic.handleGetRequest()).toBeFalse();
     expect(spy).not.toHaveBeenCalled();
+
     // eslint-disable-next-line @typescript-eslint/unbound-method
     expect(platform.log.error).toHaveBeenCalledWith(
       "Scene Accessory (Scene Actuator ABB7xxxxxxxx (ch1234)) cannot be disabled"

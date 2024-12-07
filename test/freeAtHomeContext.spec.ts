@@ -2,9 +2,9 @@ import { Channel, Device, Logger } from "freeathome-local-api-client";
 import {
   PlatformAccessory,
   UnknownContext,
-} from "homebridge/lib/platformAccessory";
-import { isFreeAtHomeAccessory } from "./../src/freeAtHomeContext";
-import { EmptyGuid } from "./../src/util";
+} from "homebridge/platformAccessory";
+import { EmptyGuid } from "../src/util.js";
+import { isFreeAtHomeAccessory } from "./../src/freeAtHomeContext.js";
 
 const channel: Channel = {};
 const device: Device = {};

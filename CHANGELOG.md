@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 1.14.1 - 08.12.2024
+
+### Added
+
+- [#106](https://github.com/pgerke/homebridge-freeathome-local-api/issues/106):
+  Added support for Homebridge v2.0
+- [#106](https://github.com/pgerke/homebridge-freeathome-local-api/issues/106):
+  Added support for Node 22
+
+### Changed
+
+- [#106](https://github.com/pgerke/homebridge-freeathome-local-api/issues/106):
+  Migrated the plugin to ESM.
+
 ## 1.13.0 - 24.08.2024
 
 ### Changed

@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 1.14.2 - 28.12.2024
+
+### Changed
+
+- [#109](https://github.com/pgerke/homebridge-freeathome-local-api/issues/109):
+  Migrated to managed SonarQube
+
 ## 1.14.1 - 08.12.2024
 
 ### Added

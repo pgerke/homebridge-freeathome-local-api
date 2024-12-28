@@ -23,8 +23,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Install latest npm
-        run: npm install -g npm@${{ matrix.npm-version }} && npm --version
       - name: Install dependencies
         run: npm ci
       - name: Build the project
@@ -54,8 +52,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Install latest npm
-        run: npm install -g npm@${{ matrix.npm-version }} && npm --version
       - name: Restore dependencies
         run: npm ci
       - name: Patch homebridge package
@@ -81,8 +77,6 @@ jobs:
       matrix:
         # the Node.js versions to build on
         node-version: [18, 20, 22]
-        include:
-          - npm-version: latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -90,8 +84,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Install latest npm
-        run: npm install -g npm@${{ matrix.npm-version }} && npm --version
       - name: Restore dependencies
         run: npm ci
       - name: Patch homebridge package

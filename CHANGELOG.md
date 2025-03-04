@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- [#113](https://github.com/pgerke/homebridge-freeathome-local-api/issues/113):
+  Setup continuous deployment
 - [#115](https://github.com/pgerke/homebridge-freeathome-local-api/issues/115):
   Migrate from npm to pnpm
 

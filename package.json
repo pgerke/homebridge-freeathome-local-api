@@ -33,8 +33,7 @@
     "watch": "pnpm run build && pnpm link && nodemon",
     "test": "node --import tsx jasmine.mjs",
     "test:ci": "c8 pnpm run test",
-    "build": "pnpm run clean && tsc -p tsconfig.json",
-    "prepublishOnly": "pnpm run lint && pnpm run build"
+    "build": "pnpm run clean && tsc -p tsconfig.json"
   },
   "keywords": [
     "homebridge-plugin",

@@ -2,7 +2,7 @@ Thanks for helping make the free@home Homebridge Plugin safe for everyone!
 
 ## Security
 
-I'm taking the security of my software products and services seriously, including all of the open source code repositories managed through GitHub. 
+I'm taking the security of my software products and services seriously, including all of the open source code repositories managed through GitHub.
 
 ## Reporting Security Issues
 

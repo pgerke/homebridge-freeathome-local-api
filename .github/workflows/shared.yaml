@@ -1,21 +1,42 @@
-name: Continuous Integration
-
 on:
-  push:
-    branches: [main]
-  pull_request:
-  workflow_dispatch:
+  - workflow_call
 
 jobs:
+  cache_dependencies:
+    name: Cache dependencies
+    runs-on: ubuntu-latest
+    outputs:
+      pnpm-store-path: ${{ steps.pnpm-store-path.outputs.store-path }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+      - name: Get pnpm store path
+        id: pnpm-store-path
+        run: echo "store-path=$(pnpm store path)" >> $GITHUB_OUTPUT
+      - name: Cache pnpm store
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.pnpm-store-path.outputs.store-path }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+      - name: Restore dependencies
+        run: pnpm install --frozen-lockfile
+
   build:
     name: Build
     runs-on: ubuntu-latest
+    needs: cache_dependencies
     strategy:
       matrix:
         # the Node.js versions to build on
         node-version: [18, 20, 22]
-        include:
-          - npm-version: latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -23,10 +44,19 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Install dependencies
-        run: npm ci
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+      - name: Restore pnpm store
+        uses: actions/cache@v4
+        with:
+          path: ${{ needs.cache_dependencies.outputs.pnpm-store-path }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+      - name: Restore dependencies
+        run: pnpm install --frozen-lockfile
       - name: Build the project
-        run: npm run build
+        run: pnpm run build
         env:
           CI: true
       - name: Upload artifacts
@@ -39,12 +69,11 @@ jobs:
   lint:
     name: Lint
     runs-on: ubuntu-latest
+    needs: cache_dependencies
     strategy:
       matrix:
         # the Node.js versions to build on
         node-version: [18, 20, 22]
-        include:
-          - npm-version: latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -52,27 +81,47 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+      - name: Restore pnpm store
+        uses: actions/cache@v4
+        with:
+          path: ${{ needs.cache_dependencies.outputs.pnpm-store-path }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
       - name: Restore dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
       - name: Patch homebridge package
         run: node patch-homebridge-exports.mjs
       - name: Run linter
-        run: npm run lint
+        run: pnpm run lint
 
   audit:
     name: Audit
     runs-on: ubuntu-latest
+    needs: cache_dependencies
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+      - name: Restore pnpm store
+        uses: actions/cache@v4
+        with:
+          path: ${{ needs.cache_dependencies.outputs.pnpm-store-path }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
       - name: Restore dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
       - name: Run audit
-        run: npm audit --omit=dev
+        run: pnpm audit --prod
 
   test:
     name: Test
     runs-on: ubuntu-latest
+    needs: cache_dependencies
     strategy:
       matrix:
         # the Node.js versions to build on
@@ -84,12 +133,21 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+      - name: Restore pnpm store
+        uses: actions/cache@v4
+        with:
+          path: ${{ needs.cache_dependencies.outputs.pnpm-store-path }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
       - name: Restore dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
       - name: Patch homebridge package
         run: node patch-homebridge-exports.mjs
       - name: Run unit test
-        run: npm run test:ci
+        run: pnpm run test:ci
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -105,7 +163,7 @@ jobs:
   analysis:
     name: Analyse
     runs-on: ubuntu-latest
-    needs: [test]
+    needs: test
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4

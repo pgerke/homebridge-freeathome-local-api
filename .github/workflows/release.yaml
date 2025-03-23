@@ -1,0 +1,69 @@
+name: Release
+
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - main
+
+jobs:
+  check_release_trigger:
+    name: Check if PR will trigger a Release
+    runs-on: ubuntu-latest
+    outputs:
+      version_changed: ${{ steps.detect_version_change.outputs.version_changed }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Detect version change
+        id: detect_version_change
+        uses: ./.github/actions/detect-version-change
+
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    needs: [check_release_trigger]
+    if: ${{ needs.check_release_trigger.outputs.version_changed == 'true' && !contains(github.event.head_commit.message, '[skip deploy]') }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Get new version and changelog
+        id: extract_version
+        uses: ./.github/actions/get-version-and-changelog
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: "${{ steps.extract_version.outputs.version }}"
+          name: "v${{ steps.extract_version.outputs.version }}"
+          body: |
+            ${{ steps.extract_version.outputs.changelog }}
+          prerelease: ${{ contains(steps.extract_version.outputs.version, '-') }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  deploy:
+    name: Deploy to npmjs.org
+    runs-on: ubuntu-latest
+    needs: [check_release_trigger]
+    if: ${{ needs.check_release_trigger.outputs.version_changed == 'true' && !contains(github.event.head_commit.message, '[skip deploy]') }}
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: "https://registry.npmjs.org"
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-22
+          path: dist
+      - name: Publish to npmjs.org
+        run: |
+          pnpm publish ./dist --access public --tag pre;
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_PROVENANCE: true

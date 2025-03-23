@@ -5,10 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+## [1.14.5](https://github.com/pgerke/homebridge-freeathome-local-api/releases/tag/1.14.5) - 23.03.2025
 
 ### Changed
 
+- [#117](https://github.com/pgerke/homebridge-freeathome-local-api/issues/117):
+  Dependency Bump
+- [#118](https://github.com/pgerke/homebridge-freeathome-local-api/issues/118):
+  Migrate from Continuous Deployment to Merge PR-based Releases
 - [#113](https://github.com/pgerke/homebridge-freeathome-local-api/issues/113):
   Setup continuous deployment
 - [#115](https://github.com/pgerke/homebridge-freeathome-local-api/issues/115):

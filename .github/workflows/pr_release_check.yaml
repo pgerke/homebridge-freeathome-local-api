@@ -49,7 +49,6 @@ jobs:
 
             ## 📢 Planned version: v${{ steps.extract_version.outputs.version }}
 
-            🔍 **Changelog for the new version:**
             ${{ steps.extract_version.outputs.changelog }}
           edit-mode: replace
 

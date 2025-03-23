@@ -1,0 +1,39 @@
+name: "Get Version and Changelog"
+description: "Get the new version and changelog entry from commitizen"
+outputs:
+  version:
+    description: "The new version"
+    value: ${{ steps.version.outputs.version }}
+  changelog:
+    description: "The changelog entry for the new version"
+    value: ${{ steps.changelog.outputs.changelog }}
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        fetch-tags: true
+    - name: Install Commitizen
+      shell: bash
+      run: pip install commitizen
+    - name: Get new version
+      shell: bash
+      id: version
+      run: |
+        cz version -p
+        echo "version=$(cz version -p)" >> $GITHUB_OUTPUT
+    - name: Extract Changelog Entry
+      shell: bash
+      id: changelog
+      run: |
+        {
+          echo "changelog<<EOF"
+          awk -v version=$(cz version -p) '
+          $0 ~ "^## "version" " { in_section = 1; next }
+          $0 ~ "^## " && in_section { exit }
+          in_section { print }
+        ' CHANGELOG.md
+          echo "EOF"
+        } >> "$GITHUB_OUTPUT"

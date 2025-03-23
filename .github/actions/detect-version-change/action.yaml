@@ -1,0 +1,41 @@
+name: "Detect commitizen version change"
+description: "Checks if the 'version' key in package.json has changed compared to the previous commit."
+outputs:
+  version_changed:
+    description: "Boolean indicating if the version has changed"
+    value: ${{ steps.check.outputs.version_changed }}
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout previous commit
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 2
+
+    - name: Extract version from previous commit
+      id: old_version
+      shell: bash
+      run: |
+        OLD_VERSION=$(git show HEAD^:package.json | jq -r '.version // "not_found"')
+        echo "OLD_VERSION=$OLD_VERSION" >> $GITHUB_ENV
+        echo "Previous version: $OLD_VERSION"
+
+    - name: Extract version from current commit
+      id: new_version
+      shell: bash
+      run: |
+        NEW_VERSION=$(jq -r '.version // "not_found"' package.json)
+        echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
+        echo "Current version: $NEW_VERSION"
+
+    - name: Compare versions
+      id: check
+      shell: bash
+      run: |
+        if [ "$OLD_VERSION" != "$NEW_VERSION" ]; then
+          echo "Version changed from $OLD_VERSION to $NEW_VERSION"
+          echo "version_changed=true" >> $GITHUB_OUTPUT
+        else
+          echo "No version change detected"
+          echo "version_changed=false" >> $GITHUB_OUTPUT
+        fi

@@ -1,0 +1,84 @@
+name: PR Release Check
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  check_release_trigger:
+    name: Check if PR will trigger a Release
+    runs-on: ubuntu-latest
+    outputs:
+      version_changed: ${{ steps.detect_version_change.outputs.version_changed }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Detect version change
+        id: detect_version_change
+        uses: ./.github/actions/detect-version-change
+
+  pr_comment_release:
+    name: Update PR Comment with Release Information
+    runs-on: ubuntu-latest
+    needs: check_release_trigger
+    if: ${{ needs.check_release_trigger.outputs.version_changed == 'true' }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Add "release" label
+        uses: actions-ecosystem/action-add-labels@v1
+        with:
+          labels: release
+      - name: Get new version and changelog
+        id: extract_version
+        uses: ./.github/actions/get-version-and-changelog
+      - name: Find Comment
+        uses: peter-evans/find-comment@v3
+        id: fc
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-author: "github-actions[bot]"
+          body-includes: "**This PR will"
+      - name: Comment on PR that a release will be triggered
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            ✅ **This PR will trigger a new release upon merge!** 🚀
+
+            ## 📢 Planned version: v${{ steps.extract_version.outputs.version }}
+
+            🔍 **Changelog for the new version:**
+            ```markdown
+            ${{ steps.extract_version.outputs.changelog }}
+            ```
+          edit-mode: replace
+
+  pr_comment_no_release:
+    name: Update PR Comment with Release Information
+    runs-on: ubuntu-latest
+    needs: check_release_trigger
+    if: ${{ needs.check_release_trigger.outputs.version_changed == 'false' }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Remove "release" label
+        uses: actions-ecosystem/action-remove-labels@v1
+        with:
+          labels: release
+      - name: Find Comment
+        uses: peter-evans/find-comment@v3
+        id: fc
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-author: "github-actions[bot]"
+          body-includes: "**This PR will"
+      - name: Comment on PR that no release will be triggered
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            🚫 **This PR will not trigger a release upon merge!**
+          edit-mode: replace

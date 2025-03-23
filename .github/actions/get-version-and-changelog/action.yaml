@@ -31,9 +31,9 @@ runs:
         {
           echo "changelog<<EOF"
           awk -v version="$(cz version -p)" '
-          $0 ~ "^## "version" " { in_section = 1; next }
-          $0 ~ "^## " && in_section { exit }
-          in_section { print }
-        ' CHANGELOG.md
+            $0 ~ "^##[[:space:]]*\\[?" version "[^0-9]" { in_section = 1; next }
+            $0 ~ "^##[[:space:]]" && in_section { exit }
+            in_section { print }
+          ' CHANGELOG.md
           echo "EOF"
         } >> "$GITHUB_OUTPUT"

@@ -30,7 +30,7 @@ runs:
       run: |
         {
           echo "changelog<<EOF"
-          awk -v version=$(cz version -p) '
+          awk -v version="$(cz version -p)" '
           $0 ~ "^## "version" " { in_section = 1; next }
           $0 ~ "^## " && in_section { exit }
           in_section { print }

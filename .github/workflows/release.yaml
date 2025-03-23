@@ -42,11 +42,17 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+  cache_dependencies:
+    name: Cache dependencies
+    uses: ./.github/workflows/dependency_cache.yaml
+    needs: [check_release_trigger]
+    if: ${{ needs.check_release_trigger.outputs.version_changed == 'true' && !contains(github.event.head_commit.message, '[skip deploy]') }}
+    secrets: inherit
+
   deploy:
     name: Deploy to npmjs.org
     runs-on: ubuntu-latest
-    needs: [check_release_trigger]
-    if: ${{ needs.check_release_trigger.outputs.version_changed == 'true' && !contains(github.event.head_commit.message, '[skip deploy]') }}
+    needs: [cache_dependencies]
     permissions:
       contents: read
       id-token: write
@@ -56,11 +62,21 @@ jobs:
         with:
           node-version: 22
           registry-url: "https://registry.npmjs.org"
-      - name: Download artifacts
-        uses: actions/download-artifact@v4
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+      - name: Restore pnpm store
+        uses: actions/cache@v4
         with:
-          name: dist-22
-          path: dist
+          path: ${{ needs.cache_dependencies.outputs.pnpm-store-path }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+      - name: Restore dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Build the project
+        run: pnpm run build
+        env:
+          CI: true
       - name: Publish to npmjs.org
         run: |
           pnpm publish ./dist --access public --tag pre;

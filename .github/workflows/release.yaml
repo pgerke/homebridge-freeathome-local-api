@@ -81,7 +81,7 @@ jobs:
           CI: true
       - name: Publish to npmjs.org
         run: |
-          pnpm publish ./dist --access public --tag pre;
+          pnpm publish --access public --tag pre;
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_PROVENANCE: true

@@ -49,10 +49,7 @@ jobs:
 
             ## 📢 Planned version: v${{ steps.extract_version.outputs.version }}
 
-            🔍 **Changelog for the new version:**
-            ```markdown
             ${{ steps.extract_version.outputs.changelog }}
-            ```
           edit-mode: replace
 
   pr_comment_no_release:

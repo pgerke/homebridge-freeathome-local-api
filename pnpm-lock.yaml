@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       freeathome-local-api-client:
-        specifier: ^1.6.0
-        version: 1.6.0
+        specifier: ^1.6.1
+        version: 1.6.1
       rxjs:
         specifier: ^7.8.2
         version: 7.8.2
@@ -1063,8 +1063,8 @@ packages:
     resolution: {integrity: sha512-hGfm/slu0ZabnNt4oaRZ6uREyfCj6P4fT/n6A1rGV+Z0VdGXjfOhVUpkn6qVQONHGIFwmveGXyDs75+nr6FM8w==}
     engines: {node: '>= 6'}
 
-  freeathome-local-api-client@1.6.0:
-    resolution: {integrity: sha512-jUni4eIpmZvldwdTlD+KmiEL37rSyULAIuG0wPB3Pwx27bD5nTbHDgap32jQ69zy4wIVdDH8wEYlYMDNmt6swA==}
+  freeathome-local-api-client@1.6.1:
+    resolution: {integrity: sha512-zbZ0sjryoT7y2+NBZmAX/B5NRn9s96DAoRxVkFCxZkguV5cLEmZRRP4Z4HNztxvXs4lAZUTgKTrsBhY8eFgKig==}
 
   from@0.1.7:
     resolution: {integrity: sha512-twe20eF1OxVxp/ML/kq2p1uc6KvFK/+vs8WjEbeKmV2He22MKm7YF2ANIt+EOqhJ5L3K/SuuPhk0hWQDjOM23g==}
@@ -1961,8 +1961,8 @@ packages:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==}
     engines: {node: '>= 0.4'}
 
-  synckit@0.11.5:
-    resolution: {integrity: sha512-frqvfWyDA5VPVdrWfH24uM6SI/O8NLpVbIIJxb8t/a3YGsp4AW9CYgSKC0OaSEfexnp7Y1pVh2Y6IHO8ggGDmA==}
+  synckit@0.11.6:
+    resolution: {integrity: sha512-2pR2ubZSV64f/vqm9eLPz/KOvR9Dm+Co/5ChLgeHl0yEDRc6h5hXHoxEQH8Y5Ljycozd3p1k5TTSVdzYGkPvLw==}
     engines: {node: ^14.18.0 || >=16.0.0}
 
   tapable@2.2.1:
@@ -3145,7 +3145,7 @@ snapshots:
       eslint: 9.27.0
       prettier: 3.5.3
       prettier-linter-helpers: 1.0.0
-      synckit: 0.11.5
+      synckit: 0.11.6
     optionalDependencies:
       eslint-config-prettier: 10.1.5(eslint@9.27.0)
 
@@ -3307,7 +3307,7 @@ snapshots:
       es-set-tostringtag: 2.1.0
       mime-types: 2.1.35
 
-  freeathome-local-api-client@1.6.0:
+  freeathome-local-api-client@1.6.1:
     dependencies:
       rxjs: 7.8.2
       ts-interface-checker: 1.0.2
@@ -4295,10 +4295,9 @@ snapshots:
 
   supports-preserve-symlinks-flag@1.0.0: {}
 
-  synckit@0.11.5:
+  synckit@0.11.6:
     dependencies:
       '@pkgr/core': 0.2.4
-      tslib: 2.8.1
 
   tapable@2.2.1: {}
 

@@ -1,8 +1,8 @@
 {
   "displayName": "free@home Local API",
   "name": "homebridge-freeathome-local-api",
-  "version": "1.14.9-pre.0",
-  "preview": true,
+  "version": "1.14.9",
+  "preview": false,
   "description": "Control your free@home setup using the local API provided by your System Access Point",
   "license": "MIT",
   "repository": {
@@ -33,7 +33,7 @@
     "watch": "pnpm run build && pnpm link && nodemon",
     "test": "node --import tsx jasmine.mjs",
     "test:ci": "c8 pnpm run test",
-    "build": "pnpm run clean && tsc -p tsconfig.json"
+    "build": "pnpm run clean && node ./update-version.mjs && tsc -p tsconfig.json"
   },
   "keywords": [
     "homebridge-plugin",
@@ -45,7 +45,7 @@
     "smarthome"
   ],
   "dependencies": {
-    "freeathome-local-api-client": "^1.6.0",
+    "freeathome-local-api-client": "^1.6.1",
     "rxjs": "^7.8.2",
     "undici": "^7.9.0"
   },

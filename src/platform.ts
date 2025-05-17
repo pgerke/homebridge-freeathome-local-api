@@ -45,7 +45,7 @@ import { SwitchSensorAccessory } from "./switchSensorAccessory.js";
 import { WeatherStationTemperatureSensorAccessory } from "./temperatureSensorAccessory.js";
 import { TriggerSensorAccessory } from "./triggerSensorAccessory.js";
 import { AccessoryType, TypeMapping } from "./typeMappings.js";
-import { EmptyGuid } from "./util.js";
+import { APP_VERSION, EmptyGuid } from "./util.js";
 
 const DelayFactor = 200;
 
@@ -83,6 +83,8 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
     public readonly config: PlatformConfig,
     public readonly api: API
   ) {
+    // log plugin version
+    log.debug("Homebridge free@home Local API Plugin ", APP_VERSION);
     this.Service = this.api.hap.Service;
     this.Characteristic = this.api.hap.Characteristic;
     // set maximum reconnection attempt count

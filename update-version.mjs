@@ -11,7 +11,9 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const filePath = path.join(__dirname, "src/util.ts");
 
 // Get application version from commitizen
-const { stdout: versionRaw } = await execAsync("cz version -p");
+const { stdout: versionRaw } = await execAsync(
+  "jq -r '.version  // \"unknown\"' package.json"
+);
 const version = versionRaw.trim();
 
 // Get git hash

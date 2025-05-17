@@ -2,6 +2,14 @@ import { InOutPut } from "freeathome-local-api-client";
 import { CharacteristicValue } from "homebridge";
 
 /**
+ * The current version of the application.
+ *
+ * This constant is used to indicate the build or release version of the app.
+ * In development environments, it may be set to "DEBUG".
+ */
+export const APP_VERSION = "DEBUG";
+
+/**
  * In the local API the system access point UUID is always an empty UUID. Could be extended later to also support the cloud API.
  */
 export const EmptyGuid = "00000000-0000-0000-0000-000000000000";

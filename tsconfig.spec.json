@@ -8,7 +8,8 @@
     "test/**/*.ts",
     "test.ts",
     "eslint.config.mjs",
-    "jasmine.mjs"
+    "jasmine.mjs",
+    "update-version.mjs"
   ],
   "exclude": ["node_modules", "dist"]
 }

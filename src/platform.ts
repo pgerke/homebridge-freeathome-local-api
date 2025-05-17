@@ -84,7 +84,7 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
     public readonly api: API
   ) {
     // log plugin version
-    log.debug("Homebridge free@home Local API Plugin ", APP_VERSION);
+    this.log.debug("Homebridge free@home Local API Plugin ", APP_VERSION);
     this.Service = this.api.hap.Service;
     this.Characteristic = this.api.hap.Characteristic;
     // set maximum reconnection attempt count

@@ -16,7 +16,7 @@ jobs:
       version_changed: ${{ steps.detect_version_change.outputs.version_changed }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Detect version change
         id: detect_version_change
         uses: ./.github/actions/detect-version-change
@@ -28,7 +28,7 @@ jobs:
     if: ${{ needs.check_release_trigger.outputs.version_changed == 'true' && !contains(github.event.head_commit.message, '[skip deploy]') }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Get new version and changelog
         id: extract_version
         uses: ./.github/actions/get-version-and-changelog
@@ -59,7 +59,7 @@ jobs:
       id-token: write
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:

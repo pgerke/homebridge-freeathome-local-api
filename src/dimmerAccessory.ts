@@ -58,8 +58,8 @@ export class DimmerAccessory extends FreeAtHomeAccessory {
       this.accessory.context.channel.outputs[this.dpOutOn].value ?? "0"
     );
     this.stateBrightness = parseInt(
-      this.accessory.context.channel.outputs?.[this.dpOutBrightness]?.value ??
-        this.accessory.context.channel.inputs?.[this.dpInBrightness]?.value ??
+      this.accessory.context.channel.outputs[this.dpOutBrightness].value ??
+        this.accessory.context.channel.inputs[this.dpInBrightness].value ??
         "0"
     );
 

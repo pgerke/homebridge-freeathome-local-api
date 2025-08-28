@@ -2,13 +2,22 @@ import { CharacteristicValue, PlatformAccessory, Service } from "homebridge";
 import { FreeAtHomeAccessory } from "./freeAtHomeAccessory.js";
 import { FreeAtHomeContext } from "./freeAtHomeContext.js";
 import { FreeAtHomeHomebridgePlatform } from "./platform.js";
-import { EmptyGuid, convertToString } from "./util.js";
+import { EmptyGuid, convertToString, getDataPointByPairingID } from "./util.js";
+
+const pidOutOn = 256;
+const pidOutBrightness = 272;
+const pidInOn = 1;
+const pidInBrightness = 17;
 
 /** A dimming actuator accessory.*/
 export class DimmerAccessory extends FreeAtHomeAccessory {
   private readonly service: Service;
   private stateOn: boolean;
   private stateBrightness: number;
+  private readonly dpOutOn: string;
+  private readonly dpOutBrightness: string;
+  private readonly dpInOn: string;
+  private readonly dpInBrightness: string;
 
   /**
    * Constructs a new dimming actuator accessory instance.
@@ -21,13 +30,36 @@ export class DimmerAccessory extends FreeAtHomeAccessory {
   ) {
     super(platform, accessory);
 
+    // Resolve data points
+    if (
+      !this.accessory.context.channel.outputs ||
+      !this.accessory.context.channel.inputs
+    )
+      throw new Error("Channel lacks expected input or output data points.");
+    this.dpOutOn = getDataPointByPairingID(
+      this.accessory.context.channel.outputs,
+      pidOutOn
+    );
+    this.dpOutBrightness = getDataPointByPairingID(
+      this.accessory.context.channel.outputs,
+      pidOutBrightness
+    );
+    this.dpInOn = getDataPointByPairingID(
+      this.accessory.context.channel.inputs,
+      pidInOn
+    );
+    this.dpInBrightness = getDataPointByPairingID(
+      this.accessory.context.channel.inputs,
+      pidInBrightness
+    );
+
     // set initial state
     this.stateOn = !!parseInt(
-      this.accessory.context.channel.outputs?.odp0000.value ?? "0"
+      this.accessory.context.channel.outputs[this.dpOutOn].value ?? "0"
     );
     this.stateBrightness = parseInt(
-      this.accessory.context.channel.outputs?.odp0001.value ??
-        this.accessory.context.channel.inputs?.idp0002.value ??
+      this.accessory.context.channel.outputs[this.dpOutBrightness].value ??
+        this.accessory.context.channel.inputs[this.dpInBrightness].value ??
         "0"
     );
 
@@ -66,7 +98,7 @@ export class DimmerAccessory extends FreeAtHomeAccessory {
       EmptyGuid,
       this.accessory.context.deviceSerial,
       this.accessory.context.channelId,
-      "idp0000",
+      this.dpInOn,
       value ? "1" : "0"
     );
 
@@ -92,7 +124,7 @@ export class DimmerAccessory extends FreeAtHomeAccessory {
       EmptyGuid,
       this.accessory.context.deviceSerial,
       this.accessory.context.channelId,
-      "idp0002",
+      this.dpInBrightness,
       convertToString(value)
     );
   }
@@ -100,7 +132,7 @@ export class DimmerAccessory extends FreeAtHomeAccessory {
   public override updateDatapoint(datapoint: string, value: string): void {
     // ignore unknown data points
     switch (datapoint) {
-      case "odp0000":
+      case this.dpOutOn:
         this.stateOn = !!parseInt(value);
         // do the update
         this.doUpdateDatapoint(
@@ -110,7 +142,7 @@ export class DimmerAccessory extends FreeAtHomeAccessory {
           this.stateOn
         );
         return;
-      case "odp0001":
+      case this.dpOutBrightness:
         // Do NOT set brightness to 0, otherwise when turning the dimmer back on, brightness will be 100%.
         if (value === "0") return;
 

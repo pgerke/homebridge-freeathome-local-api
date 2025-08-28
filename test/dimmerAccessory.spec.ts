@@ -21,7 +21,24 @@ describe("Dimmer Accessory", () => {
   let platformAccessory: PlatformAccessory<FreeAtHomeContext>;
 
   beforeEach(() => {
-    channel = {};
+    channel = {
+      inputs: {
+        idp1234: {
+          pairingID: 1,
+        },
+        idp5678: {
+          pairingID: 17,
+        },
+      },
+      outputs: {
+        odp1234: {
+          pairingID: 256,
+        },
+        odp5678: {
+          pairingID: 272,
+        },
+      },
+    };
     device = {};
     platform = new MockFreeAtHomeHomebridgePlatform();
     platformAccessory = createPlatformAccessory("Dimmer Accessory");
@@ -34,6 +51,22 @@ describe("Dimmer Accessory", () => {
   });
   afterEach(() => {
     platform.resetLoggerCalls();
+  });
+
+  it("should throw if expected output data points are missing on channel", () => {
+    channel.outputs = undefined;
+
+    expect(() => new DimmerAccessory(platform, platformAccessory)).toThrowError(
+      "Channel lacks expected input or output data points."
+    );
+  });
+
+  it("should throw if expected input data points are missing on channel", () => {
+    channel.inputs = undefined;
+
+    expect(() => new DimmerAccessory(platform, platformAccessory)).toThrowError(
+      "Channel lacks expected input or output data points."
+    );
   });
 
   it("should be created with default state", async () => {
@@ -52,20 +85,18 @@ describe("Dimmer Accessory", () => {
     expect(await characteristicBrightness.handleGetRequest()).toBe(0);
   });
 
-  it("should be created with non-default state 1/2", async () => {
+  it("should be created with non-default state 1/3", async () => {
     channel.outputs = {
-      odp0000: {
+      odp1234: {
         value: "1",
+        pairingID: 256,
       },
-      odp0001: {
+      odp5678: {
         value: "20",
+        pairingID: 272,
       },
     };
-    channel.inputs = {
-      idp0002: {
-        value: "50",
-      },
-    };
+    channel.inputs!.idp5678.value = "50";
     const accessory = new DimmerAccessory(platform, platformAccessory);
     expect(accessory).toBeTruthy();
     const instance = accessory as unknown as {
@@ -81,12 +112,9 @@ describe("Dimmer Accessory", () => {
     expect(await characteristicBrightness.handleGetRequest()).toBe(20);
   });
 
-  it("should be created with non-default state 2/2", async () => {
-    channel.inputs = {
-      idp0002: {
-        value: "20",
-      },
-    };
+  it("should be created with non-default state 2/3", async () => {
+    channel.outputs!.odp5678.value = undefined;
+    channel.inputs!.idp5678.value = "20";
     const accessory = new DimmerAccessory(platform, platformAccessory);
     expect(accessory).toBeTruthy();
     const instance = accessory as unknown as {
@@ -100,6 +128,24 @@ describe("Dimmer Accessory", () => {
     );
     expect(await characteristicOn.handleGetRequest()).toBeFalse();
     expect(await characteristicBrightness.handleGetRequest()).toBe(20);
+  });
+
+  it("should be created with non-default state 3/3", async () => {
+    channel.outputs!.odp5678.value = undefined;
+    channel.inputs!.idp5678.value = undefined;
+    const accessory = new DimmerAccessory(platform, platformAccessory);
+    expect(accessory).toBeTruthy();
+    const instance = accessory as unknown as {
+      service: Service;
+    };
+    const characteristicOn = instance.service.getCharacteristic(
+      accessory.platform.Characteristic.On
+    );
+    const characteristicBrightness = instance.service.getCharacteristic(
+      accessory.platform.Characteristic.Brightness
+    );
+    expect(await characteristicOn.handleGetRequest()).toBeFalse();
+    expect(await characteristicBrightness.handleGetRequest()).toBe(0);
   });
 
   it("should not handle a request to set On characteristic if the value has not changed", async () => {
@@ -117,14 +163,8 @@ describe("Dimmer Accessory", () => {
   });
 
   it("should handle request to set On characteristic to true if the value has changed", async () => {
-    channel.outputs = {
-      odp0000: {
-        value: "0",
-      },
-      odp0001: {
-        value: "20",
-      },
-    };
+    channel.outputs!.odp1234.value = "0";
+    channel.outputs!.odp5678.value = "20";
     const accessory = new DimmerAccessory(platform, platformAccessory);
     const instance = accessory as unknown as {
       service: Service;
@@ -142,7 +182,7 @@ describe("Dimmer Accessory", () => {
       EmptyGuid,
       "ABB7xxxxxxxx",
       "ch1234",
-      "idp0000",
+      "idp1234",
       "1"
     );
     // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -153,14 +193,8 @@ describe("Dimmer Accessory", () => {
   });
 
   it("should handle request to set On characteristic to false if the value has changed", async () => {
-    channel.outputs = {
-      odp0000: {
-        value: "1",
-      },
-      odp0001: {
-        value: "20",
-      },
-    };
+    channel.outputs!.odp1234.value = "1";
+    channel.outputs!.odp5678.value = "20";
     const accessory = new DimmerAccessory(platform, platformAccessory);
     const instance = accessory as unknown as {
       service: Service;
@@ -176,7 +210,7 @@ describe("Dimmer Accessory", () => {
       EmptyGuid,
       "ABB7xxxxxxxx",
       "ch1234",
-      "idp0000",
+      "idp1234",
       "0"
     );
     // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -215,7 +249,7 @@ describe("Dimmer Accessory", () => {
       EmptyGuid,
       "ABB7xxxxxxxx",
       "ch1234",
-      "idp0002",
+      "idp5678",
       "100"
     );
     // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -264,7 +298,7 @@ describe("Dimmer Accessory", () => {
       accessory.platform.Characteristic.On
     );
     expect(await characteristic.handleGetRequest()).toBeFalse();
-    accessory.updateDatapoint("odp0000", "1");
+    accessory.updateDatapoint("odp1234", "1");
     expect(spy).toHaveBeenCalledWith(
       "Dimmer Accessory",
       instance.service,
@@ -289,7 +323,7 @@ describe("Dimmer Accessory", () => {
       accessory.platform.Characteristic.Brightness
     );
     expect(await characteristic.handleGetRequest()).toBe(0);
-    accessory.updateDatapoint("odp0001", "50");
+    accessory.updateDatapoint("odp5678", "50");
     expect(spy).toHaveBeenCalledWith(
       "Dimmer Accessory",
       instance.service,
@@ -299,14 +333,8 @@ describe("Dimmer Accessory", () => {
   });
 
   it("should not process Brightness update to 0%", async () => {
-    channel.outputs = {
-      odp0000: {
-        value: "1",
-      },
-      odp0001: {
-        value: "20",
-      },
-    };
+    channel.outputs!.odp1234.value = "1";
+    channel.outputs!.odp5678.value = "20";
     const accessory = new DimmerAccessory(platform, platformAccessory);
     const instance = accessory as unknown as {
       service: Service;
@@ -322,7 +350,7 @@ describe("Dimmer Accessory", () => {
       accessory.platform.Characteristic.Brightness
     );
     expect(await characteristic.handleGetRequest()).toBe(20);
-    accessory.updateDatapoint("odp0001", "0");
+    accessory.updateDatapoint("odp5678", "0");
     expect(spy).not.toHaveBeenCalled();
   });
 });

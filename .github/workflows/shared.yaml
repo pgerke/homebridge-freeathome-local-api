@@ -14,10 +14,10 @@ jobs:
     strategy:
       matrix:
         # the Node.js versions to build on
-        node-version: [18, 20, 22]
+        node-version: [20, 22]
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
@@ -34,7 +34,7 @@ jobs:
       - name: Restore dependencies
         run: pnpm install --frozen-lockfile
       - name: Build the project
-        run: pnpm run build
+        run: pnpm build
         env:
           CI: true
       - name: Upload artifacts
@@ -51,10 +51,10 @@ jobs:
     strategy:
       matrix:
         # the Node.js versions to build on
-        node-version: [18, 20, 22]
+        node-version: [20, 22]
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
@@ -73,7 +73,7 @@ jobs:
       - name: Patch homebridge package
         run: node patch-homebridge-exports.mjs
       - name: Run linter
-        run: pnpm run lint
+        run: pnpm lint
 
   audit:
     name: Audit
@@ -81,7 +81,7 @@ jobs:
     needs: cache_dependencies
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
       - name: Restore pnpm store
@@ -103,10 +103,10 @@ jobs:
     strategy:
       matrix:
         # the Node.js versions to build on
-        node-version: [18, 20, 22]
+        node-version: [20, 22]
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
@@ -125,7 +125,7 @@ jobs:
       - name: Patch homebridge package
         run: node patch-homebridge-exports.mjs
       - name: Run unit test
-        run: pnpm run test:ci
+        run: pnpm test:ci
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -144,9 +144,9 @@ jobs:
     needs: test
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Download artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: Coverage Node 22
           path: "./coverage/"
@@ -167,7 +167,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
       - name: Run Gitleaks Check

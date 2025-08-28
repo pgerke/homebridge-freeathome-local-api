@@ -52,6 +52,22 @@ const configuration: Configuration = {
             functionID: "12",
             floor: "1",
             room: "1",
+            outputs: {
+              odp0000: {
+                pairingID: 256,
+              },
+              odp0001: {
+                pairingID: 272,
+              },
+            },
+            inputs: {
+              idp0000: {
+                pairingID: 1,
+              },
+              idp0001: {
+                pairingID: 17,
+              },
+            },
           },
         },
       },
@@ -117,6 +133,22 @@ const configuration: Configuration = {
             functionID: "12",
             floor: "1",
             room: "1",
+            outputs: {
+              odp0000: {
+                pairingID: 256,
+              },
+              odp0001: {
+                pairingID: 272,
+              },
+            },
+            inputs: {
+              idp0000: {
+                pairingID: 1,
+              },
+              idp0001: {
+                pairingID: 17,
+              },
+            },
           },
           ch0005: {
             functionID: "9",

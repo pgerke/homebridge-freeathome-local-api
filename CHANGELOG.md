@@ -5,11 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+## [1.16.0](https://github.com/pgerke/homebridge-freeathome-local-api/releases/tag/1.15.0) - 28.08.2025
 
 ### Fixed
 
 - [#180](https://github.com/pgerke/homebridge-freeathome-local-api/issues/180): Dimmer accessories will now resolve datapoints from pairing IDs
+- [#185](https://github.com/pgerke/homebridge-freeathome-local-api/issues/185): Release job will not run if the PR was closed without merge
+
+### Changed
+
+- NO TICKET: Bump dependencies
 
 ## [1.15.0](https://github.com/pgerke/homebridge-freeathome-local-api/releases/tag/1.15.0) - 23.07.2025
 

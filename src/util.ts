@@ -7,7 +7,7 @@ import { CharacteristicValue } from "homebridge";
  * This constant is used to indicate the build or release version of the app.
  * In development environments, it may be set to "DEBUG".
  */
-export const APP_VERSION = "v1.15.1-pre.0-6eeecf4";
+export const APP_VERSION = "DEBUG";
 
 /**
  * In the local API the system access point UUID is always an empty UUID. Could be extended later to also support the cloud API.

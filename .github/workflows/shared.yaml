@@ -14,7 +14,7 @@ jobs:
     strategy:
       matrix:
         # the Node.js versions to build on
-        node-version: [18, 20, 22]
+        node-version: [20, 22]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
@@ -34,7 +34,7 @@ jobs:
       - name: Restore dependencies
         run: pnpm install --frozen-lockfile
       - name: Build the project
-        run: pnpm run build
+        run: pnpm build
         env:
           CI: true
       - name: Upload artifacts
@@ -51,7 +51,7 @@ jobs:
     strategy:
       matrix:
         # the Node.js versions to build on
-        node-version: [18, 20, 22]
+        node-version: [20, 22]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
@@ -73,7 +73,7 @@ jobs:
       - name: Patch homebridge package
         run: node patch-homebridge-exports.mjs
       - name: Run linter
-        run: pnpm run lint
+        run: pnpm lint
 
   audit:
     name: Audit
@@ -103,7 +103,7 @@ jobs:
     strategy:
       matrix:
         # the Node.js versions to build on
-        node-version: [18, 20, 22]
+        node-version: [20, 22]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
@@ -125,7 +125,7 @@ jobs:
       - name: Patch homebridge package
         run: node patch-homebridge-exports.mjs
       - name: Run unit test
-        run: pnpm run test:ci
+        run: pnpm test:ci
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:

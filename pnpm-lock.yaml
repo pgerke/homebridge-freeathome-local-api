@@ -15,8 +15,8 @@ importers:
         specifier: ^7.8.2
         version: 7.8.2
       undici:
-        specifier: <7.13.0
-        version: 7.12.0
+        specifier: ^7.15.0
+        version: 7.15.0
     devDependencies:
       '@eslint/eslintrc':
         specifier: ^3.3.1
@@ -2083,8 +2083,8 @@ packages:
   undici-types@6.21.0:
     resolution: {integrity: sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ==}
 
-  undici@7.12.0:
-    resolution: {integrity: sha512-GrKEsc3ughskmGA9jevVlIOPMiiAHJ4OFUtaAH+NhfTUSiZ1wMPIQqQvAJUrJspFXJt3EBWgpAeoHEDVT1IBug==}
+  undici@7.15.0:
+    resolution: {integrity: sha512-7oZJCPvvMvTd0OlqWsIxTuItTpJBpU1tcbVl24FMn3xt3+VSunwUasmfPJRE57oNO1KsZ4PgA1xTdAX4hq8NyQ==}
     engines: {node: '>=20.18.1'}
 
   universalify@2.0.1:
@@ -4468,7 +4468,7 @@ snapshots:
 
   undici-types@6.21.0: {}
 
-  undici@7.12.0: {}
+  undici@7.15.0: {}
 
   universalify@2.0.1: {}
 

@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - NO TICKET: Bump dependencies
+- NO TICKET: Drop support for Node 18
 
 ## [1.15.0](https://github.com/pgerke/homebridge-freeathome-local-api/releases/tag/1.15.0) - 23.07.2025
 

@@ -77,7 +77,7 @@ jobs:
       - name: Restore dependencies
         run: pnpm install --frozen-lockfile
       - name: Build the project
-        run: pnpm run build
+        run: pnpm build
         env:
           CI: true
       - name: Publish to npmjs.org

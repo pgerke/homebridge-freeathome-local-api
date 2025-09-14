@@ -242,6 +242,7 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
       // Filter unsupported devices by serial range
       if (
         !serial.startsWith("ABB") && // free@home default
+        !serial.startsWith("0007") && // new free@home devices
         !serial.startsWith("E11") && // alarm services
         !serial.startsWith("7EB1") && // weather station
         !serial.startsWith("FFFF480") // Scenes
@@ -393,6 +394,7 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
     switch (functionID.toUpperCase() as FunctionID) {
       case FunctionID.FID_SWITCH_SENSOR:
       case FunctionID.FID_DIMMING_SENSOR:
+      case FunctionID.FID_DES_DOOR_RINGING_SENSOR:
         this.fahAccessories.set(
           `${serial}_${channelId}`,
           new SwitchSensorAccessory(this, accessory)
@@ -406,6 +408,7 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
         );
         return;
       case FunctionID.FID_ROOM_TEMPERATURE_CONTROLLER_MASTER_WITHOUT_FAN:
+      case FunctionID.FID_PANEL_ROOM_TEMPERATURE_CONTROLLER_MASTER_WITHOUT_FAN:
         this.fahAccessories.set(
           `${serial}_${channelId}`,
           new RoomTemperatureControllerAccessory(this, accessory)
@@ -465,6 +468,7 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
         return;
       case FunctionID.FID_WINDOW_DOOR_SENSOR:
       case FunctionID.FID_WINDOW_DOOR_POSITION_SENSOR:
+      case FunctionID.FID_WELCOME_IP_DOOR_OPEN_SENSOR:
         this.fahAccessories.set(
           `${serial}_${channelId}`,
           new ContactSensorAccessory(this, accessory)

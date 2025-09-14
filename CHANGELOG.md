@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.17.0](https://github.com/pgerke/homebridge-freeathome-local-api/releases/tag/1.17.0) - 14.09.2025
 
+### Added
+
+- [#186](https://github.com/pgerke/homebridge-freeathome-local-api/issues/186): Support SmartTouch 10" Panel device
+
 ### Changed
 
 - NO TICKET: Bump dependencies

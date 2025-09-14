@@ -74,6 +74,31 @@ A sample configuration section for the plugin with ignored channels might look l
 }
 ```
 
+## Allowing Devices and Channels
+
+If you want to restrict which devices or channels are exposed to Apple Home, you can use the allow list. This is useful if you only want to make certain devices or channels available, while hiding all others — even if they are otherwise supported.
+
+The format for an allowed channel is `{DeviceSerial}/{Channel}`. For example, to allow only channel `ch0001` of the device with the serial `ABB700123456`, add `ABB700123456/ch0001` to the allowed channel list. To allow all channels of a device, use an asterisk for the channel part: `ABB700123456/*`.
+
+If the allow list is set, **only** the devices and channels specified in the list will be exposed. All others will be ignored, even if they are supported and not in the ignore list. You can still use the ignore list to ignore certain channels for devices listed on the allow list.
+
+A sample configuration section for the plugin with allowed channels might look like this:
+
+```json
+{
+  "name": "My free@home Setup",
+  "host": "sysap.home.net",
+  "user": "12345678-9ACB-DEF0-1234-56789ABCDEF0",
+  "password": "s3cre3tP4ssw0rt",
+  "tlsEnabled": false,
+  "verboseErrors": false,
+  "experimental": false,
+  "allowedChannels": ["ABB700123456/*"],
+  "ignoredChannels": ["ABB700123456/ch0010"],
+  "platform": "FreeAtHomeLocalApi"
+}
+```
+
 ## Type Mappings
 
 Starting with plugin version v1.3.0, you can add type mappings to the config file to determine how certain devices are displayed in Apple Home. For example, a free@home binary switch actuator might be mapped to a light bulb, a regular switch or an outlet. Unfortunately, there is no way to determine the type of the connected device of a switch programmatically. So a type mapping is needed to advise the plugin to use another than the default service.

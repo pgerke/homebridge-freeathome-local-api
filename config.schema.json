@@ -78,6 +78,15 @@
         "required": false,
         "default": false
       },
+      "allowedChannels": {
+        "title": "Allowed Channels",
+        "description": "Determines channels that shall be allowed during device discovery. Only accessories for allowed channels will be configured. Use the pattern '{DeviceSerial}/{Channel}' to allow a specific channel, or '{DeviceSerial}/*' to allow all channels provided by the device. Check the README file details!",
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "required": false
+      },
       "ignoredChannels": {
         "title": "Ignored Channels",
         "description": "Determines channels that shall be ignored during device discovery. No accessory will be configured for an ignored channel. Use the pattern '{DeviceSerial}/{Channel}' to ignore a specific channel, or '{DeviceSerial}/*' to ignore all channels provided by the device. Check the README file details!",

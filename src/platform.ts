@@ -212,6 +212,21 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
       return;
     }
 
+    // Remove cached disallowed devices
+    if (
+      !this.isAllowedChannel(
+        accessory.context.deviceSerial,
+        accessory.context.channelId
+      )
+    ) {
+      this.removedAccessories.push(accessory);
+      this.log.warn(
+        "Removing accessory from cache (channel not on allow list):",
+        accessory.displayName
+      );
+      return;
+    }
+
     // Remove cached ignored devices
     if (
       this.isIgnoredChannel(
@@ -363,6 +378,14 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
       return false;
     }
 
+    // Filter allowed devices
+    if (!this.isAllowedChannel(serial, channelId)) {
+      this.log.debug(
+        `Ignored ${serial} (${channelId}): Channel is not listed on the allow list.`
+      );
+      return false;
+    }
+
     // Filter ignored devices
     if (this.isIgnoredChannel(serial, channelId)) {
       this.log.debug(
@@ -509,6 +532,16 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
           `${serial} (${channelId}): Cannot configure accessory for FunctionID '${functionID}'!`
         );
     }
+  }
+
+  private isAllowedChannel(device: string, channel: string): boolean {
+    if (!this.config.allowedChannels) return true;
+
+    return (this.config.allowedChannels as Array<string>).some(
+      (e) =>
+        e.toUpperCase() === `${device.toUpperCase()}/*` ||
+        e.toUpperCase() === `${device.toUpperCase()}/${channel.toUpperCase()}`
+    );
   }
 
   private isIgnoredChannel(device: string, channel: string): boolean {

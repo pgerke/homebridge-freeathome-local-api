@@ -67,6 +67,9 @@ export enum FunctionID {
   // FID_DIMMING_SENSOR_PUSHBUTTON_TYPE2 = "101A",
   /** A wireless dimming actuator */
   FID_DIMMING_ACTUATOR_TYPE0 = "1810",
+  FID_DES_DOOR_RINGING_SENSOR = "1F",
+  FID_WELCOME_IP_DOOR_OPEN_SENSOR = "5E",
+  FID_PANEL_ROOM_TEMPERATURE_CONTROLLER_MASTER_WITHOUT_FAN = "C1",
 }
 
 /** Contains the list of function IDs that are only experimentally supported by the plugin */
@@ -78,4 +81,7 @@ export const experimentallySupportedFunctionIDs: Array<FunctionID> = [
   FunctionID.FID_SCENE_SENSOR,
   FunctionID.FID_STAIRCASE_LIGHT_SENSOR,
   FunctionID.FID_TRIGGER,
+  FunctionID.FID_DES_DOOR_RINGING_SENSOR,
+  FunctionID.FID_WELCOME_IP_DOOR_OPEN_SENSOR,
+  FunctionID.FID_PANEL_ROOM_TEMPERATURE_CONTROLLER_MASTER_WITHOUT_FAN,
 ];

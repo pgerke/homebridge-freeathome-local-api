@@ -445,6 +445,37 @@ describe("free@home Homebridge Platform", () => {
     expect(platform.accessories.length).toBe(0);
   });
 
+  it("should configure only allowed accessory", () => {
+    config.allowedChannels = ["ABB700000001/*", "ABB700000002/ch0000"];
+    const platform = new FreeAtHomeHomebridgePlatform(logger, config, api);
+    expect(platform.accessories.length).toBe(0);
+    const platformAccessory = createPlatformAccessory("Test Accessory");
+    platformAccessory.context = {
+      channel: {},
+      channelId: "ch0005",
+      device: {},
+      deviceSerial: "ABB700000002",
+    };
+    platform.configureAccessory(platformAccessory);
+    expect(platform.accessories.length).toBe(0);
+  });
+
+  it("should not configure ignored channel from allowed device", () => {
+    config.allowedChannels = ["ABB700000001/*"];
+    config.ignoredChannels = ["ABB700000001/ch0005"];
+    const platform = new FreeAtHomeHomebridgePlatform(logger, config, api);
+    expect(platform.accessories.length).toBe(0);
+    const platformAccessory = createPlatformAccessory("Test Accessory");
+    platformAccessory.context = {
+      channel: {},
+      channelId: "ch0005",
+      device: {},
+      deviceSerial: "ABB700000002",
+    };
+    platform.configureAccessory(platformAccessory);
+    expect(platform.accessories.length).toBe(0);
+  });
+
   it("should not configure ignored accessory", () => {
     const platform = new FreeAtHomeHomebridgePlatform(logger, config, api);
     expect(platform.accessories.length).toBe(0);
@@ -497,6 +528,22 @@ describe("free@home Homebridge Platform", () => {
     spyOn(platform.sysap, "getConfiguration").and.resolveTo(configuration);
     await instance.discoverDevices();
     expect(instance.fahAccessories.size).toBe(15);
+  });
+
+  it("should discover devices from the system access point with allow list", async () => {
+    config.allowedChannels = ["ABB700000001/*", "ABB700000002/ch0000"];
+
+    const platform = new FreeAtHomeHomebridgePlatform(logger, config, api);
+    const instance = platform as unknown as {
+      readonly fahAccessories: Map<string, FreeAtHomeAccessory>;
+      readonly sysap: {
+        readonly logger: FahLogger;
+      };
+      discoverDevices(): Promise<void>;
+    };
+    spyOn(platform.sysap, "getConfiguration").and.resolveTo(configuration);
+    await instance.discoverDevices();
+    expect(instance.fahAccessories.size).toBe(3);
   });
 
   it("should discover devices from the system access point without ignore list", async () => {

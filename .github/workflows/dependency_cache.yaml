@@ -14,12 +14,12 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
       - name: Setup Node.js
         uses: actions/setup-node@v5
         with:
           node-version: lts/*
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
       - name: Get pnpm store path
         id: pnpm-store-path
         run: echo "store-path=$(pnpm store path)" >> $GITHUB_OUTPUT

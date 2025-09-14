@@ -18,12 +18,12 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v5
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
       - name: Restore pnpm store
         uses: actions/cache@v4
         with:
@@ -55,12 +55,12 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v5
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
       - name: Restore pnpm store
         uses: actions/cache@v4
         with:
@@ -107,12 +107,12 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v5
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
       - name: Restore pnpm store
         uses: actions/cache@v4
         with:

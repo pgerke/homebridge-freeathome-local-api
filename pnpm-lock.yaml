@@ -59,7 +59,7 @@ importers:
         version: 2.32.0(@typescript-eslint/parser@8.43.0(eslint@9.35.0)(typescript@5.9.2))(eslint@9.35.0)
       eslint-plugin-n:
         specifier: ^17.22.0
-        version: 17.22.0(eslint@9.35.0)(typescript@5.9.2)
+        version: 17.23.0(eslint@9.35.0)(typescript@5.9.2)
       eslint-plugin-prettier:
         specifier: ^5.5.4
         version: 5.5.4(eslint-config-prettier@10.1.8(eslint@9.35.0))(eslint@9.35.0)(prettier@3.6.2)
@@ -627,8 +627,8 @@ packages:
   balanced-match@1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
 
-  baseline-browser-mapping@2.8.3:
-    resolution: {integrity: sha512-mcE+Wr2CAhHNWxXN/DdTI+n4gsPc5QpXpWnyCQWiQYIYZX+ZMJ8juXZgjRa/0/YPJo/NSsgW15/YgmI4nbysYw==}
+  baseline-browser-mapping@2.8.4:
+    resolution: {integrity: sha512-L+YvJwGAgwJBV1p6ffpSTa2KRc69EeeYGYjRVWKs0GKrK+LON0GC0gV+rKSNtALEDvMDqkvCFq9r1r94/Gjwxw==}
     hasBin: true
 
   binary-extensions@2.3.0:
@@ -937,8 +937,8 @@ packages:
       '@typescript-eslint/parser':
         optional: true
 
-  eslint-plugin-n@17.22.0:
-    resolution: {integrity: sha512-+YQ4dW8gg3eVZ3A8lL6zugEmA+Le5IEpCXsI8vKvDvSIB8gEh2N3PKqDwI+J8uLb7nphTJkwiv2e5OlnEDNvpQ==}
+  eslint-plugin-n@17.23.0:
+    resolution: {integrity: sha512-aPePGxUr5LezcXmMRBF83eK1MmqUYY1NdLdHC+jdpfc5b98eL7yDXY20gXJ6DcTxrHBhrLsfYYqo7J+m0h9YXQ==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
     peerDependencies:
       eslint: '>=8.23.0'
@@ -2749,7 +2749,7 @@ snapshots:
 
   balanced-match@1.0.2: {}
 
-  baseline-browser-mapping@2.8.3: {}
+  baseline-browser-mapping@2.8.4: {}
 
   binary-extensions@2.3.0: {}
 
@@ -2775,7 +2775,7 @@ snapshots:
 
   browserslist@4.26.0:
     dependencies:
-      baseline-browser-mapping: 2.8.3
+      baseline-browser-mapping: 2.8.4
       caniuse-lite: 1.0.30001741
       electron-to-chromium: 1.5.218
       node-releases: 2.0.21
@@ -3180,7 +3180,7 @@ snapshots:
       - eslint-import-resolver-webpack
       - supports-color
 
-  eslint-plugin-n@17.22.0(eslint@9.35.0)(typescript@5.9.2):
+  eslint-plugin-n@17.23.0(eslint@9.35.0)(typescript@5.9.2):
     dependencies:
       '@eslint-community/eslint-utils': 4.9.0(eslint@9.35.0)
       enhanced-resolve: 5.18.3

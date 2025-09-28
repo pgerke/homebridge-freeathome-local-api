@@ -32,7 +32,7 @@ export class ContactSensorAccessory extends FreeAtHomeAccessory {
     );
 
     // set initial state
-    this.contactOpen = !!parseInt(
+    this.contactOpen = !!Number.parseInt(
       this.accessory.context.channel.outputs[this.dpOpenClosed].value ?? "0"
     );
 
@@ -56,7 +56,7 @@ export class ContactSensorAccessory extends FreeAtHomeAccessory {
     if (datapoint !== this.dpOpenClosed) return;
 
     // do the update
-    this.contactOpen = !!parseInt(value);
+    this.contactOpen = !!Number.parseInt(value);
 
     this.doUpdateDatapoint(
       "Contact Sensor",

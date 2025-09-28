@@ -1,6 +1,7 @@
 import {
   Channel,
   Configuration,
+  Device,
   Logger as FreeAtHomeLogger,
   SystemAccessPoint,
   WebSocketMessage,
@@ -15,7 +16,7 @@ import {
   Service,
   UnknownContext,
 } from "homebridge";
-import { globalAgent } from "https";
+import { globalAgent } from "node:https";
 import { Subscription } from "rxjs";
 import { Agent, setGlobalDispatcher } from "undici";
 import { WeatherStationBrightnessSensorAccessory } from "./brightnessSensorAccessory.js";
@@ -253,7 +254,7 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
     const config: Configuration = await this.sysap.getConfiguration();
 
     // Enmumerate the devices
-    Object.keys(config[EmptyGuid].devices).forEach((serial: string) => {
+    for (const serial of Object.keys(config[EmptyGuid].devices)) {
       // Filter unsupported devices by serial range
       if (
         !serial.startsWith("ABB") && // free@home default
@@ -263,79 +264,25 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
         !serial.startsWith("FFFF480") // Scenes
         // !serial.startsWith("FFFF4000") // Light groups
       )
-        return;
+        continue;
 
       // Filter devices without channels
       const device = config[EmptyGuid].devices[serial];
-      if (!device.channels) return;
+      if (!device.channels) continue;
 
       // Room and Floor may be defined either on device or on channel level.
       // Here we check if the location is defined on device level.
       const locationConfiguredOnDeviceLevel = !!device.floor && !!device.room;
 
       // Enumerate the channels
-      Object.keys(device.channels).forEach((channelId: string) => {
+      for (const channelId of Object.keys(device.channels)) {
         try {
-          // We are enumerating the keys of the channels object. Neither the channels object nor the channelId can possibly be undefined.
-
-          const channel = device.channels![channelId];
-          if (
-            !this.isViableChannel(
-              serial,
-              channelId,
-              channel,
-              locationConfiguredOnDeviceLevel
-            )
-          )
-            return;
-          // Create or restore the accessory
-          const uuid = this.api.hap.uuid.generate(`${serial}_${channelId}`);
-          let accessory = this.accessories.find((a) => a.UUID === uuid);
-          if (accessory) {
-            // the accessory already exists
-            this.log.info(
-              "Restoring existing accessory from cache:",
-              accessory.displayName
-            );
-            // Update context
-            accessory.context.deviceSerial = serial;
-            accessory.context.device = device;
-            accessory.context.channel = channel;
-            accessory.context.channelId = channelId;
-            this.api.updatePlatformAccessories([accessory]);
-            // it is possible to remove platform accessories at any time using `api.unregisterPlatformAccessories`, eg.:
-            // remove platform accessories when no longer present
-            // this.api.unregisterPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [existingAccessory]);
-            // this.log.info('Removing existing accessory from cache:', existingAccessory.displayName);
-          } else {
-            // the accessory does not yet exist, so we need to create it
-            this.log.info("Adding new accessory:", channel.displayName);
-            // create a new accessory
-            accessory = new this.api.platformAccessory<FreeAtHomeContext>(
-              channel.displayName ?? uuid,
-              uuid
-            );
-            accessory.context.deviceSerial = serial;
-            accessory.context.device = device;
-            accessory.context.channel = channel;
-            accessory.context.channelId = channelId;
-            // link the accessory to your platform
-            this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [
-              accessory,
-            ]);
-          }
-          // This check is used to apply the type guard so the accessory can be used as a free@home accesory without a cast.
-          // Given that the accessory context is constructed in the previous lines, it is impossible for the type check to fail.
-          // Consequently the branch can never be covered and is excluded from the coverage.
-          /* c8 ignore next */
-          if (!isFreeAtHomeAccessory(accessory, this.fahLogger)) return;
-          // create accessory
-          this.createAccessory(
+          this.processChannel(
             serial,
-
-            channel.functionID!, // The functionID is guaranteed to be defined by the isViableChannel function.
+            device,
             channelId,
-            accessory
+            device.channels[channelId],
+            locationConfiguredOnDeviceLevel
           );
         } catch (error) {
           this.log.error(
@@ -343,8 +290,78 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
             error
           );
         }
-      });
-    });
+      }
+    }
+  }
+
+  private processChannel(
+    serial: string,
+    device: Device,
+    channelId: string,
+    channel: Channel,
+    locationConfiguredOnDeviceLevel: boolean
+  ): void {
+    // We are enumerating the keys of the channels object. Neither the channels object nor the channelId can possibly be undefined.
+    if (
+      !this.isViableChannel(
+        serial,
+        channelId,
+        channel,
+        locationConfiguredOnDeviceLevel
+      )
+    )
+      return;
+
+    // Create or restore the accessory
+    const uuid = this.api.hap.uuid.generate(`${serial}_${channelId}`);
+    let accessory = this.accessories.find((a) => a.UUID === uuid);
+    if (accessory) {
+      // the accessory already exists
+      this.log.info(
+        "Restoring existing accessory from cache:",
+        accessory.displayName
+      );
+      // Update context
+      accessory.context.deviceSerial = serial;
+      accessory.context.device = device;
+      accessory.context.channel = channel;
+      accessory.context.channelId = channelId;
+      this.api.updatePlatformAccessories([accessory]);
+      // it is possible to remove platform accessories at any time using `api.unregisterPlatformAccessories`, eg.:
+      // remove platform accessories when no longer present
+      // this.api.unregisterPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [existingAccessory]);
+      // this.log.info('Removing existing accessory from cache:', existingAccessory.displayName);
+    } else {
+      // the accessory does not yet exist, so we need to create it
+      this.log.info("Adding new accessory:", channel.displayName);
+      // create a new accessory
+      accessory = new this.api.platformAccessory<FreeAtHomeContext>(
+        channel.displayName ?? uuid,
+        uuid
+      );
+      accessory.context.deviceSerial = serial;
+      accessory.context.device = device;
+      accessory.context.channel = channel;
+      accessory.context.channelId = channelId;
+      // link the accessory to your platform
+      this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [
+        accessory,
+      ]);
+    }
+
+    // This check is used to apply the type guard so the accessory can be used as a free@home accesory without a cast.
+    // Given that the accessory context is constructed in the previous lines, it is impossible for the type check to fail.
+    // Consequently the branch can never be covered and is excluded from the coverage.
+    /* c8 ignore next */
+    if (!isFreeAtHomeAccessory(accessory, this.fahLogger)) return;
+    // create accessory
+    this.createAccessory(
+      serial,
+
+      channel.functionID!, // The functionID is guaranteed to be defined by the isViableChannel function.
+      channelId,
+      accessory
+    );
   }
 
   private isViableChannel(
@@ -563,7 +580,7 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
     // Get data point identifiers
     const datapoints = Object.keys(message[EmptyGuid].datapoints);
 
-    datapoints.forEach((datapoint) => {
+    for (const datapoint of datapoints) {
       // Ignore data points that have an unexpected format
       const match = /^([a-z0-9]{12})\/(ch[\da-f]{4})\/([io]dp\d{4})$/i.exec(
         datapoint
@@ -577,7 +594,7 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
       this.fahAccessories
         .get(`${match[1]}_${match[2]}`)
         ?.updateDatapoint(match[3], message[EmptyGuid].datapoints[datapoint]);
-    });
+    }
   }
 
   private resolveAccessoryType(device: string, channel: string): AccessoryType {

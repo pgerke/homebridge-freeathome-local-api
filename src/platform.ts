@@ -489,9 +489,14 @@ export class FreeAtHomeHomebridgePlatform implements DynamicPlatformPlugin {
           new SceneSensorAccessory(this, accessory)
         );
         return;
+      case FunctionID.FID_WELCOME_IP_DOOR_OPEN_SENSOR:
+        this.fahAccessories.set(
+          `${serial}_${channelId}`,
+          new ContactSensorAccessory(this, accessory, 2)
+        );
+        return;
       case FunctionID.FID_WINDOW_DOOR_SENSOR:
       case FunctionID.FID_WINDOW_DOOR_POSITION_SENSOR:
-      case FunctionID.FID_WELCOME_IP_DOOR_OPEN_SENSOR:
         this.fahAccessories.set(
           `${serial}_${channelId}`,
           new ContactSensorAccessory(this, accessory)

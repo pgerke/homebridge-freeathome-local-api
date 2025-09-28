@@ -1,17 +1,14 @@
 name: Release
 
 on:
-  pull_request:
-    types:
-      - closed
+  push:
     branches:
       - main
 
 jobs:
   check_release_trigger:
-    name: Check if PR will trigger a Release
+    name: Check if push will trigger a Release
     runs-on: ubuntu-latest
-    if: ${{ github.event.pull_request.merged == true }}
     outputs:
       version_changed: ${{ steps.detect_version_change.outputs.version_changed }}
     steps:

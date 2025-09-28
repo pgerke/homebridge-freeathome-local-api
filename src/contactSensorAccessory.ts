@@ -4,8 +4,6 @@ import { FreeAtHomeContext } from "./freeAtHomeContext.js";
 import { FreeAtHomeHomebridgePlatform } from "./platform.js";
 import { getDataPointByPairingID } from "./util.js";
 
-const pidOpenClosed = 53;
-
 /** A contact sensor accessory. */
 export class ContactSensorAccessory extends FreeAtHomeAccessory {
   private readonly service: Service;
@@ -19,7 +17,8 @@ export class ContactSensorAccessory extends FreeAtHomeAccessory {
    */
   constructor(
     readonly platform: FreeAtHomeHomebridgePlatform,
-    readonly accessory: PlatformAccessory<FreeAtHomeContext>
+    readonly accessory: PlatformAccessory<FreeAtHomeContext>,
+    readonly pidOpenClosed: number = 53
   ) {
     super(platform, accessory);
 
@@ -33,7 +32,7 @@ export class ContactSensorAccessory extends FreeAtHomeAccessory {
     );
 
     // set initial state
-    this.contactOpen = !!parseInt(
+    this.contactOpen = !!Number.parseInt(
       this.accessory.context.channel.outputs[this.dpOpenClosed].value ?? "0"
     );
 
@@ -57,7 +56,7 @@ export class ContactSensorAccessory extends FreeAtHomeAccessory {
     if (datapoint !== this.dpOpenClosed) return;
 
     // do the update
-    this.contactOpen = !!parseInt(value);
+    this.contactOpen = !!Number.parseInt(value);
 
     this.doUpdateDatapoint(
       "Contact Sensor",

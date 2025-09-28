@@ -8,5 +8,9 @@
   "yaml.schemas": {
     "file:///c%3A/Users/Philip/.vscode/extensions/atlassian.atlascode-2.10.7/resources/schemas/pipelines-schema.json": "bitbucket-pipelines.yml",
     "https://json.schemastore.org/github-workflow.json": "file:///c%3A/git/homebridge-freeathome-local-api/.github/workflows/build.yml"
+  },
+  "sonarlint.connectedMode.project": {
+    "connectionId": "pgerke",
+    "projectKey": "pgerke_homebridge-freeathome-local-api"
   }
 }

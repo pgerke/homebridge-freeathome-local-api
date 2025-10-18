@@ -40,7 +40,7 @@ jobs:
           comment-author: "github-actions[bot]"
           body-includes: "**This PR will"
       - name: Comment on PR that a release will be triggered
-        uses: peter-evans/create-or-update-comment@v4
+        uses: peter-evans/create-or-update-comment@v5
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}
           issue-number: ${{ github.event.pull_request.number }}
@@ -72,7 +72,7 @@ jobs:
           comment-author: "github-actions[bot]"
           body-includes: "**This PR will"
       - name: Comment on PR that no release will be triggered
-        uses: peter-evans/create-or-update-comment@v4
+        uses: peter-evans/create-or-update-comment@v5
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}
           issue-number: ${{ github.event.pull_request.number }}

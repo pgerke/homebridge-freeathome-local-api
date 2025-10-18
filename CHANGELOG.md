@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.18.0](https://github.com/pgerke/homebridge-freeathome-local-api/releases/tag/1.18.0) - 18.10.2025
+
+### Changed
+
+- NO TICKET: Bump dependencies
+- [#218](https://github.com/pgerke/homebridge-freeathome-local-api/issues/218): Migrate to trusted publisher
+
 ## [1.17.1](https://github.com/pgerke/homebridge-freeathome-local-api/releases/tag/1.17.1) - 28.09.2025
 
 ### Fixed

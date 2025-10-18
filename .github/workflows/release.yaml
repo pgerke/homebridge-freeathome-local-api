@@ -64,6 +64,8 @@ jobs:
         with:
           node-version: 22
           registry-url: "https://registry.npmjs.org"
+      - name: Upgrade npm
+        run: npm install -g npm@^11.5.1
       - name: Restore pnpm store
         uses: actions/cache@v4
         with:
@@ -81,5 +83,4 @@ jobs:
         run: |
           pnpm publish --access public --tag pre --no-git-checks
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_PROVENANCE: true

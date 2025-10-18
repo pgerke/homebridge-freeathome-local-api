@@ -148,6 +148,20 @@ You can also choose to use TLS, but disable certificate verification by checking
 
 The changelog can be viewed [here](CHANGELOG.md).
 
+## Publishing
+
+This project uses npm Trusted Publisher authentication for secure package publishing. The release process is automated through GitHub Actions and does not require long-lived npm tokens.
+
+### Release Process
+
+1. Update the version in `package.json` and document changes in `CHANGELOG.md`
+2. Create a pull request targeting the `main` branch
+3. Once the PR is reviewed and merged, the release workflow automatically:
+   - Detects the version change
+   - Creates a GitHub release
+   - Builds the project
+   - Publishes to npm using OIDC authentication with provenance
+
 ## I found a bug, what do I do?
 
 I'm happy to hear any feedback regarding the plugin or it's implementation, be it critizism, praise or rants. Please create a [GitHub issue](https://github.com/pgerke/homebridge-freeathome-local-api/issues) or drop me an [email](mailto:info@philipgerke.com) if you would like to contact me.

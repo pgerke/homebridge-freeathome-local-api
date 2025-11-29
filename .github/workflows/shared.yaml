@@ -17,11 +17,11 @@ jobs:
         node-version: [20, 22]
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node-version }}
       - name: Restore pnpm store
@@ -38,7 +38,7 @@ jobs:
         env:
           CI: true
       - name: Upload artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: dist-${{ matrix.node-version }}
           path: dist
@@ -54,11 +54,11 @@ jobs:
         node-version: [20, 22]
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node-version }}
       - name: Restore pnpm store
@@ -81,7 +81,7 @@ jobs:
     needs: cache_dependencies
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
       - name: Restore pnpm store
@@ -106,11 +106,11 @@ jobs:
         node-version: [20, 22]
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node-version }}
       - name: Restore pnpm store
@@ -127,7 +127,7 @@ jobs:
       - name: Run unit test
         run: pnpm test:ci
       - name: Upload artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: Coverage Node ${{ matrix.node-version }}
           path: coverage
@@ -144,9 +144,9 @@ jobs:
     needs: test
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Download artifacts
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           name: Coverage Node 22
           path: "./coverage/"
@@ -167,7 +167,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
       - name: Run Gitleaks Check

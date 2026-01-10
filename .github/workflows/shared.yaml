@@ -14,7 +14,7 @@ jobs:
     strategy:
       matrix:
         # the Node.js versions to build on
-        node-version: [20, 22]
+        node-version: [20, 22, 24]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -51,7 +51,7 @@ jobs:
     strategy:
       matrix:
         # the Node.js versions to build on
-        node-version: [20, 22]
+        node-version: [20, 22, 24]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -103,7 +103,7 @@ jobs:
     strategy:
       matrix:
         # the Node.js versions to build on
-        node-version: [20, 22]
+        node-version: [20, 22, 24]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -148,11 +148,15 @@ jobs:
       - name: Download artifacts
         uses: actions/download-artifact@v7
         with:
-          name: Coverage Node 22
+          name: Coverage Node 24
           path: "./coverage/"
       - name: Extract version
         id: version-extraction
         run: echo "APP_VERSION=$(jq -r .version package.json)" >> "$GITHUB_OUTPUT"
+      - name: Ensure full git history for SonarQube
+        run: |
+          git fetch --unshallow || true
+          git fetch --tags
       - name: SonarQube Scan
         uses: sonarsource/sonarqube-scan-action@master
         env:

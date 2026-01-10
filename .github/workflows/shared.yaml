@@ -14,7 +14,7 @@ jobs:
     strategy:
       matrix:
         # the Node.js versions to build on
-        node-version: [20, 22]
+        node-version: [20, 22, 24]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -25,7 +25,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: Restore pnpm store
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ${{ needs.cache_dependencies.outputs.pnpm-store-path }}
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('pnpm-lock.yaml') }}
@@ -38,7 +38,7 @@ jobs:
         env:
           CI: true
       - name: Upload artifacts
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: dist-${{ matrix.node-version }}
           path: dist
@@ -51,7 +51,7 @@ jobs:
     strategy:
       matrix:
         # the Node.js versions to build on
-        node-version: [20, 22]
+        node-version: [20, 22, 24]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -62,7 +62,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: Restore pnpm store
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ${{ needs.cache_dependencies.outputs.pnpm-store-path }}
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('pnpm-lock.yaml') }}
@@ -85,7 +85,7 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
       - name: Restore pnpm store
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ${{ needs.cache_dependencies.outputs.pnpm-store-path }}
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('pnpm-lock.yaml') }}
@@ -103,7 +103,7 @@ jobs:
     strategy:
       matrix:
         # the Node.js versions to build on
-        node-version: [20, 22]
+        node-version: [20, 22, 24]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -114,7 +114,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: Restore pnpm store
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ${{ needs.cache_dependencies.outputs.pnpm-store-path }}
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('pnpm-lock.yaml') }}
@@ -127,7 +127,7 @@ jobs:
       - name: Run unit test
         run: pnpm test:ci
       - name: Upload artifacts
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: Coverage Node ${{ matrix.node-version }}
           path: coverage
@@ -146,13 +146,17 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v6
       - name: Download artifacts
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
-          name: Coverage Node 22
+          name: Coverage Node 24
           path: "./coverage/"
       - name: Extract version
         id: version-extraction
         run: echo "APP_VERSION=$(jq -r .version package.json)" >> "$GITHUB_OUTPUT"
+      - name: Ensure full git history for SonarQube
+        run: |
+          git fetch --unshallow || true
+          git fetch --tags
       - name: SonarQube Scan
         uses: sonarsource/sonarqube-scan-action@master
         env:

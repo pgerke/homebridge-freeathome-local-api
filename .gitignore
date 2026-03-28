@@ -122,3 +122,4 @@ dist
 
 # SonarQube Scanner
 .scannerwork
+.DS_Store

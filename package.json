@@ -7,7 +7,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/pgerke/homebridge-freeathome-local-api.git"
+    "url": "git+https://github.com/lion-and-bear/homebridge-freeathome-local-api.git"
   },
   "author": {
     "email": "info@philipgerke.com",
@@ -19,7 +19,7 @@
     "url": "https://paypal.me/PhilipGerke"
   },
   "bugs": {
-    "url": "https://github.com/pgerke/homebridge-freeathome-local-api/issues"
+    "url": "https://github.com/lion-and-bear/homebridge-freeathome-local-api/issues"
   },
   "engines": {
     "homebridge": ">=1.8.0 || ^2.0.0-beta.0",

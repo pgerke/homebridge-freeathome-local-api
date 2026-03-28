@@ -10,7 +10,7 @@
     "https://json.schemastore.org/github-workflow.json": "file:///c%3A/git/homebridge-freeathome-local-api/.github/workflows/build.yml"
   },
   "sonarlint.connectedMode.project": {
-    "connectionId": "pgerke",
-    "projectKey": "pgerke_homebridge-freeathome-local-api"
+    "connectionId": "lion-and-bear",
+    "projectKey": "lion-and-bear_homebridge-freeathome-local-api"
   }
 }

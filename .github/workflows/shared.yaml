@@ -136,7 +136,7 @@ jobs:
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          slug: pgerke/homebridge-freeathome-local-api
+          slug: lion-and-bear/homebridge-freeathome-local-api
 
   analysis:
     name: Analyse

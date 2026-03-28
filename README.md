@@ -4,8 +4,8 @@ A Homebridge plugin that allows the user to control BUSCH-JAEGER free@home devic
 
 [![verified-by-homebridge](https://badgen.net/badge/homebridge/verified/purple)](https://github.com/homebridge/homebridge/wiki/Verified-Plugins)
 ![CI](https://img.shields.io/github/actions/workflow/status/lion-and-bear/homebridge-freeathome-local-api/ci.yaml?style=flat-square)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=lion-and-bear_homebridge-freeathome-local-api&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=lion-and-bear_homebridge-freeathome-local-api)
-[![codecov](https://codecov.io/gh/lion-and-bear/homebridge-freeathome-local-api/branch/main/graph/badge.svg?token=V5ICB2MGH0)](https://codecov.io/gh/lion-and-bear/homebridge-freeathome-local-api)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=homebridge-freeathome-local-api&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=homebridge-freeathome-local-api)
+[![codecov](https://codecov.io/gh/lion-and-bear/homebridge-freeathome-local-api/graph/badge.svg?token=isIIARbSmH)](https://codecov.io/gh/lion-and-bear/homebridge-freeathome-local-api)
 ![Dependencies](https://img.shields.io/librariesio/release/npm/homebridge-freeathome-local-api?style=flat-square)
 ![npm](https://img.shields.io/npm/v/homebridge-freeathome-local-api?style=flat-square)
 ![License](https://img.shields.io/github/license/lion-and-bear/homebridge-freeathome-local-api?style=flat-square)

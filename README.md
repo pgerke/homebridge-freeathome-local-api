@@ -3,12 +3,12 @@
 A Homebridge plugin that allows the user to control BUSCH-JAEGER free@home devices using the System Access Point local API.
 
 [![verified-by-homebridge](https://badgen.net/badge/homebridge/verified/purple)](https://github.com/homebridge/homebridge/wiki/Verified-Plugins)
-![CI](https://img.shields.io/github/actions/workflow/status/pgerke/homebridge-freeathome-local-api/ci.yaml?style=flat-square)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=pgerke_homebridge-freeathome-local-api&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=pgerke_homebridge-freeathome-local-api)
-[![codecov](https://codecov.io/gh/pgerke/homebridge-freeathome-local-api/branch/main/graph/badge.svg?token=V5ICB2MGH0)](https://codecov.io/gh/pgerke/homebridge-freeathome-local-api)
+![CI](https://img.shields.io/github/actions/workflow/status/lion-and-bear/homebridge-freeathome-local-api/ci.yaml?style=flat-square)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=homebridge-freeathome-local-api&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=homebridge-freeathome-local-api)
+[![codecov](https://codecov.io/gh/lion-and-bear/homebridge-freeathome-local-api/graph/badge.svg?token=isIIARbSmH)](https://codecov.io/gh/lion-and-bear/homebridge-freeathome-local-api)
 ![Dependencies](https://img.shields.io/librariesio/release/npm/homebridge-freeathome-local-api?style=flat-square)
 ![npm](https://img.shields.io/npm/v/homebridge-freeathome-local-api?style=flat-square)
-![License](https://img.shields.io/github/license/pgerke/homebridge-freeathome-local-api?style=flat-square)
+![License](https://img.shields.io/github/license/lion-and-bear/homebridge-freeathome-local-api?style=flat-square)
 
 ## Features
 
@@ -19,7 +19,7 @@ A Homebridge plugin that allows the user to control BUSCH-JAEGER free@home devic
 
 ## Supported accessories
 
-I'll add further accessories over time, but feel free to request your favorite accessory type in a [GitHub issue](https://github.com/pgerke/homebridge-freeathome-local-api/issues).
+I'll add further accessories over time, but feel free to request your favorite accessory type in a [GitHub issue](https://github.com/lion-and-bear/homebridge-freeathome-local-api/issues).
 
 ### Official Support
 
@@ -42,7 +42,7 @@ Please note that you need to have a control center running your Apple Home to be
 
 ### Experimental Support
 
-Some more accessories are supported experimentally. The experimental accessories are implemented according to the BUSCH-JAEGER specification and fully unit tested, but I don't own the hardware, so I cannot perform in-situ tests for functionality, user experience and stability. If you own one or more of the devices listed below and want to help me support those accessories, please create a [GitHub issue](https://github.com/pgerke/homebridge-freeathome-local-api/issues) or reach out to me via [email](mailto:info@philipgerke.com).
+Some more accessories are supported experimentally. The experimental accessories are implemented according to the BUSCH-JAEGER specification and fully unit tested, but I don't own the hardware, so I cannot perform in-situ tests for functionality, user experience and stability. If you own one or more of the devices listed below and want to help me support those accessories, please create a [GitHub issue](https://github.com/lion-and-bear/homebridge-freeathome-local-api/issues) or reach out to me via [email](mailto:info@philipgerke.com).
 
 - Blinds Actuators
 - Shutter Actuators
@@ -164,7 +164,7 @@ This project uses npm Trusted Publisher authentication for secure package publis
 
 ## I found a bug, what do I do?
 
-I'm happy to hear any feedback regarding the plugin or it's implementation, be it critizism, praise or rants. Please create a [GitHub issue](https://github.com/pgerke/homebridge-freeathome-local-api/issues) or drop me an [email](mailto:info@philipgerke.com) if you would like to contact me.
+I'm happy to hear any feedback regarding the plugin or it's implementation, be it critizism, praise or rants. Please create a [GitHub issue](https://github.com/lion-and-bear/homebridge-freeathome-local-api/issues) or drop me an [email](mailto:info@philipgerke.com) if you would like to contact me.
 
 I would especially appreciate, if you could report any issues you encounter while using the library. Issues I know about, I can probably fix.
 
@@ -179,7 +179,7 @@ While creating a bug report, please make it easy for me to fix it by giving us a
 
 ## I have a feature request, what do I do?
 
-Please create a [GitHub issue](https://github.com/pgerke/homebridge-freeathome-local-api/issues) or drop me an [email](mailto:info@philipgerke.com)!
+Please create a [GitHub issue](https://github.com/lion-and-bear/homebridge-freeathome-local-api/issues) or drop me an [email](mailto:info@philipgerke.com)!
 
 ## Non-Affiliation Disclaimer
 

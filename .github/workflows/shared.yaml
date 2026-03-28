@@ -38,7 +38,7 @@ jobs:
         env:
           CI: true
       - name: Upload artifacts
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: dist-${{ matrix.node-version }}
           path: dist
@@ -127,7 +127,7 @@ jobs:
       - name: Run unit test
         run: pnpm test:ci
       - name: Upload artifacts
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: Coverage Node ${{ matrix.node-version }}
           path: coverage
@@ -136,7 +136,7 @@ jobs:
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          slug: pgerke/homebridge-freeathome-local-api
+          slug: lion-and-bear/homebridge-freeathome-local-api
 
   analysis:
     name: Analyse
@@ -146,7 +146,7 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v6
       - name: Download artifacts
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: Coverage Node 24
           path: "./coverage/"
@@ -178,3 +178,4 @@ jobs:
         uses: gitleaks/gitleaks-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}

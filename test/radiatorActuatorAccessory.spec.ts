@@ -300,7 +300,7 @@ describe("Radiator Actuator Accessory", () => {
     expect(spy).not.toHaveBeenCalled();
   });
 
-  it("should handle request to set TargetHeatingCoolingState characteristic to off", async () => {
+  it("should handle request to set TargetHeatingCoolingState characteristic from auto to off", async () => {
     channel.outputs!.odp0000.value = "1";
     channel.outputs!.odp0006.value = "21.5";
     channel.outputs!.odp0008.value = "1";
@@ -341,7 +341,7 @@ describe("Radiator Actuator Accessory", () => {
     );
   });
 
-  it("should handle request to set TargetHeatingCoolingState characteristic to off", async () => {
+  it("should handle request to set TargetHeatingCoolingState characteristic from off to auto", async () => {
     channel.outputs!.odp0000.value = "1";
     channel.outputs!.odp0006.value = "21.5";
     channel.outputs!.odp0008.value = "0";

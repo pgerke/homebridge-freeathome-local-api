@@ -55,7 +55,7 @@ describe("FreeAtHomeContext", () => {
     expect(isFreeAtHomeAccessory(accessory, logger)).toBeFalse();
   });
 
-  it("should reject context if channel is missing", () => {
+  it("should reject context if device is missing", () => {
     const accessory: PlatformAccessory<UnknownContext> = new PlatformAccessory(
       "Test Accessory",
       EmptyGuid

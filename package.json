@@ -67,7 +67,7 @@
     "eslint-plugin-prettier": "^5.5.5",
     "eslint-plugin-promise": "^7.2.1",
     "hap-nodejs": "^1.2.0",
-    "homebridge": "2.0.0-beta.80",
+    "homebridge": "2.0.0-beta.86",
     "jasmine": "^6.1.0",
     "jasmine-spec-reporter": "^7.0.0",
     "nodemon": "^3.1.14",

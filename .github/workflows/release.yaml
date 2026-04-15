@@ -30,7 +30,7 @@ jobs:
         id: extract_version
         uses: ./.github/actions/get-version-and-changelog
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           tag_name: "${{ steps.extract_version.outputs.version }}"
           name: "v${{ steps.extract_version.outputs.version }}"

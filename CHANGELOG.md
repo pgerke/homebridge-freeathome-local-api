@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - NO TICKET: Bump dependencies
+- [#283](https://github.com/lion-and-bear/homebridge-freeathome-local-api/issues/283): Drop support for Node 20
 
 ## [1.20.0](https://github.com/lion-and-bear/homebridge-freeathome-local-api/releases/tag/1.20.0) - 28.03.2026
 

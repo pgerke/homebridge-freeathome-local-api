@@ -14,12 +14,12 @@ jobs:
     strategy:
       matrix:
         # the Node.js versions to build on
-        node-version: [20, 22, 24]
+        node-version: [22, 24]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
       - name: Setup pnpm
-        uses: pnpm/action-setup@v5
+        uses: pnpm/action-setup@v6
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v6
         with:
@@ -51,12 +51,12 @@ jobs:
     strategy:
       matrix:
         # the Node.js versions to build on
-        node-version: [20, 22, 24]
+        node-version: [22, 24]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
       - name: Setup pnpm
-        uses: pnpm/action-setup@v5
+        uses: pnpm/action-setup@v6
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v6
         with:
@@ -83,7 +83,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v6
       - name: Setup pnpm
-        uses: pnpm/action-setup@v5
+        uses: pnpm/action-setup@v6
       - name: Restore pnpm store
         uses: actions/cache@v5
         with:
@@ -103,12 +103,12 @@ jobs:
     strategy:
       matrix:
         # the Node.js versions to build on
-        node-version: [20, 22, 24]
+        node-version: [22, 24]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
       - name: Setup pnpm
-        uses: pnpm/action-setup@v5
+        uses: pnpm/action-setup@v6
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v6
         with:
@@ -133,7 +133,7 @@ jobs:
           path: coverage
           retention-days: 1
       - name: Upload to Codecov
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@v6
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           slug: lion-and-bear/homebridge-freeathome-local-api

@@ -70,8 +70,8 @@ importers:
         specifier: ^1.2.0
         version: 1.2.0
       homebridge:
-        specifier: 2.0.3-beta.3
-        version: 2.0.3-beta.3
+        specifier: 2.0.3-beta.9
+        version: 2.0.3-beta.9
       jasmine:
         specifier: ^6.2.0
         version: 6.2.0
@@ -451,27 +451,27 @@ packages:
   '@leichtgewicht/ip-codec@2.0.5':
     resolution: {integrity: sha512-Vo+PSpZG2/fmgmiNzYK9qWRh8h/CHrwD0mo1h1DzL4yzHNSfWYujGTYsWGreD000gcgmZ7K4Ys6Tx9TxtsKdDw==}
 
-  '@matter/general@0.17.0-alpha.0-20260514-1682cbb80':
-    resolution: {integrity: sha512-BlDN5PzaQYV94yAUExhgm0pqS0k5JNTotgSNbYRIWkQXoW7Ti1opdHbNqF8cyDMyxaJOUGqe+hGDe8CjdUob+A==}
+  '@matter/general@0.17.0':
+    resolution: {integrity: sha512-FuPCFPqfVVVTx5LEL1aq0tdaUyAV8moVq/ub8aSKQk7fuihmPqBDN+oI8fqoL4ZnFnKYkcPNLFS1tHev470BXA==}
 
-  '@matter/main@0.17.0-alpha.0-20260514-1682cbb80':
-    resolution: {integrity: sha512-0leSIrsiaF6AFT93FEZ6Jy2zpkLkop2CuwLXJpR35Jfzc2BquflZMSr/uS+A2io32kTBLCHukmfDpKrf6hsCgw==}
+  '@matter/main@0.17.0':
+    resolution: {integrity: sha512-COOnXctFURD9fzugivocjOI7Xfe7odpItirU66o9TDG17YPuKiGCFG0MnQmAJ0u12swI2NY5O858ar9tx6EvTQ==}
 
-  '@matter/model@0.17.0-alpha.0-20260514-1682cbb80':
-    resolution: {integrity: sha512-0ztzI57eCvajpNZ3417JLTwMAGyLBuKZCHxZgTeMrhbQmSGYg752Ex7FM7laKusoc5fyNuROHgNX7DEjy/kZ4w==}
+  '@matter/model@0.17.0':
+    resolution: {integrity: sha512-HF0rtOkRlrpMCqu0SFKeCaKGZA5tt77+AEPJnK628g9WtOdRbkmPsYQiL8sU1wElr+CshfubGVhoS/dYX2O3OA==}
 
-  '@matter/node@0.17.0-alpha.0-20260514-1682cbb80':
-    resolution: {integrity: sha512-DV2tuRvc2Q/OuHhlwA43D9+SckcpAlLhIFD33alJUu1A2VAYu/92odvHv0pXxhZX2FV49+OmLk5rFnY2SpFjlg==}
+  '@matter/node@0.17.0':
+    resolution: {integrity: sha512-5t8cVKwRYTEXBd8VSBIiqb3AcJmPPSQB6pFPETFEWTCm+nzzW8Fj7sHrkJvG6yUQn7ktUulOcd7U7yId7/sa2w==}
 
-  '@matter/nodejs@0.17.0-alpha.0-20260514-1682cbb80':
-    resolution: {integrity: sha512-wF0nrn7zFjWc9AOXtzUARHF9REIlA4sRxmJAeRV2SiatA/1qOPUD1v9MLa7ml8SGGJthmHGQ9ZJzyKN+B/r8bg==}
+  '@matter/nodejs@0.17.0':
+    resolution: {integrity: sha512-KCY2RlGUjJXdUKP8uCRfEwdCJZB44hO1sMPcgC7jQBjNwzeVJ/YiJwA/Cca0evhahCmtqOnqjvalvNm+aKYUOA==}
     engines: {node: '>=20.19.0 <22.0.0 || >=22.13.0'}
 
-  '@matter/protocol@0.17.0-alpha.0-20260514-1682cbb80':
-    resolution: {integrity: sha512-4nr9hFxZewD7HzES1aG1M0ToyYhWH7UNTmf8JuwNkYCEv2O7CMqc9Rl1I8MCPHaOMZcTtT2bhhSGa1IgZz2jbQ==}
+  '@matter/protocol@0.17.0':
+    resolution: {integrity: sha512-OGEEtgXOwivIfGcr6eP37NqW5yCTU7VJa9IezrMEBHSynJHA2lvoBiOx4Zs5cuq7KK/J4wNeAOi9XyT/UINCGg==}
 
-  '@matter/types@0.17.0-alpha.0-20260514-1682cbb80':
-    resolution: {integrity: sha512-C0rsV8QHgLzy9OnIVyfoIJGPSzg14YU+nj8y6aD2P2lR0lD7lvP5DlEZccm6lNE7EkGt4Ly5jxNfMpDeCxSSCg==}
+  '@matter/types@0.17.0':
+    resolution: {integrity: sha512-HA0HvXlJoIl6hkxfLJvjtEdJM23KydjtwHT1BgYlp2g+/ZIOAlhTTreB1fErPAsBZeZWNMnWwNC78H4h6lnGKA==}
 
   '@napi-rs/wasm-runtime@0.2.12':
     resolution: {integrity: sha512-ZVWUcfwY4E/yPitQJl481FjFo3K22D6qF0DuFH6Y/nbnE11GY5uguDxZMGXPQ8WQ0128MXQD7TnfHyK4oWoIJQ==}
@@ -732,8 +732,8 @@ packages:
     resolution: {integrity: sha512-BLrgEcRTwX2o6gGxGOCNyMvGSp35YofuYzw9h1IMTRmKqttAZZVU67bdb9Pr2vUHA8+j3i2tJfjO6C6+4myGTA==}
     engines: {node: 18 || 20 || >=22}
 
-  baseline-browser-mapping@2.10.29:
-    resolution: {integrity: sha512-Asa2krT+XTPZINCS+2QcyS8WTkObE77RwkydwF7h6DmnKqbvlalz93m/dnphUyCa6SWSP51VgtEUf2FN+gelFQ==}
+  baseline-browser-mapping@2.10.31:
+    resolution: {integrity: sha512-MujYO3eP72uvmSE0i4wltsodRfIpZATP3jvzRNRGGxgzId7aVocVJJV3nf01qnzzKFGxQVC9bpWxl5cjxTr/7Q==}
     engines: {node: '>=6.0.0'}
     hasBin: true
 
@@ -792,8 +792,8 @@ packages:
     resolution: {integrity: sha512-L28STB170nwWS63UjtlEOE3dldQApaJXZkOI1uMFfzf3rRuPegHaHesyee+YxQ+W6SvRDQV6UrdOdRiR153wJg==}
     engines: {node: '>=6'}
 
-  caniuse-lite@1.0.30001792:
-    resolution: {integrity: sha512-hVLMUZFgR4JJ6ACt1uEESvQN1/dBVqPAKY0hgrV70eN3391K6juAfTjKZLKvOMsx8PxA7gsY1/tLMMTcfFLLpw==}
+  caniuse-lite@1.0.30001793:
+    resolution: {integrity: sha512-iwSsYWaCOoh26cV8NwNRViHlrfUvYsHDfRVcbtmw0Kg6PJIZZXwMkj1442FYLBGkeUf1juAsU3DTfxW579mrPA==}
 
   chalk@5.6.2:
     resolution: {integrity: sha512-7NzBL0rN6fMUW+f7A6Io4h40qQlG+xGmtMxfbnH/K7TAtt8JQWVQK+6g0UXKMeVJoyV5EkkNsErQ8pVD3bLHbA==}
@@ -888,8 +888,8 @@ packages:
   duplexer@0.1.2:
     resolution: {integrity: sha512-jtD6YG370ZCIi/9GTaJKQxWTZD045+4R4hTk/x1UyoqadyJ9x9CgSi1RlVDQF8U2sxLLSnFkCaMihqljHIWgMg==}
 
-  electron-to-chromium@1.5.357:
-    resolution: {integrity: sha512-NHlTIQDK8fmVwHwuIzmXYEJ1Ewq3D9wDNc0cWXxDGysP6Pb21giwGNkxiTifyKy/4SoPuN5l6GLP1W9Sv7zB2g==}
+  electron-to-chromium@1.5.360:
+    resolution: {integrity: sha512-GkcBt6YYAw9SxFWn+xVar4cLVGlXVuswwtRLBozi2zp0GjXs4ZnOrqV4zbXzg35n7w81hCkyJNYicgXlVHAmBA==}
 
   emoji-regex@8.0.0:
     resolution: {integrity: sha512-MSjYzcWNOA0ewAHpz0MxpYFvwg6yjy1NG3xteoqz644VCo/RPgnr1/GGt+ic3iJTzQ8Eu3TdM14SawnVUmGE6A==}
@@ -1243,8 +1243,8 @@ packages:
     engines: {node: '>=14.0.0'}
     hasBin: true
 
-  homebridge@2.0.3-beta.3:
-    resolution: {integrity: sha512-x5GmuCS+Gd2HXyeRgo1aVKnY9Gbmgq6SyCHWJKqyr1WRX8nKXOg+KS5gxdn4+hoxb9+clkfaKpoUkYDYajjY8w==}
+  homebridge@2.0.3-beta.9:
+    resolution: {integrity: sha512-GYvbTcqH0b5lAR7XR7cA70u0AfBJfXzcsHRZtFWqEKWRPpa5ioyqQZoqsdO94GwoC5przLETLL/MSa/TebkZjA==}
     engines: {node: ^22 || ^24}
     hasBin: true
 
@@ -2266,49 +2266,49 @@ snapshots:
 
   '@leichtgewicht/ip-codec@2.0.5': {}
 
-  '@matter/general@0.17.0-alpha.0-20260514-1682cbb80':
+  '@matter/general@0.17.0':
     dependencies:
       '@noble/curves': 2.2.0
 
-  '@matter/main@0.17.0-alpha.0-20260514-1682cbb80':
+  '@matter/main@0.17.0':
     dependencies:
-      '@matter/general': 0.17.0-alpha.0-20260514-1682cbb80
-      '@matter/model': 0.17.0-alpha.0-20260514-1682cbb80
-      '@matter/node': 0.17.0-alpha.0-20260514-1682cbb80
-      '@matter/protocol': 0.17.0-alpha.0-20260514-1682cbb80
-      '@matter/types': 0.17.0-alpha.0-20260514-1682cbb80
+      '@matter/general': 0.17.0
+      '@matter/model': 0.17.0
+      '@matter/node': 0.17.0
+      '@matter/protocol': 0.17.0
+      '@matter/types': 0.17.0
     optionalDependencies:
-      '@matter/nodejs': 0.17.0-alpha.0-20260514-1682cbb80
+      '@matter/nodejs': 0.17.0
 
-  '@matter/model@0.17.0-alpha.0-20260514-1682cbb80':
+  '@matter/model@0.17.0':
     dependencies:
-      '@matter/general': 0.17.0-alpha.0-20260514-1682cbb80
+      '@matter/general': 0.17.0
 
-  '@matter/node@0.17.0-alpha.0-20260514-1682cbb80':
+  '@matter/node@0.17.0':
     dependencies:
-      '@matter/general': 0.17.0-alpha.0-20260514-1682cbb80
-      '@matter/model': 0.17.0-alpha.0-20260514-1682cbb80
-      '@matter/protocol': 0.17.0-alpha.0-20260514-1682cbb80
-      '@matter/types': 0.17.0-alpha.0-20260514-1682cbb80
+      '@matter/general': 0.17.0
+      '@matter/model': 0.17.0
+      '@matter/protocol': 0.17.0
+      '@matter/types': 0.17.0
 
-  '@matter/nodejs@0.17.0-alpha.0-20260514-1682cbb80':
+  '@matter/nodejs@0.17.0':
     dependencies:
-      '@matter/general': 0.17.0-alpha.0-20260514-1682cbb80
-      '@matter/node': 0.17.0-alpha.0-20260514-1682cbb80
-      '@matter/protocol': 0.17.0-alpha.0-20260514-1682cbb80
-      '@matter/types': 0.17.0-alpha.0-20260514-1682cbb80
+      '@matter/general': 0.17.0
+      '@matter/node': 0.17.0
+      '@matter/protocol': 0.17.0
+      '@matter/types': 0.17.0
     optional: true
 
-  '@matter/protocol@0.17.0-alpha.0-20260514-1682cbb80':
+  '@matter/protocol@0.17.0':
     dependencies:
-      '@matter/general': 0.17.0-alpha.0-20260514-1682cbb80
-      '@matter/model': 0.17.0-alpha.0-20260514-1682cbb80
-      '@matter/types': 0.17.0-alpha.0-20260514-1682cbb80
+      '@matter/general': 0.17.0
+      '@matter/model': 0.17.0
+      '@matter/types': 0.17.0
 
-  '@matter/types@0.17.0-alpha.0-20260514-1682cbb80':
+  '@matter/types@0.17.0':
     dependencies:
-      '@matter/general': 0.17.0-alpha.0-20260514-1682cbb80
-      '@matter/model': 0.17.0-alpha.0-20260514-1682cbb80
+      '@matter/general': 0.17.0
+      '@matter/model': 0.17.0
 
   '@napi-rs/wasm-runtime@0.2.12':
     dependencies:
@@ -2550,7 +2550,7 @@ snapshots:
 
   balanced-match@4.0.4: {}
 
-  baseline-browser-mapping@2.10.29: {}
+  baseline-browser-mapping@2.10.31: {}
 
   binary-extensions@2.3.0: {}
 
@@ -2581,9 +2581,9 @@ snapshots:
 
   browserslist@4.28.2:
     dependencies:
-      baseline-browser-mapping: 2.10.29
-      caniuse-lite: 1.0.30001792
-      electron-to-chromium: 1.5.357
+      baseline-browser-mapping: 2.10.31
+      caniuse-lite: 1.0.30001793
+      electron-to-chromium: 1.5.360
       node-releases: 2.0.44
       update-browserslist-db: 1.2.3(browserslist@4.28.2)
 
@@ -2619,7 +2619,7 @@ snapshots:
 
   camelcase@5.3.1: {}
 
-  caniuse-lite@1.0.30001792: {}
+  caniuse-lite@1.0.30001793: {}
 
   chalk@5.6.2: {}
 
@@ -2707,7 +2707,7 @@ snapshots:
 
   duplexer@0.1.2: {}
 
-  electron-to-chromium@1.5.357: {}
+  electron-to-chromium@1.5.360: {}
 
   emoji-regex@8.0.0: {}
 
@@ -3107,10 +3107,10 @@ snapshots:
 
   hexy@0.4.0: {}
 
-  homebridge@2.0.3-beta.3:
+  homebridge@2.0.3-beta.9:
     dependencies:
       '@homebridge/hap-nodejs': 2.1.7-beta.1
-      '@matter/main': 0.17.0-alpha.0-20260514-1682cbb80
+      '@matter/main': 0.17.0
       chalk: 5.6.2
       commander: 14.0.3
       fs-extra: 11.3.5
